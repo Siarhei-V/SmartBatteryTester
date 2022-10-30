@@ -8,7 +8,6 @@ namespace SmartBatteryTesterDesktopApp.ViewModels
 {
     internal class MainWindowVM : INotifyPropertyChanged
     {
-
         private List<string> _portNameListVM = new List<string>() { "COM 1", "COM 2", "COM 3", "COM 4", "COM 5"}; // TODO: temp
         public List<string> PortNameListVM
         {
@@ -24,7 +23,7 @@ namespace SmartBatteryTesterDesktopApp.ViewModels
                 return _connectToComPortCommand ??
                     (_connectToComPortCommand = new RelayCommand(obj =>
                     {
-                        MessageBox.Show("Command Test");    // TODO: temp
+                        MessageBox.Show("Test command message");    // TODO: temp
                     }));
             }
         }
