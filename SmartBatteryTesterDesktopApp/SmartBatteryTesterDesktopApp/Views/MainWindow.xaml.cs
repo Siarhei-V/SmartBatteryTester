@@ -1,6 +1,6 @@
 ﻿using System.Windows;
 
-namespace SmartBatteryTesterDesktopApp
+namespace SmartBatteryTesterDesktopApp.Views
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml

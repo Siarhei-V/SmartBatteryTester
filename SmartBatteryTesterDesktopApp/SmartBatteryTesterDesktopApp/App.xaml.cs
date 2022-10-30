@@ -1,5 +1,6 @@
 ﻿using Ninject;
 using SmartBatteryTesterDesktopApp.ViewModels;
+using SmartBatteryTesterDesktopApp.Views;
 using System.Windows;
 
 namespace SmartBatteryTesterDesktopApp
