@@ -2,6 +2,6 @@
 {
     public interface IResultSaver
     {
-        string Save();
+        void Save();
     }
 }

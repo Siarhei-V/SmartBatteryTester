@@ -2,10 +2,14 @@
 {
     public class Discharger
     {
-        DischargerDto _dataModel;
-        decimal _lowerDischargeThreshold;
-        IResultSaver _resultSaver;
-        ISwitchable _dischargerSwitch;
+        private DischargerDto _dataModel;
+        private decimal _lowerDischargeThreshold;
+        private IResultSaver _resultSaver;
+        private ISwitchable _dischargerSwitch;
+
+        private decimal _valuesChangeDiscreteness;
+        private decimal _prevVoltage;
+        private decimal _prevCurrent;
 
         public Discharger(IResultSaver resultSaver, ISwitchable dischargerSwitch)
         {
@@ -14,15 +18,28 @@
             _dischargerSwitch = dischargerSwitch;
         }
 
-        public void Start(decimal lowerDischargeThreshold, decimal voltageBeforeDischarging)
+        public void Start(decimal lowerDischargeThreshold, decimal voltageBeforeDischarging, decimal valuesChangeDiscreteness)
         {
             _dataModel.Voltage = voltageBeforeDischarging;
+            _prevVoltage = voltageBeforeDischarging;
+
             _lowerDischargeThreshold = lowerDischargeThreshold;
+            _valuesChangeDiscreteness = valuesChangeDiscreteness;
+
             _resultSaver.Save();
             _dischargerSwitch.TurnOn();
         }
 
+        public void Discharge(decimal voltage, decimal current)
+        {
+            if (_prevVoltage - voltage >= _valuesChangeDiscreteness || 
+                Math.Abs(_prevCurrent - current) >= _valuesChangeDiscreteness)
+            {
+                _prevCurrent = current;
+                _prevVoltage = voltage;
 
-
+                _resultSaver.Save();
+            }
+        }
     }
 }
