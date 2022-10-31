@@ -1,7 +1,7 @@
 ﻿namespace SmartBatteryTesterDesktopApp.BL
 {
-    public class Class1
+    public interface IResultSaver
     {
-
+        string Save();
     }
 }
