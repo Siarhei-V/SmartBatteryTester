@@ -1,6 +1,6 @@
 ﻿namespace SmartBatteryTesterDesktopApp.BL
 {
-    public class DischargerDto
+    public class DischargerValuesDto
     {
         public DateTime CurrentDateTime { get; internal set; }
         public decimal Voltage { get; internal set; }

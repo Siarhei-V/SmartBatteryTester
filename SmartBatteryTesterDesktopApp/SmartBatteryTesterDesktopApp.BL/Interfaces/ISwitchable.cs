@@ -1,4 +1,4 @@
-﻿namespace SmartBatteryTesterDesktopApp.BL
+﻿namespace SmartBatteryTesterDesktopApp.BL.Interfaces
 {
     public interface ISwitchable
     {

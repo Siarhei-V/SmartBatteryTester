@@ -1,32 +1,34 @@
 ﻿using Moq;
+using SmartBatteryTesterDesktopApp.BL.Interfaces;
 using Xunit;
 
 namespace SmartBatteryTesterDesktopApp.BL.Tests
 {
     public class DischargerTest
     {
-        Mock<IResultSaver> _resultSaver;
+        Mock<IValuesSaver> _valueSaver;
+        Mock<IInfoSaver> _infoSaver;
         Mock<ISwitchable> _switchable;
 
         public DischargerTest()
         {
-            _resultSaver = new Mock<IResultSaver>();
+            _valueSaver = new Mock<IValuesSaver>();
             _switchable = new Mock<ISwitchable>();
-
-            _switchable.Setup(m => m.TurnOn());
+            _infoSaver = new Mock<IInfoSaver>();
         }
 
         [Fact]
         public void Start_CheckSaveAndTurnOnMethodsColling()
         {
             // Arrange
-            Discharger _discharger = new Discharger(_resultSaver.Object, _switchable.Object);
+            Discharger discharger = new Discharger(_valueSaver.Object, _infoSaver.Object, _switchable.Object);
+            DischargerValuesDto dischargerDto = new DischargerValuesDto();
 
             // Act
-            _discharger.Start(1, 1, 1);
+            discharger.Start(1, 1, 1);
 
             // Assert
-            _resultSaver.Verify(m => m.Save(), Times.Once);
+            _valueSaver.Verify(m => m.Save(It.IsAny<DischargerValuesDto>()), Times.Once);
             _switchable.Verify(m => m.TurnOn(), Times.Once);
         }
 
@@ -39,21 +41,21 @@ namespace SmartBatteryTesterDesktopApp.BL.Tests
         public void Discharge_CheckSaveMethodColling(decimal voltage, decimal current, decimal valuesChangeDiscreteness)
         {
             // Arrange
-            Discharger _discharger = new Discharger(_resultSaver.Object, _switchable.Object);
+            Discharger discharger = new Discharger(_valueSaver.Object, _infoSaver.Object, _switchable.Object);
 
             // Act
-            _discharger.Start(1, 12, valuesChangeDiscreteness);
-            _discharger.Discharge(voltage, current);
+            discharger.Start(1, 12, valuesChangeDiscreteness);
+            discharger.Discharge(voltage, current);
 
             // Assert
             if (Math.Abs(12 - voltage) >= valuesChangeDiscreteness || 
                 Math.Abs(0 - current) >= valuesChangeDiscreteness)
             {
-                _resultSaver.Verify(m => m.Save(), Times.Exactly(2));
+                _valueSaver.Verify(m => m.Save(It.IsAny<DischargerValuesDto>()), Times.Exactly(2));
             }
             else
             {
-                _resultSaver.Verify(m => m.Save(), Times.Once);
+                _valueSaver.Verify(m => m.Save(It.IsAny<DischargerValuesDto>()), Times.Once);
             }
         }
 
@@ -61,7 +63,7 @@ namespace SmartBatteryTesterDesktopApp.BL.Tests
         public void Discharge_CheckPrevValuesSetting()
         {
             // Arrange
-            Discharger _discharger = new Discharger(_resultSaver.Object, _switchable.Object);
+            Discharger discharger = new Discharger(_valueSaver.Object, _infoSaver.Object, _switchable.Object);
 
             List<decimal> voltageValues = new List<decimal>() { 11, 10, 9.9m};
             List<decimal> currentValues = new List<decimal>() { 1, 1, 1 };
@@ -69,31 +71,32 @@ namespace SmartBatteryTesterDesktopApp.BL.Tests
             decimal valuesChangeDiscreteness = 1;
 
             // Act
-            _discharger.Start(1, 12, valuesChangeDiscreteness);
+            discharger.Start(1, 12, valuesChangeDiscreteness);
 
             // Assert
-            _discharger.Discharge(voltageValues[0], currentValues[0]);
-            _resultSaver.Verify(m => m.Save(), Times.Exactly(2));
+            discharger.Discharge(voltageValues[0], currentValues[0]);
+            _valueSaver.Verify(m => m.Save(It.IsAny<DischargerValuesDto>()), Times.Exactly(2));
 
-            _discharger.Discharge(voltageValues[1], currentValues[1]);
-            _resultSaver.Verify(m => m.Save(), Times.Exactly(3));
+            discharger.Discharge(voltageValues[1], currentValues[1]);
+            _valueSaver.Verify(m => m.Save(It.IsAny<DischargerValuesDto>()), Times.Exactly(3));
 
-            _discharger.Discharge(voltageValues[2], currentValues[2]);
-            _resultSaver.Verify(m => m.Save(), Times.Exactly(3));
+            discharger.Discharge(voltageValues[2], currentValues[2]);
+            _valueSaver.Verify(m => m.Save(It.IsAny<DischargerValuesDto>()), Times.Exactly(3));
         }
 
         [Fact]
         public void Discharge_ChekDischargingFinish()
         {
             // Arrange
-            Discharger _discharger = new Discharger(_resultSaver.Object, _switchable.Object);
+            Discharger discharger = new Discharger(_valueSaver.Object, _infoSaver.Object, _switchable.Object);
 
             // Act
-            _discharger.Start(10.5m, 12, 1);
-            _discharger.Discharge(10, 1);
+            discharger.Start(10.5m, 12, 1);
+            discharger.Discharge(10, 1);
 
             // Assert
-            _resultSaver.Verify(m => m.Save(), Times.Exactly(2));
+            _valueSaver.Verify(m => m.Save(It.IsAny<DischargerValuesDto>()), Times.Exactly(2));
+            _infoSaver.Verify(m => m.Save(It.IsAny<DischargerInfoDto>()), Times.Once);
             _switchable.Verify(m => m.TurnOff(), Times.Once);
         }
     }

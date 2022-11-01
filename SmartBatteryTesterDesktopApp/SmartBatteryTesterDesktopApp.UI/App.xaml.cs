@@ -17,8 +17,6 @@ namespace SmartBatteryTesterDesktopApp
         {
             kernel = new StandardKernel();
 
- 
-
             var appVM = kernel.Get<MainWindowVM>();
 
             MainWindow = new MainWindow();
