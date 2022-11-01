@@ -3,7 +3,7 @@ using SmartBatteryTesterDesktopApp.BL.Interfaces;
 
 namespace SmartBatteryTesterDesktopApp.BL
 {
-    public class Discharger
+    public class Discharger : IDischarger
     {
         private DischargerValuesDto _dataModel;
         private DischargerInfoDto _infoModel;
@@ -45,7 +45,7 @@ namespace SmartBatteryTesterDesktopApp.BL
 
             _dischargerSwitch.TurnOn();
             _capacityCalculator.DischargingStartDateTime = _dataModel.CurrentDateTime;
-            
+
             _valuesSaver.Save(_dataModel);
         }
 
@@ -57,7 +57,7 @@ namespace SmartBatteryTesterDesktopApp.BL
                 return;
             }
 
-            if (_prevVoltage - voltage >= _valuesChangeDiscreteness || 
+            if (_prevVoltage - voltage >= _valuesChangeDiscreteness ||
                 Math.Abs(_prevCurrent - current) >= _valuesChangeDiscreteness)
             {
                 HandleCurrentValues(voltage, current);
