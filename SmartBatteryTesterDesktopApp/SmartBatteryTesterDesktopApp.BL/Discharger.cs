@@ -1,5 +1,4 @@
-﻿using Ninject;
-using SmartBatteryTesterDesktopApp.BL.Interfaces;
+﻿using SmartBatteryTesterDesktopApp.BL.Interfaces;
 
 namespace SmartBatteryTesterDesktopApp.BL
 {
@@ -12,7 +11,6 @@ namespace SmartBatteryTesterDesktopApp.BL
         private IInfoSaver _infoSaver;
         private ISwitchable _dischargerSwitch;
         private ICapacityCalculator _capacityCalculator;
-        private IKernel _kernel;
 
         private decimal _lowerDischargeThreshold;
         private decimal _valuesChangeDiscreteness;
@@ -21,9 +19,7 @@ namespace SmartBatteryTesterDesktopApp.BL
 
         public Discharger(IValuesSaver valuesSaver, IInfoSaver infoSaver, ISwitchable dischargerSwitch)
         {
-            _kernel = new StandardKernel();
-            _kernel.Bind<ICapacityCalculator>().To<CapacityCalculator>().InSingletonScope();
-            _capacityCalculator = _kernel.Get<ICapacityCalculator>();
+            _capacityCalculator = new CapacityCalculator();
 
             _dataModel = new DischargerValuesDto();
             _infoModel = new DischargerInfoDto();
