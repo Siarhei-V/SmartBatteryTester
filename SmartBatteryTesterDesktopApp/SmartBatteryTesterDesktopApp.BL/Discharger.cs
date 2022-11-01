@@ -32,6 +32,13 @@
 
         public void Discharge(decimal voltage, decimal current)
         {
+            if (voltage <= _lowerDischargeThreshold)
+            {
+                _dischargerSwitch.TurnOff();
+                _resultSaver.Save();
+                return;
+            }
+
             if (_prevVoltage - voltage >= _valuesChangeDiscreteness || 
                 Math.Abs(_prevCurrent - current) >= _valuesChangeDiscreteness)
             {

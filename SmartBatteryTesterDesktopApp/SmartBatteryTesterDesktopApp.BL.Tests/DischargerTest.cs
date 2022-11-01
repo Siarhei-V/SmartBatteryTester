@@ -82,5 +82,19 @@ namespace SmartBatteryTesterDesktopApp.BL.Tests
             _resultSaver.Verify(m => m.Save(), Times.Exactly(3));
         }
 
+        [Fact]
+        public void Discharge_ChekDischargingFinish()
+        {
+            // Arrange
+            Discharger _discharger = new Discharger(_resultSaver.Object, _switchable.Object);
+
+            // Act
+            _discharger.Start(10.5m, 12, 1);
+            _discharger.Discharge(10, 1);
+
+            // Assert
+            _resultSaver.Verify(m => m.Save(), Times.Exactly(2));
+            _switchable.Verify(m => m.TurnOff(), Times.Once);
+        }
     }
 }
