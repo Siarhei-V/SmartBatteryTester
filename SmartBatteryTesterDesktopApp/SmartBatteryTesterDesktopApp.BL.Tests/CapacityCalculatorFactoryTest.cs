@@ -5,12 +5,11 @@ namespace SmartBatteryTesterDesktopApp.BL.Tests
 {
     public class CapacityCalculatorFactoryTest
     {
-        ICapacityCalculatorFactory _capacityCalculatorFactory;
+        IResultsCalculatorFactory _capacityCalculatorFactory;
 
         public CapacityCalculatorFactoryTest()
         {
-            _capacityCalculatorFactory = new CapacityCalculatorFactory();
-            
+            _capacityCalculatorFactory = new ResultsCalculatorFactory();
         }
 
         [Fact]
@@ -19,11 +18,11 @@ namespace SmartBatteryTesterDesktopApp.BL.Tests
             // Arrange
 
             // Act
-            var result = _capacityCalculatorFactory.MakeCapacityCalculator();
+            var result = _capacityCalculatorFactory.MakeResultsCalculator();
 
             // Assert
             Assert.NotNull(result);
-            Assert.Equal("CapacityCalculator", result.GetType().Name);
+            Assert.Equal("ResultsCalculator", result.GetType().Name);
         }
     }
 }

@@ -4,7 +4,7 @@ namespace SmartBatteryTesterDesktopApp.BL
 {
     public class DischargerInitializer : IDischargerInitializer
     {
-        private ICapacityCalculatorFactory _capacityCalculatorFactory;
+        private IResultsCalculatorFactory _capacityCalculatorFactory;
         private IDischarger _discharger;
 
         public IDischarger DischargerImplementation
@@ -14,7 +14,7 @@ namespace SmartBatteryTesterDesktopApp.BL
 
         public DischargerInitializer(IValuesSaver valuesSaver, IInfoSaver infoSaver, ISwitchable dischargerSwitch)
         {
-            _capacityCalculatorFactory = new CapacityCalculatorFactory();
+            _capacityCalculatorFactory = new ResultsCalculatorFactory();
             _discharger = new Discharger(valuesSaver, infoSaver, dischargerSwitch);
             _discharger.CapacityCalculatorFactory = _capacityCalculatorFactory;
         }

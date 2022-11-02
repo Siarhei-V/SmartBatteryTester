@@ -22,7 +22,7 @@ namespace SmartBatteryTesterDesktopApp.BL.Tests
         {
             // Arrange
             IDischarger discharger = new Discharger(_valueSaver.Object, _infoSaver.Object, _switchable.Object);
-            discharger.CapacityCalculatorFactory = new CapacityCalculatorFactory();     // TODO: mock this
+            discharger.CapacityCalculatorFactory = new ResultsCalculatorFactory();     // TODO: mock this
 
             // Act
             discharger.Start(1, 1, 1);
@@ -42,7 +42,7 @@ namespace SmartBatteryTesterDesktopApp.BL.Tests
         {
             // Arrange
             IDischarger discharger = new Discharger(_valueSaver.Object, _infoSaver.Object, _switchable.Object);
-            discharger.CapacityCalculatorFactory = new CapacityCalculatorFactory();     // TODO: mock this
+            discharger.CapacityCalculatorFactory = new ResultsCalculatorFactory();     // TODO: mock this
 
             // Act
             discharger.Start(1, 12, valuesChangeDiscreteness);
@@ -65,7 +65,7 @@ namespace SmartBatteryTesterDesktopApp.BL.Tests
         {
             // Arrange
             IDischarger discharger = new Discharger(_valueSaver.Object, _infoSaver.Object, _switchable.Object);
-            discharger.CapacityCalculatorFactory = new CapacityCalculatorFactory();     // TODO: mock this
+            discharger.CapacityCalculatorFactory = new ResultsCalculatorFactory();     // TODO: mock this
 
             List<decimal> voltageValues = new List<decimal>() { 11, 10, 9.9m};
             List<decimal> currentValues = new List<decimal>() { 1, 1, 1 };
@@ -91,7 +91,7 @@ namespace SmartBatteryTesterDesktopApp.BL.Tests
         {
             // Arrange
             IDischarger discharger = new Discharger(_valueSaver.Object, _infoSaver.Object, _switchable.Object);
-            discharger.CapacityCalculatorFactory = new CapacityCalculatorFactory();     // TODO: mock this
+            discharger.CapacityCalculatorFactory = new ResultsCalculatorFactory();     // TODO: mock this
 
             // Act
             discharger.Start(10.5m, 12, 1);

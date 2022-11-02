@@ -2,7 +2,7 @@
 {
     public interface IDischarger
     {
-        internal ICapacityCalculatorFactory CapacityCalculatorFactory { set; }
+        internal IResultsCalculatorFactory CapacityCalculatorFactory { set; }
 
         public void Start(decimal lowerDischargeThreshold, decimal voltageBeforeDischarging, decimal valuesChangeDiscreteness);
 

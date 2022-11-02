@@ -10,14 +10,14 @@ namespace SmartBatteryTesterDesktopApp.BL
         private IValuesSaver _valuesSaver;
         private IInfoSaver _infoSaver;
         private ISwitchable _dischargerSwitch;
-        private ICapacityCalculator _capacityCalculator;
+        private IResultsCalculator _resultsCalculator;
         private decimal _lowerDischargeThreshold;
         private decimal _valuesChangeDiscreteness;
         private decimal _prevVoltage;
         private decimal _prevCurrent;
 
-        private ICapacityCalculatorFactory _capacityCalculatorFactory;
-        ICapacityCalculatorFactory IDischarger.CapacityCalculatorFactory
+        private IResultsCalculatorFactory _capacityCalculatorFactory;
+        IResultsCalculatorFactory IDischarger.CapacityCalculatorFactory
         {
             set => _capacityCalculatorFactory = value;
         }
@@ -34,7 +34,8 @@ namespace SmartBatteryTesterDesktopApp.BL
 
         public void Start(decimal lowerDischargeThreshold, decimal voltageBeforeDischarging, decimal valuesChangeDiscreteness)
         {
-            _capacityCalculator = _capacityCalculatorFactory.MakeCapacityCalculator();
+            _resultsCalculator = _capacityCalculatorFactory.MakeResultsCalculator();
+            _resultsCalculator.DischargerInfoDto = _infoModel;
 
             _dataModel.Voltage = voltageBeforeDischarging;
             _dataModel.CurrentDateTime = DateTime.Now;
@@ -44,7 +45,7 @@ namespace SmartBatteryTesterDesktopApp.BL
             _valuesChangeDiscreteness = valuesChangeDiscreteness;
 
             _dischargerSwitch.TurnOn();
-            _capacityCalculator.DischargingStartDateTime = _dataModel.CurrentDateTime;
+            _resultsCalculator.DischargingStartDateTime = _dataModel.CurrentDateTime;
 
             _valuesSaver.Save(_dataModel);
         }
@@ -83,9 +84,9 @@ namespace SmartBatteryTesterDesktopApp.BL
             _dataModel.Current = current;
             _dataModel.CurrentDateTime = DateTime.Now;
 
-            _capacityCalculator.DischargingCurrent = current;
-            _capacityCalculator.DischargingEndDateTime = _dataModel.CurrentDateTime;
-            _infoModel.ResultCapacity = _capacityCalculator.GetCapacity();
+            _resultsCalculator.DischargingCurrent = current;
+            _resultsCalculator.DischargingEndDateTime = _dataModel.CurrentDateTime;
+            _resultsCalculator.CalculateResults();
 
             _dischargerSwitch.TurnOff();
 
