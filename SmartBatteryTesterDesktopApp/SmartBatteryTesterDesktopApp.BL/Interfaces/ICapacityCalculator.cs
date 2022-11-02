@@ -2,10 +2,10 @@
 {
     internal interface ICapacityCalculator
     {
-        DateTime DischargingStartDateTime { get; set; }
-        DateTime DischargingEndDateTime { get; set; }
-        decimal DischargingCurrent { get; set; }
+        internal DateTime DischargingStartDateTime { set; }
+        internal DateTime DischargingEndDateTime { set; }
+        internal decimal DischargingCurrent { set; }
 
-        decimal GetCapacity();
+        internal decimal GetCapacity();
     }
 }

@@ -11,27 +11,31 @@ namespace SmartBatteryTesterDesktopApp.BL
         private IInfoSaver _infoSaver;
         private ISwitchable _dischargerSwitch;
         private ICapacityCalculator _capacityCalculator;
-
         private decimal _lowerDischargeThreshold;
         private decimal _valuesChangeDiscreteness;
         private decimal _prevVoltage;
         private decimal _prevCurrent;
 
+        private ICapacityCalculatorFactory _capacityCalculatorFactory;
+        ICapacityCalculatorFactory IDischarger.CapacityCalculatorFactory
+        {
+            set => _capacityCalculatorFactory = value;
+        }
+
         public Discharger(IValuesSaver valuesSaver, IInfoSaver infoSaver, ISwitchable dischargerSwitch)
         {
-            _capacityCalculator = new CapacityCalculator();
-
             _dataModel = new DischargerValuesDto();
             _infoModel = new DischargerInfoDto();
 
             _valuesSaver = valuesSaver;
             _infoSaver = infoSaver;
             _dischargerSwitch = dischargerSwitch;
-
         }
 
         public void Start(decimal lowerDischargeThreshold, decimal voltageBeforeDischarging, decimal valuesChangeDiscreteness)
         {
+            _capacityCalculator = _capacityCalculatorFactory.MakeCapacityCalculator();
+
             _dataModel.Voltage = voltageBeforeDischarging;
             _dataModel.CurrentDateTime = DateTime.Now;
 
@@ -58,7 +62,6 @@ namespace SmartBatteryTesterDesktopApp.BL
             {
                 HandleCurrentValues(voltage, current);
             }
-
         }
 
         #region PrivateMethods

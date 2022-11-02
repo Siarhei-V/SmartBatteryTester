@@ -6,19 +6,33 @@ namespace SmartBatteryTesterDesktopApp.BL
     {
         private DischargerInfoDto _dischargerInfoDto;
 
-        public DateTime DischargingStartDateTime { get; set; }
-        public DateTime DischargingEndDateTime { get; set; }
-        public decimal DischargingCurrent { get; set; }
+        private DateTime _dischargingStartDateTime;
+        DateTime ICapacityCalculator.DischargingStartDateTime 
+        {
+            set => _dischargingStartDateTime = value;
+        }
 
-        public CapacityCalculator()
+        private DateTime _dischargingEndDateTime;
+        DateTime ICapacityCalculator.DischargingEndDateTime
+        {
+            set => _dischargingEndDateTime = value;
+        }
+
+        private decimal _dischargingCurrent;
+        decimal ICapacityCalculator.DischargingCurrent
+        {
+            set => _dischargingCurrent = value;
+        }
+
+        internal CapacityCalculator()
         {
             _dischargerInfoDto = new DischargerInfoDto();
         }
 
-        public decimal GetCapacity()
+        decimal ICapacityCalculator.GetCapacity()
         {
-            return _dischargerInfoDto.ResultCapacity = Convert.ToDecimal((DischargingEndDateTime - DischargingStartDateTime)
-                .TotalHours) * DischargingCurrent;
+            return _dischargerInfoDto.ResultCapacity = Convert.ToDecimal((_dischargingEndDateTime - _dischargingStartDateTime)
+                .TotalHours) * _dischargingCurrent;
         }
     }
 }
