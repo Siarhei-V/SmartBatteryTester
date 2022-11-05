@@ -1,9 +1,10 @@
-﻿namespace SmartBatteryTesterDesktopApp.PORT.Interfaces
+﻿using SmartBatteryTesterDesktopApp.BL.Interfaces;
+
+namespace SmartBatteryTesterDesktopApp.PORT.Interfaces
 {
     public interface IPortDataHandler
     {
-        public void Connect();
-        public void GetData(decimal voltage, decimal current, DateTime currentDateTime);
-        public void Disconnect();
+        void HandleStartValues(decimal lowerDischargerVoltage, decimal startVoltage, decimal valuesChangeDiscreteness);
+        void HandleIntermediateValues(decimal voltage, decimal current, DateTime dateTime);
     }
 }
