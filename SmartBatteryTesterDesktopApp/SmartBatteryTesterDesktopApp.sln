@@ -9,6 +9,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SmartBatteryTesterDesktopAp
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SmartBatteryTesterDesktopApp.BL.Tests", "SmartBatteryTesterDesktopApp.BL.Tests\SmartBatteryTesterDesktopApp.BL.Tests.csproj", "{5C20D87D-CECC-47D6-A674-4105D7BAFE51}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmartBatteryTesterDesktopApp.PORT", "SmartBatteryTesterDesktopApp.PORT\SmartBatteryTesterDesktopApp.PORT.csproj", "{14F64F6D-C433-4EC3-BC48-3B95FDC7A6A7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmartBatteryTesterDesktopApp.PORT.Tests", "SmartBatteryTesterDesktopApp.PORT.Tests\SmartBatteryTesterDesktopApp.PORT.Tests.csproj", "{246F1F41-0F82-4863-85D6-FA68692E5C32}"
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmartBatteryTesterDesktopApp.USART", "SmartBatteryTesterDesktopApp.USART\SmartBatteryTesterDesktopApp.USART.csproj", "{2426FF6D-7472-4728-86D3-90940C4DCE85}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmartBatteryTesterDesktopApp.USART.Tests", "SmartBatteryTesterDesktopApp.USART.Tests\SmartBatteryTesterDesktopApp.USART.Tests.csproj", "{96499029-3E8E-4140-8481-170D5829BE9C}"
@@ -31,6 +35,14 @@ Global
 		{5C20D87D-CECC-47D6-A674-4105D7BAFE51}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5C20D87D-CECC-47D6-A674-4105D7BAFE51}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5C20D87D-CECC-47D6-A674-4105D7BAFE51}.Release|Any CPU.Build.0 = Release|Any CPU
+		{14F64F6D-C433-4EC3-BC48-3B95FDC7A6A7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{14F64F6D-C433-4EC3-BC48-3B95FDC7A6A7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{14F64F6D-C433-4EC3-BC48-3B95FDC7A6A7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{14F64F6D-C433-4EC3-BC48-3B95FDC7A6A7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{246F1F41-0F82-4863-85D6-FA68692E5C32}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{246F1F41-0F82-4863-85D6-FA68692E5C32}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{246F1F41-0F82-4863-85D6-FA68692E5C32}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{246F1F41-0F82-4863-85D6-FA68692E5C32}.Release|Any CPU.Build.0 = Release|Any CPU
 		{2426FF6D-7472-4728-86D3-90940C4DCE85}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{2426FF6D-7472-4728-86D3-90940C4DCE85}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2426FF6D-7472-4728-86D3-90940C4DCE85}.Release|Any CPU.ActiveCfg = Release|Any CPU
