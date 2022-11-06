@@ -4,33 +4,35 @@ using Xunit;
 
 namespace SmartBatteryTesterDesktopApp.PORT.Tests
 {
-    public class PortParametersSetterTest
+    public class PortDataHandlerTest
     {
         [Fact]
         public void CheckSingletonImplementation()
         {
             // Arrange
-            IPortParametersSetter firstPortParametersSetter = PortParametersSetter.Instance;
-            IPortParametersSetter secondPortParametersSetter = PortParametersSetter.Instance;
+            IPortDataHandler firstPortDataHandler; 
+            IPortDataHandler secondPortDataHandler;
 
             // Act
+            firstPortDataHandler = PortDataHandler.Instance;
+            secondPortDataHandler = PortDataHandler.Instance;
 
-            // Arrange
-            Assert.Equal(firstPortParametersSetter, secondPortParametersSetter);
+            // Assert
+            Assert.Same(firstPortDataHandler, secondPortDataHandler);
         }
 
         [Fact]
         public void CheckNoPublicConstructors()
         {
             // Arrange
-            Type portParametersSetter = typeof(PortParametersSetter);
-            ConstructorInfo[] constructorsInfoArray = portParametersSetter.GetConstructors();
+            Type portDataHandler = typeof(PortDataHandler);
+            ConstructorInfo[] constructorInfos = portDataHandler.GetConstructors();
             bool hasPublicConstructors = false;
 
             // Act
-            foreach (ConstructorInfo constructorInfo in constructorsInfoArray)
+            foreach (var item in constructorInfos)
             {
-                if (constructorInfo.IsPublic)
+                if (item.IsPublic)
                 {
                     hasPublicConstructors = true;
                     break;

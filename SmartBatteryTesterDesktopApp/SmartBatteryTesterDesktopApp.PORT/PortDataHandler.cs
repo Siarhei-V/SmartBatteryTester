@@ -6,23 +6,45 @@ namespace SmartBatteryTesterDesktopApp.PORT
 {
     public class PortDataHandler : IPortDataHandler
     {
-        IDischargerInitializer? _dischargerInitializer;
-        public IDischarger? _discharger;
+        static PortDataHandler? _portDataHandler;
+        IDischargerFacade? _dischargerFacade;
+        IDischargerController _dischargerController;
+        IPortDataTransmitter _portTransmitter;
 
-        public PortDataHandler(IValuesSaver valuesSaver, IInfoSaver infoSaver, ISwitchable dischargerSwitch)  // TODO: change ctor?
+        private PortDataHandler()
         {
-            _dischargerInitializer = new DischargerInitializer(valuesSaver, infoSaver, dischargerSwitch);
-            _discharger = _dischargerInitializer.DischargerImplementation;
+            _dischargerFacade = new DischargerFacade();
+            _dischargerController = new PortController();
+            _dischargerController.ControllerNotify += (sender, args) => _portTransmitter?.StopDataTransfer();
+        }
+
+        public static PortDataHandler Instance
+        {
+            get => _portDataHandler ?? (_portDataHandler = new PortDataHandler());
+        }
+
+        public IPortDataTransmitter PortTransmitter
+        {
+            set => _portTransmitter = value;
+        }
+        public void InitializeDataHandler(IDischargerDataSaver dischargerDataSaver) // TODO: this is a temporary parameter
+        {
+            _dischargerFacade.InitializeDischarger(dischargerDataSaver, _dischargerController);
+        }
+
+        public void StartDischarging(Dictionary<string, string> portConnectionParameters)
+        {
+            _portTransmitter.StartDataTransfer(portConnectionParameters);
         }
 
         public void HandleStartValues(decimal lowerDischargerVoltage, decimal startVoltage, decimal valuesChangeDiscreteness)
         {
-            _discharger.Start(lowerDischargerVoltage, startVoltage, valuesChangeDiscreteness);
+            _dischargerFacade.StartDischarging(lowerDischargerVoltage, startVoltage, valuesChangeDiscreteness);
         }
 
         public void HandleIntermediateValues(decimal voltage, decimal current, DateTime dateTime)
         {
-            _discharger.Discharge(voltage, current);
+            _dischargerFacade.Discharge(voltage, current);
         }
     }
 }
