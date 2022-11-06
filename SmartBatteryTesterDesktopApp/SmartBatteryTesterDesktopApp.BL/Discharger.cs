@@ -2,41 +2,29 @@
 
 namespace SmartBatteryTesterDesktopApp.BL
 {
-    public class Discharger : IDischarger
+    internal class Discharger : IDischarger
     {
-        private DischargerValuesDto _dataModel;
-        private DischargerInfoDto _infoModel;
+        private DischargerDto _dataModel;
 
-        private IValuesSaver _valuesSaver;
-        private IInfoSaver _infoSaver;
-        private ISwitchable _dischargerSwitch;
+        private IDischargerDataSaver _dataSaver;
         private IResultsCalculator _resultsCalculator;
+        private IDischargerController _controller;
         private decimal _lowerDischargeThreshold;
         private decimal _valuesChangeDiscreteness;
         private decimal _prevVoltage;
         private decimal _prevCurrent;
 
-        private IResultsCalculatorFactory _resultsCalculatorFactory;
-        IResultsCalculatorFactory IDischarger.ResultsCalculatorFactory
+        public Discharger(IDischargerDataSaver dataSaver, IResultsCalculator resultsCalculator, DischargerDto dischargerDto, 
+            IDischargerController dischargerController)
         {
-            set => _resultsCalculatorFactory = value;
+            _dataModel = dischargerDto;
+            _resultsCalculator = resultsCalculator;
+            _dataSaver = dataSaver;
+            _controller = dischargerController;
         }
 
-        public Discharger(IValuesSaver valuesSaver, IInfoSaver infoSaver, ISwitchable dischargerSwitch)
+        void IDischarger.Start(decimal lowerDischargeThreshold, decimal voltageBeforeDischarging, decimal valuesChangeDiscreteness)
         {
-            _dataModel = new DischargerValuesDto();
-            _infoModel = new DischargerInfoDto();
-
-            _valuesSaver = valuesSaver;
-            _infoSaver = infoSaver;
-            _dischargerSwitch = dischargerSwitch;
-        }
-
-        public void Start(decimal lowerDischargeThreshold, decimal voltageBeforeDischarging, decimal valuesChangeDiscreteness)
-        {
-            _resultsCalculator = _resultsCalculatorFactory.MakeResultsCalculator();
-            _resultsCalculator.DischargerInfoDto = _infoModel;
-
             _dataModel.Voltage = voltageBeforeDischarging;
             _dataModel.CurrentDateTime = DateTime.Now;
 
@@ -44,13 +32,13 @@ namespace SmartBatteryTesterDesktopApp.BL
             _lowerDischargeThreshold = lowerDischargeThreshold;
             _valuesChangeDiscreteness = valuesChangeDiscreteness;
 
-            _dischargerSwitch.TurnOn();
+            _dataModel.IsDischargingStarted = true;
             _resultsCalculator.DischargingStartDateTime = _dataModel.CurrentDateTime;
 
-            _valuesSaver.Save(_dataModel);
+            _dataSaver.Save(_dataModel);
         }
 
-        public void Discharge(decimal voltage, decimal current)
+        void IDischarger.Discharge(decimal voltage, decimal current)
         {
             if (voltage <= _lowerDischargeThreshold)
             {
@@ -75,7 +63,7 @@ namespace SmartBatteryTesterDesktopApp.BL
             _prevVoltage = voltage;
             _prevCurrent = current;
 
-            _valuesSaver.Save(_dataModel);
+            _dataSaver.Save(_dataModel);
         }
 
         private void StopDischarging(decimal voltage, decimal current)
@@ -88,10 +76,9 @@ namespace SmartBatteryTesterDesktopApp.BL
             _resultsCalculator.DischargingEndDateTime = _dataModel.CurrentDateTime;
             _resultsCalculator.CalculateResults();
 
-            _dischargerSwitch.TurnOff();
-
-            _valuesSaver.Save(_dataModel);
-            _infoSaver.Save(_infoModel);
+            _dataModel.IsDischargingCompleted = true;
+            _controller.StopDischarging();
+            _dataSaver.Save(_dataModel);
         }
         #endregion
     }
