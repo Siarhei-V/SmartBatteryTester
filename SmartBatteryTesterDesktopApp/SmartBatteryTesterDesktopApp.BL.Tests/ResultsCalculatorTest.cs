@@ -6,13 +6,12 @@ namespace SmartBatteryTesterDesktopApp.BL.Tests
     public class ResultsCalculatorTest
     {
         IResultsCalculator _resultsCalculator;
-        DischargerInfoDto _infoModel;
+        DischargerDto _dataModel;
 
         public ResultsCalculatorTest()
         {
-            _resultsCalculator = new ResultsCalculator();
-            _infoModel = new DischargerInfoDto();
-            _resultsCalculator.DischargerInfoDto = _infoModel;
+            _dataModel = new DischargerDto();
+            _resultsCalculator = new ResultsCalculator(_dataModel);
         }
 
         [Fact]
@@ -32,7 +31,7 @@ namespace SmartBatteryTesterDesktopApp.BL.Tests
             _resultsCalculator.CalculateResults();
 
             // Assert
-            Assert.Equal(70, _infoModel.ResultCapacity);
+            Assert.Equal(70, _dataModel.ResultCapacity);
             Assert.Equal(20, timeDifference.TotalHours);
         }
     }

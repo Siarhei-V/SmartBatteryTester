@@ -1,11 +1,9 @@
 ﻿namespace SmartBatteryTesterDesktopApp.BL.Interfaces
 {
-    public interface IDischarger
+    internal interface IDischarger
     {
-        internal IResultsCalculatorFactory ResultsCalculatorFactory { set; }
+        internal void Start(decimal lowerDischargeThreshold, decimal voltageBeforeDischarging, decimal valuesChangeDiscreteness);
 
-        public void Start(decimal lowerDischargeThreshold, decimal voltageBeforeDischarging, decimal valuesChangeDiscreteness);
-
-        public void Discharge(decimal voltage, decimal current);
+        internal void Discharge(decimal voltage, decimal current);
     }
 }
