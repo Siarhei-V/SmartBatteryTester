@@ -8,20 +8,12 @@ namespace SmartBatteryTesterDesktopApp.USART
     {
         SerialPort _port;
         IUsartParametersConverter _converter;
-        //IEventsHandler _eventsHandler;
-        UsartEventArgs _usartEventArgs;
         Dictionary<string, string>? _parameters;
 
-        //object _objectLock;
-
-        internal UsartDataTransmitter(SerialPort serialPort, IUsartParametersConverter usartDataConverter,
-            UsartEventArgs usartEventArgs/*, IEventsHandler eventsHandler*/)
+        internal UsartDataTransmitter(SerialPort serialPort, IUsartParametersConverter usartDataConverter)
         {
             _port = serialPort;
             _converter = usartDataConverter;
-            _usartEventArgs = usartEventArgs;
-            //_eventsHandler = eventsHandler;
-            //_objectLock = new object();
         }
 
         public Dictionary<string, string> Parameters
@@ -29,25 +21,6 @@ namespace SmartBatteryTesterDesktopApp.USART
             get => _parameters;
             set => _parameters = value;
         }
-
-        //event EventHandler<EventArgs> IPortDataTransmitter.DataReceivedNotify
-        //{
-        //    add
-        //    {
-        //        lock (_objectLock)
-        //        {
-        //            UsartDataReceivedNotify += value;
-        //        }
-        //    }
-
-        //    remove
-        //    {
-        //        lock (_objectLock)
-        //        {
-        //            UsartDataReceivedNotify -= value;
-        //        }
-        //    }
-        //}
 
         public void StartDataTransfer()
         {

@@ -20,7 +20,6 @@ namespace SmartBatteryTesterDesktopApp.USART
             _dataConverter = usartDataConverter;
 
             _portDataTransmitter = portDataTransmitter;
-            //_portDataTransmitter.DataReceivedNotify += HandleDataFromUsart;
             _port.DataReceived += HandleDataFromUsart;
 
             _portDataHandler = portDataHandler;
@@ -39,7 +38,6 @@ namespace SmartBatteryTesterDesktopApp.USART
 
                 lowerVoltageThreshold = Convert.ToDecimal(_portDataTransmitter.Parameters["LowDischargeVoltage"]);
                 valuesChangeDiscretennes = Convert.ToDecimal(_portDataTransmitter.Parameters["ValuesChangeDiscreteness"]);
-                //_dataConverter.ConvertUsartArgsFromStringToDecimal(e, out lowerVoltageThreshold, out valuesChangeDiscretennes);
 
                 _portDataHandler.HandleStartValues(lowerVoltageThreshold, _dataFromUsart, valuesChangeDiscretennes);
                 _isFirstDataReceived = false;
