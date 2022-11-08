@@ -34,7 +34,8 @@ namespace SmartBatteryTesterDesktopApp.PORT
 
         public void StartDischarging(Dictionary<string, string> portConnectionParameters)
         {
-            _portTransmitter.StartDataTransfer(portConnectionParameters);
+            _portTransmitter.Parameters = portConnectionParameters;
+            _portTransmitter.StartDataTransfer();
         }
 
         public void HandleStartValues(decimal lowerDischargerVoltage, decimal startVoltage, decimal valuesChangeDiscreteness)
