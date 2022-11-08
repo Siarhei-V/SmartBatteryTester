@@ -2,8 +2,8 @@
 {
     public interface IPortDataTransmitter
     {
-        public event EventHandler<EventArgs> DataReceivedNotify;
-        public void StartDataTransfer(Dictionary<string, string> parameters);
+        public Dictionary<string, string> Parameters { get; set; }
+        public void StartDataTransfer();
         public void StopDataTransfer();
     }
 }
