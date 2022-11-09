@@ -50,7 +50,7 @@ namespace SmartBatteryTesterDesktopApp.USART
             }
             catch (Exception)
             {
-                throw;
+                // TODO: handle exceptions
             }
         }
         #endregion
