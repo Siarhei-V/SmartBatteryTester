@@ -16,10 +16,6 @@
                     <Setter Property="IsEnabled" Value="False"/>
                     <Setter Property="Foreground" Value="Gray"/>
                 </DataTrigger>
-                <DataTrigger Binding="{Binding ElementName=ConnectionStatusTextBox, Path=Text}" Value="Ошибка данных">
-                    <Setter Property="IsEnabled" Value="False"/>
-                    <Setter Property="Foreground" Value="Gray"/>
-                </DataTrigger>
             </Style.Triggers>
         </Style>
 
@@ -42,6 +38,8 @@
         <Style x:Key="ConnectButton" TargetType="Button">
             <Setter Property="Height" Value="30"/>
             <Setter Property="Width" Value="300"/>
+            <Setter Property="Content" Value="Подключиться к MCU"/>
+            <Setter Property="Command" Value="{Binding ConnectToComPortCommand}"/>
             <Setter Property="Background" Value="LightPink"/>
             <Setter Property="Cursor" Value="Hand"/>
             <Setter Property="BorderThickness" Value="0"/>
@@ -53,11 +51,6 @@
             <Style.Triggers>
                 <DataTrigger Binding="{Binding ElementName=ConnectionStatusTextBox, Path=Text}" Value="Связь установлена">
                     <Setter Property="Background" Value="LightGreen"/>
-                    <Setter Property="Content" Value="Отключиться"/>
-                    <Setter Property="Command" Value="{Binding DisconnectCommand}"/>
-                </DataTrigger>
-                <DataTrigger Binding="{Binding ElementName=ConnectionStatusTextBox, Path=Text}" Value="Ошибка данных">
-                    <Setter Property="Background" Value="LightYellow"/>
                     <Setter Property="Content" Value="Отключиться"/>
                     <Setter Property="Command" Value="{Binding DisconnectCommand}"/>
                 </DataTrigger>
@@ -91,9 +84,6 @@
             <Style.Triggers>
                 <DataTrigger Binding="{Binding ElementName=ConnectionStatusTextBox, Path=Text}" Value="Связь установлена">
                     <Setter Property="Background" Value="LightGreen"/>
-                </DataTrigger>
-                <DataTrigger Binding="{Binding ElementName=ConnectionStatusTextBox, Path=Text}" Value="Ошибка данных">
-                    <Setter Property="Background" Value="LightYellow"/>
                 </DataTrigger>
                 <DataTrigger Binding="{Binding ElementName=ConnectionStatusTextBox, Path=Text}" Value="Ошибка связи">
                     <Setter Property="Background" Value="Pink"/>
@@ -208,7 +198,7 @@
                 </Grid.RowDefinitions>
 
                 <Button Grid.Column="0" Grid.Row="1" Template="{DynamicResource ConnectButtonTemplate}" 
-                    Style="{StaticResource ConnectButton}" Command="{Binding ConnectToComPortCommand}" Content="Подключиться к MCU">
+                    Style="{StaticResource ConnectButton}">
                     <Button.Resources>
                         <Style TargetType="Border">
                             <Setter Property="CornerRadius" Value="5"/>

@@ -5,6 +5,7 @@ using SmartBatteryTesterDesktopApp.UI.Models;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Windows;
 
 namespace SmartBatteryTesterDesktopApp.ViewModels
 {
@@ -23,7 +24,19 @@ namespace SmartBatteryTesterDesktopApp.ViewModels
             _dischargingParameters = dischargingParameters;
             _portDataHandler = portDataHandler;
             _onDataChanged = onDataChanged;
-            _onDataChanged.DataChanged += (s, e) => VoltageVM = ((MeasurementEventArgs)e).Voltage;
+            _onDataChanged.DataChanged += (s, e) =>
+            {
+                try
+                {
+                    VoltageVM = ((MeasurementEventArgs)e).Voltage;
+                    ConnectionStatusMessageVM = "Связь установлена";
+                }
+                catch (System.Exception ex)
+                {
+                    ConnectionStatusMessageVM = "Ошибка связи";
+                    MessageBox.Show(ex.Message);
+                }
+            };
         }
 
         #region Parameter Lists
@@ -125,8 +138,30 @@ namespace SmartBatteryTesterDesktopApp.ViewModels
                     (_connectToComPortCommand = new RelayCommand(obj =>
                     {
                         CreateParameterDictionary();
-                        ConnectionStatusMessageVM = "Связь установлена";
-                        _portDataHandler.StartDischarging(_startParameters);
+
+                        try
+                        {
+                            _portDataHandler.StartDischarging(_startParameters);
+                        }
+                        catch (System.Exception e)
+                        {
+                            MessageBox.Show($"Ахтунг: {e.Message}");
+                        }
+                    }));
+            }
+        }
+
+        private RelayCommand _disconnectCommand;
+        public RelayCommand DisconnectCommand
+        {
+            get
+            {
+                return _disconnectCommand ??
+                    (_disconnectCommand = new RelayCommand(obj =>
+                    {
+                        VoltageVM = string.Empty;
+                        ConnectionStatusMessageVM = "Порт закрыт";
+                        _portDataHandler.StopDischarging();
                     }));
             }
         }
