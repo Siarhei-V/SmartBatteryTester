@@ -11,6 +11,9 @@ namespace SmartBatteryTesterDesktopApp.PORT
         IDischargerController _dischargerController;
         IPortDataTransmitter _portTransmitter;
 
+        string _voltage;
+        string _current;
+
         private PortDataHandler()
         {
             _dischargerFacade = new DischargerFacade();
@@ -27,6 +30,15 @@ namespace SmartBatteryTesterDesktopApp.PORT
         {
             set => _portTransmitter = value;
         }
+        public string Voltage
+        {
+            get => _voltage;
+        }
+        public string Current
+        {
+            get => _current;
+        }
+
         public void InitializeDataHandler(IDischargerDataSaver dischargerDataSaver) // TODO: this is a temporary parameter
         {
             _dischargerFacade.InitializeDischarger(dischargerDataSaver, _dischargerController);
@@ -38,14 +50,21 @@ namespace SmartBatteryTesterDesktopApp.PORT
             _portTransmitter.StartDataTransfer();
         }
 
-        public void HandleStartValues(decimal lowerDischargerVoltage, decimal startVoltage, decimal valuesChangeDiscreteness)
+        public void HandleStartValues(string lowerDischargerVoltage, string startVoltage, string valuesChangeDiscreteness)
         {
-            _dischargerFacade.StartDischarging(lowerDischargerVoltage, startVoltage, valuesChangeDiscreteness);
+            _voltage = startVoltage;
+
+            _dischargerFacade.StartDischarging(Convert.ToDecimal(lowerDischargerVoltage), 
+                Convert.ToDecimal(startVoltage), 
+                Convert.ToDecimal(valuesChangeDiscreteness));
         }
 
-        public void HandleIntermediateValues(decimal voltage, decimal current, DateTime dateTime)
+        public void HandleIntermediateValues(string voltage, string current, DateTime dateTime)
         {
-            _dischargerFacade.Discharge(voltage, current);
+            _voltage = voltage;
+            _current = current;
+
+            _dischargerFacade.Discharge(Convert.ToDecimal(voltage),  Convert.ToDecimal(current));
         }
     }
 }
