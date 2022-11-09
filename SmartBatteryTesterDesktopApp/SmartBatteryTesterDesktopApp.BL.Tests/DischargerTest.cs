@@ -84,7 +84,7 @@ namespace SmartBatteryTesterDesktopApp.BL.Tests
 
             // Assert
             _dataSaver.Verify(m => m.Save(It.IsAny<DischargerDto>()), Times.Exactly(2));
-            _controller.Verify(m => m.StopDischarging(), Times.Exactly(1));
+            _controller.Verify(m => m.AutoStopDischarging(), Times.Exactly(1));
         }
     }
 }

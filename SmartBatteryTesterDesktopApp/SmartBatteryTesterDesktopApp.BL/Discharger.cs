@@ -77,7 +77,7 @@ namespace SmartBatteryTesterDesktopApp.BL
             _resultsCalculator.CalculateResults();
 
             _dataModel.IsDischargingCompleted = true;
-            _controller.StopDischarging();
+            _controller.AutoStopDischarging();
             _dataSaver.Save(_dataModel);
         }
         #endregion
