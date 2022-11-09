@@ -2,6 +2,6 @@
 {
     internal interface IUsartDataConverter
     {
-        internal decimal ConvertDataFromUsart(object? sender);
+        internal string ConvertDataFromUsart(object? sender);
     }
 }

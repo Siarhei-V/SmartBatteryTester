@@ -5,11 +5,11 @@ namespace SmartBatteryTesterDesktopApp.USART
 {
     internal class UsartDataConverter : IUsartDataConverter
     {
-        decimal IUsartDataConverter.ConvertDataFromUsart(object? sender)
+        string IUsartDataConverter.ConvertDataFromUsart(object? sender)
         {
             var convertedData = ((SerialPort)sender).ReadLine();
             convertedData = convertedData.Replace(".", ",");
-            return Convert.ToDecimal(convertedData);
+            return convertedData;
         }
     }
 }
