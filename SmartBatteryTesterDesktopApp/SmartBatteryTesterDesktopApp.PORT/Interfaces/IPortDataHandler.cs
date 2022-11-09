@@ -7,7 +7,7 @@ namespace SmartBatteryTesterDesktopApp.PORT.Interfaces
         public IPortDataTransmitter PortTransmitter { set; }
         public void InitializeDataHandler(IDischargerDataSaver dischargerDataSaver);
         void StartDischarging(Dictionary<string, string> portConnectionParameters);
-        void HandleStartValues(decimal lowerDischargerVoltage, decimal startVoltage, decimal valuesChangeDiscreteness);
-        void HandleIntermediateValues(decimal voltage, decimal current, DateTime dateTime);
+        void HandleStartValues(string lowerDischargerVoltage, string startVoltage, string valuesChangeDiscreteness);
+        void HandleIntermediateValues(string voltage, string current, DateTime dateTime);
     }
 }

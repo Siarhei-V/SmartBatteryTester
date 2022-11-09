@@ -38,14 +38,16 @@ namespace SmartBatteryTesterDesktopApp.PORT
             _portTransmitter.StartDataTransfer();
         }
 
-        public void HandleStartValues(decimal lowerDischargerVoltage, decimal startVoltage, decimal valuesChangeDiscreteness)
+        public void HandleStartValues(string lowerDischargerVoltage, string startVoltage, string valuesChangeDiscreteness)
         {
-            _dischargerFacade.StartDischarging(lowerDischargerVoltage, startVoltage, valuesChangeDiscreteness);
+            _dischargerFacade.StartDischarging(Convert.ToDecimal(lowerDischargerVoltage), 
+                Convert.ToDecimal(startVoltage), 
+                Convert.ToDecimal(valuesChangeDiscreteness));
         }
 
-        public void HandleIntermediateValues(decimal voltage, decimal current, DateTime dateTime)
+        public void HandleIntermediateValues(string voltage, string current, DateTime dateTime)
         {
-            _dischargerFacade.Discharge(voltage, current);
+            _dischargerFacade.Discharge(Convert.ToDecimal(voltage),  Convert.ToDecimal(current));
         }
     }
 }
