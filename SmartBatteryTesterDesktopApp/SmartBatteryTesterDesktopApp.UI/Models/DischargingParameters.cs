@@ -14,5 +14,8 @@ namespace SmartBatteryTesterDesktopApp.UI.Models
         public string? ValuesChangeDiscretennes { get; set; }
 
         public string? LowerVoltageThreshold { get; set; }
+
+        public string? Voltage { get; set; }
+        public string? Current { get; set; }
     }
 }

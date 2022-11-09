@@ -1,5 +1,6 @@
 ﻿using SmartBatteryTesterDesktopApp.Commands;
 using SmartBatteryTesterDesktopApp.PORT.Interfaces;
+using SmartBatteryTesterDesktopApp.UI.Infrastructure;
 using SmartBatteryTesterDesktopApp.UI.Models;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -13,13 +14,16 @@ namespace SmartBatteryTesterDesktopApp.ViewModels
         DischargingParameters _dischargingParameters;
         IPortDataHandler _portDataHandler;
         Dictionary<string, string> _startParameters;
+        INotifyDataChanged _onDataChanged;
 
         public MainWindowVM(ComPortConnectionParameters parameters, DischargingParameters dischargingParameters,
-            IPortDataHandler portDataHandler)
+            IPortDataHandler portDataHandler, INotifyDataChanged onDataChanged)
         {
             _connectionParameters = parameters;
             _dischargingParameters = dischargingParameters;
             _portDataHandler = portDataHandler;
+            _onDataChanged = onDataChanged;
+            _onDataChanged.DataChanged += (s, e) => VoltageVM = ((MeasurementEventArgs)e).Voltage;
         }
 
         #region Parameter Lists
@@ -90,6 +94,16 @@ namespace SmartBatteryTesterDesktopApp.ViewModels
             set => _dischargingParameters.LowerVoltageThreshold = value;
         }
         #endregion
+
+        public string VoltageVM
+        {
+            get => _dischargingParameters.Voltage;
+            set
+            {
+                _dischargingParameters.Voltage = value;
+                OnPropertyChanged();
+            }
+        }
 
         #region Commands
         private RelayCommand _connectToComPortCommand;
