@@ -27,7 +27,7 @@ namespace SmartBatteryTesterDesktopApp.PORT
             }
         }
 
-        public void StopDischarging()
+        public void AutoStopDischarging()
         {
             ControllerNotify?.Invoke(this, new EventArgs());
         }

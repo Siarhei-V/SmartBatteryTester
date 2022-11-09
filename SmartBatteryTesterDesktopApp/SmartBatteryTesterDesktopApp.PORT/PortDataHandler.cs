@@ -45,6 +45,11 @@ namespace SmartBatteryTesterDesktopApp.PORT
             _portTransmitter.StartDataTransfer();
         }
 
+        public void StopDischarging()
+        {
+            _portTransmitter.StopDataTransfer();
+        }
+
         public void HandleStartValues(string lowerDischargerVoltage, string startVoltage, string valuesChangeDiscreteness)
         {
             _notifyDataChanged.OnDataChanged(startVoltage, "");
