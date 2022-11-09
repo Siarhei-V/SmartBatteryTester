@@ -105,6 +105,16 @@ namespace SmartBatteryTesterDesktopApp.ViewModels
             }
         }
 
+        public string ConnectionStatusMessageVM
+        {
+            get => _connectionParameters.ConnectionStatus;
+            set
+            {
+                _connectionParameters.ConnectionStatus = value;
+                OnPropertyChanged();
+            }
+        }
+
         #region Commands
         private RelayCommand _connectToComPortCommand;
         public RelayCommand ConnectToComPortCommand
@@ -115,6 +125,7 @@ namespace SmartBatteryTesterDesktopApp.ViewModels
                     (_connectToComPortCommand = new RelayCommand(obj =>
                     {
                         CreateParameterDictionary();
+                        ConnectionStatusMessageVM = "Связь установлена";
                         _portDataHandler.StartDischarging(_startParameters);
                     }));
             }
