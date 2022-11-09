@@ -1,4 +1,8 @@
 ﻿using Ninject;
+using SmartBatteryTesterDesktopApp.PORT;
+using SmartBatteryTesterDesktopApp.PORT.Interfaces;
+using SmartBatteryTesterDesktopApp.UI.Temp;
+using SmartBatteryTesterDesktopApp.USART;
 using SmartBatteryTesterDesktopApp.ViewModels;
 using SmartBatteryTesterDesktopApp.Views;
 using System.Windows;
@@ -10,14 +14,20 @@ namespace SmartBatteryTesterDesktopApp
     /// </summary>
     public partial class App : Application
     {
-        static IKernel kernel;
-        public static IKernel Kernel => kernel;
+        static IKernel _kernel;
+        public static IKernel Kernel => _kernel;
+        IPortDataHandler? _portDataHandler;
 
         protected override void OnStartup(StartupEventArgs e)
         {
-            kernel = new StandardKernel();
+            new UsartInitializer();
+            _kernel = new StandardKernel();
 
-            var appVM = kernel.Get<MainWindowVM>();
+            _portDataHandler = PortDataHandler.Instance;
+            _portDataHandler.InitializeDataHandler(new TempDataSaver());
+            _kernel.Bind<IPortDataHandler>().ToConstant(_portDataHandler);
+
+            var appVM = _kernel.Get<MainWindowVM>();
 
             MainWindow = new MainWindow();
             MainWindow.DataContext = appVM;

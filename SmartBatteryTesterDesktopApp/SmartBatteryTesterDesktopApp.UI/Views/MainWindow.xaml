@@ -5,7 +5,6 @@
         WindowStartupLocation="CenterScreen">
     
     <Window.Resources>
-
         <Style x:Key="ParametersComboBoxStyle" TargetType="ComboBox">
             <Setter Property="Height" Value="30"/>
             <Setter Property="Width" Value="100"/>
@@ -140,14 +139,14 @@
                               ItemsSource="{Binding BaudRateListVM}" SelectedValue="{Binding SelectedBaudRateVM}" SelectedItem="{Binding BaudRateListVM[9]}"/>
                 </StackPanel>
                 <StackPanel Grid.Column="2" Style="{StaticResource ParametersStackPanelStyle}">
-                    <TextBlock Style="{StaticResource ParametersTextBlockStyle}" Text="Parity"/>
-                    <ComboBox Style="{StaticResource ParametersComboBoxStyle}"
-                              ItemsSource="{Binding ParityListVM}" SelectedValue="{Binding SelectedParityVM}" SelectedItem="{Binding ParityListVM[0]}"/>
-                </StackPanel>
-                <StackPanel Grid.Column="3" Style="{StaticResource ParametersStackPanelStyle}">
                     <TextBlock Style="{StaticResource ParametersTextBlockStyle}" Text="Data Bits"/>
                     <ComboBox Style="{StaticResource ParametersComboBoxStyle}"
                               ItemsSource="{Binding DataBitsListVM}" SelectedValue="{Binding SelectedDataBitsVM}" SelectedItem="{Binding DataBitsListVM[3]}"/>
+                </StackPanel>
+                <StackPanel Grid.Column="3" Style="{StaticResource ParametersStackPanelStyle}">
+                    <TextBlock Style="{StaticResource ParametersTextBlockStyle}" Text="Parity"/>
+                    <ComboBox Style="{StaticResource ParametersComboBoxStyle}"
+                              ItemsSource="{Binding ParityListVM}" SelectedValue="{Binding SelectedParityVM}" SelectedItem="{Binding ParityListVM[0]}"/>
                 </StackPanel>
                 <StackPanel Grid.Column="4" Style="{StaticResource ParametersStackPanelStyle}">
                     <TextBlock Style="{StaticResource ParametersTextBlockStyle}" Text="Stop Bits"/>
