@@ -9,70 +9,89 @@ namespace SmartBatteryTesterDesktopApp.ViewModels
 {
     internal class MainWindowVM : INotifyPropertyChanged
     {
-        ComPortConnectionParameters _parameters;
+        ComPortConnectionParameters _connectionParameters;
+        DischargingParameters _dischargingParameters;
         IPortDataHandler _portDataHandler;
         Dictionary<string, string> _startParameters;
 
-        public MainWindowVM(ComPortConnectionParameters parameters, IPortDataHandler portDataHandler)
+        public MainWindowVM(ComPortConnectionParameters parameters, DischargingParameters dischargingParameters,
+            IPortDataHandler portDataHandler)
         {
-            _parameters = parameters;
+            _connectionParameters = parameters;
+            _dischargingParameters = dischargingParameters;
             _portDataHandler = portDataHandler;
         }
 
         #region Parameter Lists
         public List<string> PortNameListVM
         {
-            get => _parameters.PortNamesList;
+            get => _connectionParameters.PortNamesList;
         }
 
         public List<string> BaudRateListVM
         {
-            get => _parameters.BaudRatesList;
+            get => _connectionParameters.BaudRatesList;
         }
 
         public List<string> DataBitsListVM
         {
-            get => _parameters.DataBitsList;
+            get => _connectionParameters.DataBitsList;
         }
 
         public List<string> ParityListVM
         {
-            get => _parameters.ParityList;
+            get => _connectionParameters.ParityList;
         }
 
         public List<string> StopBitsListVM
         {
-            get => _parameters.StopBitsList;
+            get => _connectionParameters.StopBitsList;
+        }
+
+        public List<string> ValuesChangeDiscretennesListVM
+        {
+            get => _dischargingParameters.ValuesChangeDiscretennesList;
         }
         #endregion
 
         #region Selected Parameters
         public string SelectedPortNameVM
         {
-            set => _parameters.SelectedPortName = value;
+            set => _connectionParameters.SelectedPortName = value;
         }
 
         public string SelectedBaudRateVM
         {
-            set => _parameters.SelectedBaudRate = value;
+            set => _connectionParameters.SelectedBaudRate = value;
         }
 
         public string SelectedDataBitsVM
         {
-            set => _parameters.SelectedDataBits = value;
+            set => _connectionParameters.SelectedDataBits = value;
         }
 
         public string SelectedParityVM
         {
-            set => _parameters.SelectedParity = value;
+            set => _connectionParameters.SelectedParity = value;
         }
 
         public string SelectedStopBitsVM
         {
-            set => _parameters.SelectedStopBits = value;
+            set => _connectionParameters.SelectedStopBits = value;
+        }
+
+        public string ValuesChangeDiscretennesVM
+        {
+            set => _dischargingParameters.ValuesChangeDiscretennes = value;
+        }
+
+        public string LowerVoltageThresholdVM
+        {
+            set => _dischargingParameters.LowerVoltageThreshold = value;
         }
         #endregion
 
+        #region Commands
         private RelayCommand _connectToComPortCommand;
         public RelayCommand ConnectToComPortCommand
         {
@@ -86,19 +105,20 @@ namespace SmartBatteryTesterDesktopApp.ViewModels
                     }));
             }
         }
+        #endregion
 
         private void CreateParameterDictionary()
         {
             _startParameters = new Dictionary<string, string>()
             {
-                ["PortName"]    = _parameters.SelectedPortName,
-                ["BaudRate"]    = _parameters.SelectedBaudRate,
-                ["DataBits"]    = _parameters.SelectedDataBits,
-                ["Parity"]      = _parameters.SelectedParity,
-                ["StopBits"]    = _parameters.SelectedStopBits,
+                ["PortName"]    = _connectionParameters.SelectedPortName,
+                ["BaudRate"]    = _connectionParameters.SelectedBaudRate,
+                ["DataBits"]    = _connectionParameters.SelectedDataBits,
+                ["Parity"]      = _connectionParameters.SelectedParity,
+                ["StopBits"]    = _connectionParameters.SelectedStopBits,
 
-                ["LowDischargeVoltage"] = "3",
-                ["ValuesChangeDiscreteness"] = "0,5"
+                ["LowDischargeVoltage"] = _dischargingParameters.LowerVoltageThreshold,
+                ["ValuesChangeDiscreteness"] = _dischargingParameters.ValuesChangeDiscretennes
             };
         }
 
