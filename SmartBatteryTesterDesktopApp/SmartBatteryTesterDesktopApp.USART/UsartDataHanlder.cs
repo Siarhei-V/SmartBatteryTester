@@ -9,7 +9,7 @@ namespace SmartBatteryTesterDesktopApp.USART
         IPortDataTransmitter _portDataTransmitter;
         IPortDataHandler _portDataHandler;
         IUsartDataConverter _dataConverter;
-        decimal _dataFromUsart;
+        string _dataFromUsart;
         bool _isFirstDataReceived = true;
         SerialPort _port;
 
@@ -29,15 +29,15 @@ namespace SmartBatteryTesterDesktopApp.USART
         #region Private Methods
         private void HandleDataFromUsart(object? sender, EventArgs e)
         {
-            decimal lowerVoltageThreshold;
-            decimal valuesChangeDiscretennes;
+            string lowerVoltageThreshold;
+            string valuesChangeDiscretennes;
 
             if (_isFirstDataReceived)
             {
                 _dataFromUsart = _dataConverter.ConvertDataFromUsart(sender);
 
-                lowerVoltageThreshold = Convert.ToDecimal(_portDataTransmitter.Parameters["LowDischargeVoltage"]);
-                valuesChangeDiscretennes = Convert.ToDecimal(_portDataTransmitter.Parameters["ValuesChangeDiscreteness"]);
+                lowerVoltageThreshold = _portDataTransmitter.Parameters["LowDischargeVoltage"];
+                valuesChangeDiscretennes = _portDataTransmitter.Parameters["ValuesChangeDiscreteness"];
 
                 _portDataHandler.HandleStartValues(lowerVoltageThreshold, _dataFromUsart, valuesChangeDiscretennes);
                 _isFirstDataReceived = false;
@@ -46,7 +46,7 @@ namespace SmartBatteryTesterDesktopApp.USART
             try
             {
                 _dataFromUsart = _dataConverter.ConvertDataFromUsart(sender);
-                _portDataHandler.HandleIntermediateValues(_dataFromUsart, 10, DateTime.Now);
+                _portDataHandler.HandleIntermediateValues(_dataFromUsart, "10", DateTime.Now); 
             }
             catch (Exception)
             {
