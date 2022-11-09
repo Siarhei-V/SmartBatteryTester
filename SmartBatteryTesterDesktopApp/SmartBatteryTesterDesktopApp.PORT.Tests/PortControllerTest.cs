@@ -16,7 +16,7 @@ namespace SmartBatteryTesterDesktopApp.PORT.Tests
             _eventTriggeredCount = 0;
 
             // Act
-            dischargerController.StopDischarging();
+            dischargerController.AutoStopDischarging();
 
             // Assert
             Assert.Equal(1, _eventTriggeredCount);
@@ -31,9 +31,9 @@ namespace SmartBatteryTesterDesktopApp.PORT.Tests
 
             // Act
             dischargerController.ControllerNotify += HandleControllerNotify;
-            dischargerController.StopDischarging();
+            dischargerController.AutoStopDischarging();
             dischargerController.ControllerNotify -= HandleControllerNotify;
-            dischargerController.StopDischarging();
+            dischargerController.AutoStopDischarging();
 
             // Assert
             Assert.Equal(1, _eventTriggeredCount);
