@@ -10,9 +10,7 @@ namespace SmartBatteryTesterDesktopApp.PORT
         IDischargerFacade? _dischargerFacade;
         IDischargerController _dischargerController;
         IPortDataTransmitter _portTransmitter;
-
-        string _voltage;
-        string _current;
+        INotifyDataChanged _notifyDataChanged;
 
         private PortDataHandler()
         {
@@ -30,13 +28,10 @@ namespace SmartBatteryTesterDesktopApp.PORT
         {
             set => _portTransmitter = value;
         }
-        public string Voltage
+
+        public INotifyDataChanged NotifyDataChanged
         {
-            get => _voltage;
-        }
-        public string Current
-        {
-            get => _current;
+            set => _notifyDataChanged = value;
         }
 
         public void InitializeDataHandler(IDischargerDataSaver dischargerDataSaver) // TODO: this is a temporary parameter
@@ -52,7 +47,7 @@ namespace SmartBatteryTesterDesktopApp.PORT
 
         public void HandleStartValues(string lowerDischargerVoltage, string startVoltage, string valuesChangeDiscreteness)
         {
-            _voltage = startVoltage;
+            _notifyDataChanged.OnDataChanged(startVoltage, "");
 
             _dischargerFacade.StartDischarging(Convert.ToDecimal(lowerDischargerVoltage), 
                 Convert.ToDecimal(startVoltage), 
@@ -61,9 +56,7 @@ namespace SmartBatteryTesterDesktopApp.PORT
 
         public void HandleIntermediateValues(string voltage, string current, DateTime dateTime)
         {
-            _voltage = voltage;
-            _current = current;
-
+            _notifyDataChanged.OnDataChanged(voltage, current);
             _dischargerFacade.Discharge(Convert.ToDecimal(voltage),  Convert.ToDecimal(current));
         }
     }
