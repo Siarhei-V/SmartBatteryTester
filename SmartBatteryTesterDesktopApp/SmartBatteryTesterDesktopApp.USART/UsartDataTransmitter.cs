@@ -43,8 +43,8 @@ namespace SmartBatteryTesterDesktopApp.USART
 
         public void StopDataTransfer()
         {
-            _port?.Close();
             _port?.WriteLine("1");
+            _port?.Close();
         }
     }
 }
