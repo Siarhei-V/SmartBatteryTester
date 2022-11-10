@@ -7,13 +7,13 @@ namespace SmartBatteryTesterDesktopApp.USART
     internal class UsartDataHanlder : IUsartDataHandler
     {
         IPortDataTransmitter _portDataTransmitter;
-        IPortDataHandler _portDataHandler;
+        IPortInteractor _portDataHandler;
         IUsartDataConverter _dataConverter;
         string _dataFromUsart;
         bool _isFirstDataReceived = true;
         SerialPort _port;
 
-        internal UsartDataHanlder(IPortDataTransmitter portDataTransmitter, IPortDataHandler portDataHandler,
+        internal UsartDataHanlder(IPortDataTransmitter portDataTransmitter, IPortInteractor portDataHandler,
             IUsartDataConverter usartDataConverter, SerialPort serialPort)
         {
             _port = serialPort;
