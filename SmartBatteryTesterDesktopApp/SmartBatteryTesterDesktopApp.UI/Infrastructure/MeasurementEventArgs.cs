@@ -6,6 +6,7 @@ namespace SmartBatteryTesterDesktopApp.UI.Infrastructure
     {
         internal string? Voltage { get; set; }
         internal string? Current { get; set; }
+        internal bool IsDischargingStarted { get; set; }
     }
 }
     

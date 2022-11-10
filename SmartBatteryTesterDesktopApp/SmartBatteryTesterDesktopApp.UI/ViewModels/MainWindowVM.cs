@@ -5,6 +5,7 @@ using SmartBatteryTesterDesktopApp.UI.Models;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Threading;
 using System.Windows;
 
 namespace SmartBatteryTesterDesktopApp.ViewModels
@@ -13,23 +14,30 @@ namespace SmartBatteryTesterDesktopApp.ViewModels
     {
         ComPortConnectionParameters _connectionParameters;
         DischargingParameters _dischargingParameters;
-        IPortDataHandler _portDataHandler;
+        IPortInteractor _portInteractor;
         Dictionary<string, string> _startParameters;
         INotifyDataChanged _onDataChanged;
 
         public MainWindowVM(ComPortConnectionParameters parameters, DischargingParameters dischargingParameters,
-            IPortDataHandler portDataHandler, INotifyDataChanged onDataChanged)
+            IPortInteractor portInteractor, INotifyDataChanged onDataChanged)
         {
             _connectionParameters = parameters;
             _dischargingParameters = dischargingParameters;
-            _portDataHandler = portDataHandler;
+            _portInteractor = portInteractor;
             _onDataChanged = onDataChanged;
             _onDataChanged.DataChanged += (s, e) =>
             {
                 try
                 {
                     VoltageVM = ((MeasurementEventArgs)e).Voltage;
-                    ConnectionStatusMessageVM = "Связь установлена";
+                    if (((MeasurementEventArgs)e).IsDischargingStarted)
+                    {
+                        ConnectionStatusMessageVM = "Связь установлена";
+                    }
+                    else
+                    {
+                        ConnectionStatusMessageVM = "Порт закрыт";
+                    }
                 }
                 catch (System.Exception ex)
                 {
@@ -141,7 +149,7 @@ namespace SmartBatteryTesterDesktopApp.ViewModels
 
                         try
                         {
-                            _portDataHandler.StartDischarging(_startParameters);
+                            _portInteractor.StartDischarging(_startParameters);
                         }
                         catch (System.Exception e)
                         {
@@ -160,8 +168,7 @@ namespace SmartBatteryTesterDesktopApp.ViewModels
                     (_disconnectCommand = new RelayCommand(obj =>
                     {
                         VoltageVM = string.Empty;
-                        ConnectionStatusMessageVM = "Порт закрыт";
-                        _portDataHandler.StopDischarging();
+                        _portInteractor.StopDischarging();
                     }));
             }
         }

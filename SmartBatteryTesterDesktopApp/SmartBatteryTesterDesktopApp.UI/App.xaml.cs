@@ -17,7 +17,7 @@ namespace SmartBatteryTesterDesktopApp
     {
         static IKernel _kernel;
         public static IKernel Kernel => _kernel;
-        IPortDataHandler? _portDataHandler;
+        IPortInteractor? _portInteractor;
         INotifyDataChanged _dataChangedNotifier;
 
         protected override void OnStartup(StartupEventArgs e)
@@ -26,10 +26,10 @@ namespace SmartBatteryTesterDesktopApp
             _dataChangedNotifier = new DataChangedNotifier();
             _kernel = new StandardKernel();
 
-            _portDataHandler = PortDataHandler.Instance;
-            _portDataHandler.InitializeDataHandler(new TempDataSaver());
-            _portDataHandler.NotifyDataChanged = _dataChangedNotifier;
-            _kernel.Bind<IPortDataHandler>().ToConstant(_portDataHandler);
+            _portInteractor = PortInteractor.Instance;
+            _portInteractor.InitializeDataHandler(new TempDataSaver());
+            _portInteractor.NotifyDataChanged = _dataChangedNotifier;
+            _kernel.Bind<IPortInteractor>().ToConstant(_portInteractor);
             _kernel.Bind<INotifyDataChanged>().ToConstant(_dataChangedNotifier);
 
             var appVM = _kernel.Get<MainWindowVM>();
