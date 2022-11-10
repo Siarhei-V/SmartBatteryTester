@@ -2,7 +2,7 @@
 
 namespace SmartBatteryTesterDesktopApp.PORT.Interfaces
 {
-    public interface IPortDataHandler
+    public interface IPortInteractor
     {
         IPortDataTransmitter PortTransmitter { set; }
         public INotifyDataChanged NotifyDataChanged { set; }
