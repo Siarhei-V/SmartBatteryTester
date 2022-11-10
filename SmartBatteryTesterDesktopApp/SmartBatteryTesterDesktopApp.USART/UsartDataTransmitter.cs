@@ -33,6 +33,7 @@ namespace SmartBatteryTesterDesktopApp.USART
             try
             {
                 _port.Open();
+                _port.WriteLine("2");
             }
             catch (Exception)
             {
@@ -42,6 +43,7 @@ namespace SmartBatteryTesterDesktopApp.USART
 
         public void StopDataTransfer()
         {
+            _port?.WriteLine("1");
             _port?.Close();
         }
     }
