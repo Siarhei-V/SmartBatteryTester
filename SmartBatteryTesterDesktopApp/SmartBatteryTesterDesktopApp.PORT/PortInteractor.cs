@@ -11,12 +11,18 @@ namespace SmartBatteryTesterDesktopApp.PORT
         IDischargerController _dischargerController;
         IPortDataTransmitter _portTransmitter;
         INotifyDataChanged _notifyDataChanged;
+        bool _isDischargingStarted;
 
         private PortInteractor()
         {
             _dischargerFacade = new DischargerFacade();
             _dischargerController = new PortController();
-            _dischargerController.ControllerNotify += (sender, args) => _portTransmitter?.StopDataTransfer();
+            _dischargerController.ControllerNotify += (sender, args) => 
+            {
+                _portTransmitter?.StopDataTransfer();
+                _isDischargingStarted = false;
+                _notifyDataChanged.OnDataChanged("", "", _isDischargingStarted);
+            };
         }
 
         public static PortInteractor Instance
@@ -41,6 +47,7 @@ namespace SmartBatteryTesterDesktopApp.PORT
 
         public void StartDischarging(Dictionary<string, string> portConnectionParameters)
         {
+            _isDischargingStarted = true;
             _portTransmitter.Parameters = portConnectionParameters;
             _portTransmitter.StartDataTransfer();
         }
@@ -48,11 +55,13 @@ namespace SmartBatteryTesterDesktopApp.PORT
         public void StopDischarging()
         {
             _portTransmitter.StopDataTransfer();
+            _isDischargingStarted = false;
+            _notifyDataChanged.OnDataChanged("", "", _isDischargingStarted);
         }
 
         public void HandleStartValues(string lowerDischargerVoltage, string startVoltage, string valuesChangeDiscreteness)
         {
-            _notifyDataChanged.OnDataChanged(startVoltage, "");
+            _notifyDataChanged.OnDataChanged(startVoltage, "", _isDischargingStarted);
 
             _dischargerFacade.StartDischarging(Convert.ToDecimal(lowerDischargerVoltage), 
                 Convert.ToDecimal(startVoltage), 
@@ -61,7 +70,7 @@ namespace SmartBatteryTesterDesktopApp.PORT
 
         public void HandleIntermediateValues(string voltage, string current, DateTime dateTime)
         {
-            _notifyDataChanged.OnDataChanged(voltage, current);
+            _notifyDataChanged.OnDataChanged(voltage, current, _isDischargingStarted);
             _dischargerFacade.Discharge(Convert.ToDecimal(voltage),  Convert.ToDecimal(current));
         }
     }
