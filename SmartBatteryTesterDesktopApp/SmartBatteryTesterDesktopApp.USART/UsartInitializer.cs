@@ -11,7 +11,7 @@ namespace SmartBatteryTesterDesktopApp.USART
         IUsartParametersConverter _converter;
         IPortDataTransmitter _portDataTransmitter;
         IUsartDataHandler _usartDataHandler;
-        IPortDataHandler _portDataHandler;
+        IPortInteractor _portInteractor;
         IUsartDataConverter _usartDataConverter;
 
         public UsartInitializer()
@@ -21,8 +21,8 @@ namespace SmartBatteryTesterDesktopApp.USART
             _usartDataConverter = new UsartDataConverter();
 
             _portDataTransmitter = new UsartDataTransmitter(_port, _converter);
-            _portDataHandler = PortDataHandler.Instance;
-            _usartDataHandler = new UsartDataHanlder(_portDataTransmitter, _portDataHandler, _usartDataConverter, _port);
+            _portInteractor = PortInteractor.Instance;
+            _usartDataHandler = new UsartDataHanlder(_portDataTransmitter, _portInteractor, _usartDataConverter, _port);
         }
     }
 }
