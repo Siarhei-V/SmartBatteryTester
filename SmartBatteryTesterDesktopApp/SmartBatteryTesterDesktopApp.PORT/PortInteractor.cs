@@ -4,24 +4,24 @@ using SmartBatteryTesterDesktopApp.PORT.Interfaces;
 
 namespace SmartBatteryTesterDesktopApp.PORT
 {
-    public class PortDataHandler : IPortDataHandler
+    public class PortInteractor : IPortInteractor
     {
-        static PortDataHandler? _portDataHandler;
+        static PortInteractor? _portDataHandler;
         IDischargerFacade? _dischargerFacade;
         IDischargerController _dischargerController;
         IPortDataTransmitter _portTransmitter;
         INotifyDataChanged _notifyDataChanged;
 
-        private PortDataHandler()
+        private PortInteractor()
         {
             _dischargerFacade = new DischargerFacade();
             _dischargerController = new PortController();
             _dischargerController.ControllerNotify += (sender, args) => _portTransmitter?.StopDataTransfer();
         }
 
-        public static PortDataHandler Instance
+        public static PortInteractor Instance
         {
-            get => _portDataHandler ?? (_portDataHandler = new PortDataHandler());
+            get => _portDataHandler ?? (_portDataHandler = new PortInteractor());
         }
 
         public IPortDataTransmitter PortTransmitter

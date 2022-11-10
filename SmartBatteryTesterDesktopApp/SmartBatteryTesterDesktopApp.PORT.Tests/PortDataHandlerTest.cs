@@ -10,12 +10,12 @@ namespace SmartBatteryTesterDesktopApp.PORT.Tests
         public void CheckSingletonImplementation()
         {
             // Arrange
-            IPortDataHandler firstPortDataHandler; 
-            IPortDataHandler secondPortDataHandler;
+            IPortInteractor firstPortDataHandler; 
+            IPortInteractor secondPortDataHandler;
 
             // Act
-            firstPortDataHandler = PortDataHandler.Instance;
-            secondPortDataHandler = PortDataHandler.Instance;
+            firstPortDataHandler = PortInteractor.Instance;
+            secondPortDataHandler = PortInteractor.Instance;
 
             // Assert
             Assert.Same(firstPortDataHandler, secondPortDataHandler);
@@ -25,7 +25,7 @@ namespace SmartBatteryTesterDesktopApp.PORT.Tests
         public void CheckNoPublicConstructors()
         {
             // Arrange
-            Type portDataHandler = typeof(PortDataHandler);
+            Type portDataHandler = typeof(PortInteractor);
             ConstructorInfo[] constructorInfos = portDataHandler.GetConstructors();
             bool hasPublicConstructors = false;
 
