@@ -19,11 +19,11 @@
 #define RS1 PORTD |= 0b00000100; // данные
 #define RS0 PORTD &= 0b11111011; // команда
 
-//----------- ADConv -----------
+//----------- ADC -----------
 
-void AdcInit()
+void InitAdc()
 {
-	ADCSRA |= (1 << ADEN) | (1 << ADPS2) | (1 << ADPS1);
+	ADCSRA |= (1 << ADEN) | (1 << ADPS2) | (1 << ADPS1) | (1 << ADPS0);
 	ADMUX &= ~(1 << REFS1);
 	ADMUX |= (1 << REFS0);
 }
@@ -32,7 +32,7 @@ void AdcInit()
 
 //----------- Display -----------
 
-void PortForDisplayInit()
+void InitPortForDisplay()
 {
 	DDRD = 0xFF;
 	PORTD = 0x00;
@@ -94,9 +94,9 @@ void SendString (char str[])
 	}
 }
 
-void DisplayInit()
+void InitDisplay()
 {
-	PortForDisplayInit();
+	InitPortForDisplay();
 	_delay_ms(15);
 	
 	// включаем 4-х битный режим: 3 раза передаем 11, один или два раза - 10
@@ -125,7 +125,7 @@ void DisplayInit()
 
 //----------- USART -----------
 
-void USART_Init(unsigned int speed)
+void InitUsart(unsigned int speed)
 {
 	UBRRH = (unsigned char)(speed >> 8);
 	UBRRL = (unsigned char)speed;
@@ -141,73 +141,95 @@ void USART_Init(unsigned int speed)
 	//| (UPM0 = 0);
 }
 
-void UsartDataTransmit(unsigned char data)
+void SendCharToUsart(unsigned char data)
 {
 	while (!(UCSRA & (1 << UDRE)));
 	UDR = data;
 	// TODO do something with data
 }
 
-void UsartDataArrayTransmit (char str[])
+void SendArrayToUsart (char str[])
 {
 	wchar_t i;
 	for(i = 0; str[i] != '\0'; i++)
 	{
-		UsartDataTransmit(str[i]);
+		SendCharToUsart(str[i]);
 	}
 	
-	UsartDataTransmit(0x0a);
+	SendCharToUsart(0x0a);
 }
-//-----------------------------
-
 
 ISR(USART_RXC_vect)
 {
 	int dataFromUsart = 0;
 	dataFromUsart = UDR;
 	
-	if (dataFromUsart == 49)
+	switch (dataFromUsart)
 	{
-		PORTB &= ~(1<<(PORTB0));
-	}
-	else if (dataFromUsart == 50)
-	{
-		PORTB |= (1<<(PORTB0));
+		case 49:
+		PORTB &= ~(1 << PORTB0);	break;
+		case 50:
+		PORTB |= (1 << PORTB0);		break;
 	}
 }
 
+//-----------------------------
+
+//----------- Timer -----------
+
+void InitTimer()
+{
+	TCCR1B |= (1 << WGM12);
+	TIMSK |= (1 << OCIE1A);
+	OCR1AH = 24;
+	OCR1AL = 106;
+	TCCR1B |= (1 << CS12); // делитель 256
+}
+
+unsigned int GetAdcData()
+{
+	ADCSRA |= (1 << ADSC);
+	while((ADCSRA & (1<<ADSC)));
+	return (unsigned int) ADC;
+}
+
+ISR (TIMER1_COMPA_vect)
+{
+	float resultVoltage = 0;
+	float resultCurrent = 0;
+	char buffer [10];
+	char resultToUsart [10];
+	
+	ADMUX |= (1 << MUX0);
+
+	resultVoltage = (float)GetAdcData() / 204.8; // 1024 / 5 = 204,8; 5 - опорное напр.
+	ClearDisplay();
+	SetPos(0, 0);
+	sprintf(buffer,"Ubat = %.2f V", resultVoltage);
+	SendString(buffer);
+	
+	ADMUX &= ~(1 << MUX0);
+	resultCurrent = ((float)GetAdcData() / 204.8) * 1000 * 0.133; // 1024 / 5 = 204,8; 5 - опорное напр.
+	SetPos(0, 1);
+	sprintf(buffer,"Ibat = %.2f A", resultCurrent);
+	SendString(buffer);
+
+	sprintf(resultToUsart,"%.1f", resultVoltage);
+	SendArrayToUsart(resultToUsart);
+}
+
+//-----------------------------
 
 int main(void)
 {
 	DDRB = 0xFF;
-	AdcInit();
-	DisplayInit();
-	USART_Init(16); // 57 600
+	InitAdc();
+	InitDisplay();
+	InitUsart(16); // 57 600
+	InitTimer();
 	sei();
-	
-	// DAC
-	float result = 0;
-	unsigned short adc_value = 0;
-	char buffer [30];
-	char resultToUsart [10];
 
-	SetPos(0, 0);
-	
 	while(1)
-	{	// DAC
-		ADCSRA |= (1 << ADSC);
-		while((ADCSRA & (1<<ADSC)));
-		adc_value = (unsigned short) ADC;
-		result = (float)adc_value / (float)204.2689; // 1024 / 5 = 204,8; 5 - опорное напр.
-		ClearDisplay();
-		sprintf(buffer,"Ubat = %.2f V", result);
-		SendString(buffer);
-
-		sprintf(resultToUsart,"%.1f", result);
-		UsartDataArrayTransmit(resultToUsart);
-		
-		_delay_ms(500);
-		// TODO work with ADC using interruptions
-
+	{
 	}
 }
