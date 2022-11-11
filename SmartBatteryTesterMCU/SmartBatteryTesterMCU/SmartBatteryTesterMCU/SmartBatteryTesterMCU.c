@@ -203,7 +203,6 @@ ISR (TIMER1_COMPA_vect)
 	ADMUX |= (1 << MUX0);
 
 	resultVoltage = (float)GetAdcData() / 204.8; // 1024 / 5 = 204,8; 5 - опорное напр.
-	ClearDisplay();
 	SetPos(0, 0);
 	sprintf(buffer,"Ubat = %.2f V", resultVoltage);
 	SendString(buffer);
