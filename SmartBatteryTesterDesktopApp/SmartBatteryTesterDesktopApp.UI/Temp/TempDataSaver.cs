@@ -8,6 +8,12 @@ namespace SmartBatteryTesterDesktopApp.UI.Temp
     {
         public void Save(DischargerDto values)  // TODO: This is a temporary implementation
         {
+            if (values.IsDischargingCompleted)
+            {
+                MessageBox.Show(values.DischargeDuration.ToString());
+                MessageBox.Show(values.ResultCapacity.ToString());
+                return;
+            }
             MessageBox.Show(values.Voltage.ToString());
         }
     }

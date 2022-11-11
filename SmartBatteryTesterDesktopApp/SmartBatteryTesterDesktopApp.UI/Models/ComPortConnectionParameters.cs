@@ -51,6 +51,6 @@ namespace SmartBatteryTesterDesktopApp.UI.Models
         public string? SelectedStopBits { get; set; }
         #endregion
 
-        public string? ConnectionStatus { get; set; }
+        public string? ConnectionStatus { get; set; } = "Готов";
     }
 }

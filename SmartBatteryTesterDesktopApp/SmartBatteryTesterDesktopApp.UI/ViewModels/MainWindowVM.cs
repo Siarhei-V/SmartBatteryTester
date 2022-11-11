@@ -5,8 +5,6 @@ using SmartBatteryTesterDesktopApp.UI.Models;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using System.Threading;
-using System.Windows;
 
 namespace SmartBatteryTesterDesktopApp.ViewModels
 {
@@ -42,7 +40,6 @@ namespace SmartBatteryTesterDesktopApp.ViewModels
                 catch (System.Exception ex)
                 {
                     ConnectionStatusMessageVM = "Ошибка связи";
-                    MessageBox.Show(ex.Message);
                 }
             };
         }
@@ -126,6 +123,16 @@ namespace SmartBatteryTesterDesktopApp.ViewModels
             }
         }
 
+        public string SelectedDischargingCurrent
+        {
+            get => _dischargingParameters.Current;
+            set
+            {
+                _dischargingParameters.Current = value;
+                OnPropertyChanged();
+            }
+        }
+
         public string ConnectionStatusMessageVM
         {
             get => _connectionParameters.ConnectionStatus;
@@ -153,7 +160,7 @@ namespace SmartBatteryTesterDesktopApp.ViewModels
                         }
                         catch (System.Exception e)
                         {
-                            MessageBox.Show($"Ахтунг: {e.Message}");
+                            ConnectionStatusMessageVM = e.Message;
                         }
                     }));
             }
