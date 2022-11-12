@@ -6,6 +6,9 @@
         void StartDischarging(Dictionary<string, string> portConnectionParameters);
         void StopDischarging();
 
+        IDataGetter DataSender { set; }
+
+
 
         // TODO: remove this
         public ITempDataSaver TempDataSaver { set; }

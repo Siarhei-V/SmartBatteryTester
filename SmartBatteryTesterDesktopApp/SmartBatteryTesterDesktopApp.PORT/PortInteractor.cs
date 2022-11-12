@@ -4,7 +4,7 @@ using SmartBatteryTesterDesktopApp.PORT.Interfaces;
 
 namespace SmartBatteryTesterDesktopApp.PORT
 {
-    public class PortInteractor : IUiInteractorInputPort, IUsartInteractorInputPort, IControllerInstanceSetter, IDataSenderInstanceSetter
+    public class PortInteractor : IUiInteractorInputPort, IUsartInteractorInputPort
     {
         static PortInteractor? _portInteractor;
         IPortController? _portController;

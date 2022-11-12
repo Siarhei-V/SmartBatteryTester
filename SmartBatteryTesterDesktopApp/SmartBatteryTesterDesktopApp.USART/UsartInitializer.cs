@@ -8,7 +8,6 @@ namespace SmartBatteryTesterDesktopApp.USART
     public class UsartInitializer
     {
         SerialPort _port;
-        IControllerInstanceSetter _portInteractor;
         IUsartInteractorInputPort _usartInteractorInputPort;
         IUsartParametersConverter _paramsConverter;
 
@@ -17,10 +16,9 @@ namespace SmartBatteryTesterDesktopApp.USART
             _port = new SerialPort();
             _paramsConverter = new UsartParametersConverter();
 
-            _portInteractor = PortInteractor.Instance;
-            _portInteractor.PortController = new UsartController(_port, _paramsConverter);
-
             _usartInteractorInputPort = PortInteractor.Instance;
+            _usartInteractorInputPort.PortController = new UsartController(_port, _paramsConverter);
+
             new UsartDataSender(_port, _usartInteractorInputPort);
         }
     }

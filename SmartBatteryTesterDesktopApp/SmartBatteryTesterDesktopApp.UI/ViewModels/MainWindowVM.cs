@@ -16,7 +16,6 @@ namespace SmartBatteryTesterDesktopApp.ViewModels
         ComPortConnectionParameters _connectionParameters;
         DischargingParameters _dischargingParameters;
         IUiInteractorInputPort _portInteractor;
-        IDataSenderInstanceSetter _dataSenderInstanceSetter;
         IDataGetter _dataGetter;
         Dictionary<string, string> _startParameters;
 
@@ -28,8 +27,7 @@ namespace SmartBatteryTesterDesktopApp.ViewModels
 
             _portInteractor = PortInteractor.Instance;
 
-            _dataSenderInstanceSetter = PortInteractor.Instance;
-            _dataSenderInstanceSetter.DataSender = _dataGetter;
+            _portInteractor.DataSender = _dataGetter;
 
             _dataGetter.DataChanged += HandleDataChangedEvent;
 
