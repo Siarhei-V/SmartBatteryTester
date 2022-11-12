@@ -1,4 +1,5 @@
 ﻿using Ninject;
+using SmartBatteryTesterDesktopApp.UI.Models;
 using SmartBatteryTesterDesktopApp.USART;
 using SmartBatteryTesterDesktopApp.ViewModels;
 using SmartBatteryTesterDesktopApp.Views;
@@ -18,6 +19,8 @@ namespace SmartBatteryTesterDesktopApp
         {
             new UsartInitializer();
             _kernel = new StandardKernel();
+
+            _kernel.Bind<DischargingParameters>().ToSelf().InSingletonScope();
 
             var appVM = _kernel.Get<MainWindowVM>();
 
