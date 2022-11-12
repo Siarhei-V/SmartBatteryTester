@@ -2,7 +2,6 @@
 {
     public class DischargerDto
     {
-        public bool IsDischargingStarted { get; internal set; }
         public bool IsDischargingCompleted { get; internal set; }
         public DateTime CurrentDateTime { get; internal set; }
         public decimal Voltage { get; internal set; }

@@ -1,20 +1,13 @@
-﻿using SmartBatteryTesterDesktopApp.BL;
-using SmartBatteryTesterDesktopApp.BL.Interfaces;
+﻿using SmartBatteryTesterDesktopApp.PORT.Interfaces;
 using System.Windows;
 
 namespace SmartBatteryTesterDesktopApp.UI.Temp
 {
-    internal class TempDataSaver : IDischargerDataSaver
+    internal class TempDataSaver : ITempDataSaver
     {
-        public void Save(DischargerDto values)  // TODO: This is a temporary implementation
+        public void SaveData(string str)
         {
-            if (values.IsDischargingCompleted)
-            {
-                MessageBox.Show(values.DischargeDuration.ToString());
-                MessageBox.Show(values.ResultCapacity.ToString());
-                return;
-            }
-            MessageBox.Show(values.Voltage.ToString());
+            MessageBox.Show(str);
         }
     }
 }

@@ -2,83 +2,102 @@
 
 namespace SmartBatteryTesterDesktopApp.BL
 {
-    internal class Discharger : IDischarger
+    public class Discharger : IDischarger
     {
         private DischargerDto _dataModel;
 
-        private IDischargerDataSaver _dataSaver;
-        private IResultsCalculator _resultsCalculator;
-        private IDischargerController _controller;
+        private IResultsCalculator? _resultsCalculator;
         private decimal _lowerDischargeThreshold;
         private decimal _valuesChangeDiscreteness;
         private decimal _prevVoltage;
         private decimal _prevCurrent;
+        private bool _isFirstData = true;
+        private bool _isNewDataReceived;
 
-        public Discharger(IDischargerDataSaver dataSaver, IResultsCalculator resultsCalculator, DischargerDto dischargerDto, 
-            IDischargerController dischargerController)
+        public Discharger(DischargerDto dischargerDto)
         {
             _dataModel = dischargerDto;
-            _resultsCalculator = resultsCalculator;
-            _dataSaver = dataSaver;
-            _controller = dischargerController;
         }
 
-        void IDischarger.Start(decimal lowerDischargeThreshold, decimal voltageBeforeDischarging, decimal valuesChangeDiscreteness)
-        {
-            _dataModel.Voltage = voltageBeforeDischarging;
-            _dataModel.CurrentDateTime = DateTime.Now;
+        IResultsCalculator IDischarger.ResultsCalculator 
+        { 
+            set => _resultsCalculator = value;
+        }
 
-            _prevVoltage = voltageBeforeDischarging;
+        public bool IsNewDataReceived
+        {
+            get => _isNewDataReceived;
+        }
+
+        public void SetDischargingParams(decimal lowerDischargeThreshold, decimal valuesChangeDiscreteness, decimal dischargingCurrent)
+        {
             _lowerDischargeThreshold = lowerDischargeThreshold;
             _valuesChangeDiscreteness = valuesChangeDiscreteness;
-
-            _dataModel.IsDischargingStarted = true;
-            _resultsCalculator.DischargingStartDateTime = _dataModel.CurrentDateTime;
-
-            _dataSaver.Save(_dataModel);
+            _dataModel.Current = dischargingCurrent;
         }
 
-        void IDischarger.Discharge(decimal voltage, decimal current)
+        public void Discharge(decimal voltage, decimal current, DateTime dateTime)
         {
             if (voltage <= _lowerDischargeThreshold)
             {
-                StopDischarging(voltage, current);
+                StopDischarging(voltage, current, dateTime);
                 return;
             }
 
-            if (_prevVoltage - voltage >= _valuesChangeDiscreteness ||
+            if (Math.Abs(_prevVoltage - voltage) >= _valuesChangeDiscreteness ||
                 Math.Abs(_prevCurrent - current) >= _valuesChangeDiscreteness)
             {
-                HandleCurrentValues(voltage, current);
+                HandleNewData(voltage, current, dateTime);
+                return;
             }
+         
+            _isNewDataReceived = false;
+        }
+
+        public DischargerDto GetNewData()
+        {
+            return _dataModel;
         }
 
         #region PrivateMethods
-        private void HandleCurrentValues(decimal voltage, decimal current)
+        private void HandleNewData(decimal voltage, decimal current, DateTime dateTime)
         {
+            if (_isFirstData)
+            {
+                _resultsCalculator.DischargingStartDateTime = dateTime;
+                _dataModel.IsDischargingCompleted = false;
+                _isFirstData = false;
+            }
+
             _dataModel.Voltage = voltage;
-            _dataModel.Current = current;
-            _dataModel.CurrentDateTime = DateTime.Now;
+            _dataModel.CurrentDateTime = dateTime;
 
             _prevVoltage = voltage;
-            _prevCurrent = current;
 
-            _dataSaver.Save(_dataModel);
+            _isNewDataReceived = true;
         }
 
-        private void StopDischarging(decimal voltage, decimal current)
+        private void StopDischarging(decimal voltage, decimal current, DateTime dateTime)
         {
             _dataModel.Voltage = voltage;
-            _dataModel.Current = current;
-            _dataModel.CurrentDateTime = DateTime.Now;
+            _dataModel.CurrentDateTime = dateTime;
 
-            _resultsCalculator.DischargingCurrent = current;
-            _resultsCalculator.DischargingEndDateTime = _dataModel.CurrentDateTime;
+            _resultsCalculator.DischargingCurrent = _dataModel.Current;
+            _resultsCalculator.DischargingEndDateTime = dateTime;
             _resultsCalculator.CalculateResults();
 
+            _isNewDataReceived = true;
             _dataModel.IsDischargingCompleted = true;
-            _controller.AutoStopDischarging();
-            _dataSaver.Save(_dataModel);
+
+            PrepareToNewMeasurement();
+        }
+
+        private void PrepareToNewMeasurement()
+        {
+            _isFirstData = true;
+            _prevCurrent = 0;
+            _prevVoltage = 0;
+
         }
         #endregion
     }

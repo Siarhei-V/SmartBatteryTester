@@ -3,6 +3,7 @@ using SmartBatteryTesterDesktopApp.PORT;
 using SmartBatteryTesterDesktopApp.PORT.Interfaces;
 using SmartBatteryTesterDesktopApp.UI.Infrastructure;
 using SmartBatteryTesterDesktopApp.UI.Models;
+using SmartBatteryTesterDesktopApp.UI.Temp;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -30,22 +31,10 @@ namespace SmartBatteryTesterDesktopApp.ViewModels
             _dataSenderInstanceSetter = PortInteractor.Instance;
             _dataSenderInstanceSetter.DataSender = _dataGetter;
 
-            _dataGetter.DataChanged += (sender, args) =>
-            {
-                try
-                {
-                    Convert.ToDecimal(_dischargingParameters.Voltage);
-                    OnPropertyChanged(nameof(VoltageVM));
-                    ConnectionStatusMessageVM = "Связь установлена";
-                }
-                catch (System.Exception)
-                {
-                    ConnectionStatusMessageVM = "Ошибка передачи данных";
-                }
-            };
-        }
+            _dataGetter.DataChanged += HandleDataChangedEvent;
 
-        #region New Code
+            _portInteractor.TempDataSaver = new TempDataSaver();
+        }
 
         #region Parameters
         public List<string> PortNameListVM
@@ -71,6 +60,11 @@ namespace SmartBatteryTesterDesktopApp.ViewModels
         public List<string> StopBitsListVM
         {
             get => _connectionParameters.StopBitsList;
+        }
+
+        public List<string> ValuesChangeDiscretennesListVM
+        {
+            get => _dischargingParameters.ValuesChangeDiscretennesList;
         }
         #endregion
 
@@ -98,6 +92,26 @@ namespace SmartBatteryTesterDesktopApp.ViewModels
         public string SelectedStopBitsVM
         {
             set => _connectionParameters.SelectedStopBits = value;
+        }
+
+        public string ValuesChangeDiscretennesVM
+        {
+            set => _dischargingParameters.ValuesChangeDiscretennes = value;
+        }
+
+        public string LowerVoltageThresholdVM
+        {
+            set => _dischargingParameters.LowerVoltageThreshold = value;
+        }
+
+        public string SelectedDischargingCurrent
+        {
+            get => _dischargingParameters.Current;
+            set
+            {
+                _dischargingParameters.Current = value;
+                OnPropertyChanged();
+            }
         }
         #endregion
 
@@ -135,6 +149,9 @@ namespace SmartBatteryTesterDesktopApp.ViewModels
 
                         try
                         {
+                            _portInteractor.SetDischargingParams(_dischargingParameters.LowerVoltageThreshold,
+                                _dischargingParameters.ValuesChangeDiscretennes, 
+                                _dischargingParameters.Current);
                             _portInteractor.StartDischarging(_startParameters);
                         }
                         catch (System.Exception e)
@@ -161,6 +178,29 @@ namespace SmartBatteryTesterDesktopApp.ViewModels
         }
         #endregion
 
+        #region Private Methods
+        void HandleDataChangedEvent(object? sender, EventArgs args)
+        {
+            try
+            {
+                Convert.ToDecimal(_dischargingParameters.Voltage);
+                OnPropertyChanged(nameof(VoltageVM));
+                ConnectionStatusMessageVM = "Связь установлена";
+            }
+            catch (System.Exception)
+            {
+                if (_dischargingParameters.Voltage == "Порт закрыт")
+                {
+                    ConnectionStatusMessageVM = "Порт закрыт";
+                    VoltageVM = String.Empty;
+                }
+                else
+                {
+                    ConnectionStatusMessageVM = "Ошибка передачи данных";
+                }
+            }
+        }
+
         private void CreateParameterDictionary()
         {
             _startParameters = new Dictionary<string, string>()
@@ -169,10 +209,7 @@ namespace SmartBatteryTesterDesktopApp.ViewModels
                 ["BaudRate"] = _connectionParameters.SelectedBaudRate,
                 ["DataBits"] = _connectionParameters.SelectedDataBits,
                 ["Parity"] = _connectionParameters.SelectedParity,
-                ["StopBits"] = _connectionParameters.SelectedStopBits//,
-
-                //["LowDischargeVoltage"] = _dischargingParameters.LowerVoltageThreshold,
-                //["ValuesChangeDiscreteness"] = _dischargingParameters.ValuesChangeDiscretennes
+                ["StopBits"] = _connectionParameters.SelectedStopBits
             };
         }
 
@@ -181,49 +218,6 @@ namespace SmartBatteryTesterDesktopApp.ViewModels
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(prop));
 
         #endregion
-
-
-
-
-
-
-        #region Parameter Lists
-
-        public List<string> ValuesChangeDiscretennesListVM
-        {
-            get => _dischargingParameters.ValuesChangeDiscretennesList;
-        }
-        #endregion
-
-        #region Selected Parameters
-  
-
-        public string ValuesChangeDiscretennesVM
-        {
-            set => _dischargingParameters.ValuesChangeDiscretennes = value;
-        }
-
-        public string LowerVoltageThresholdVM
-        {
-            set => _dischargingParameters.LowerVoltageThreshold = value;
-        }
-        #endregion
-
-
-
-        public string SelectedDischargingCurrent
-        {
-            get => _dischargingParameters.Current;
-            set
-            {
-                _dischargingParameters.Current = value;
-            }
-        }
-
-
-
- 
-
 
     }
 }

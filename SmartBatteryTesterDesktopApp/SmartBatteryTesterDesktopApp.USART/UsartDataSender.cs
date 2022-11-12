@@ -18,17 +18,18 @@ namespace SmartBatteryTesterDesktopApp.USART
             _port.DataReceived += (sender, args) =>
             {
                 string data;
+
                 try
                 {
                     data = ((SerialPort)sender).ReadLine();
                     data = data.Replace(".", ",");
-                    _usartInteractorPort.SendUsartData(data);
                 }
                 catch (Exception)
                 {
-                    _usartInteractorPort.SendUsartData(string.Empty);
+                    data = string.Empty;
                 }
 
+                _usartInteractorPort.SendUsartData(data);
             };
         }
     }
