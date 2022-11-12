@@ -3,6 +3,7 @@ using SmartBatteryTesterDesktopApp.PORT;
 using SmartBatteryTesterDesktopApp.PORT.Interfaces;
 using SmartBatteryTesterDesktopApp.UI.Infrastructure;
 using SmartBatteryTesterDesktopApp.UI.Models;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
@@ -29,7 +30,19 @@ namespace SmartBatteryTesterDesktopApp.ViewModels
             _dataSenderInstanceSetter = PortInteractor.Instance;
             _dataSenderInstanceSetter.DataSender = _dataGetter;
 
-            _dataGetter.DataChanged += (sender, args) => OnPropertyChanged(nameof(VoltageVM));
+            _dataGetter.DataChanged += (sender, args) =>
+            {
+                try
+                {
+                    Convert.ToDecimal(_dischargingParameters.Voltage);
+                    OnPropertyChanged(nameof(VoltageVM));
+                    ConnectionStatusMessageVM = "Связь установлена";
+                }
+                catch (System.Exception)
+                {
+                    ConnectionStatusMessageVM = "Ошибка передачи данных";
+                }
+            };
         }
 
         #region New Code
@@ -118,29 +131,16 @@ namespace SmartBatteryTesterDesktopApp.ViewModels
                     (_connectToComPortCommand = new RelayCommand(obj =>
                     {
                         CreateParameterDictionary();
+                        ConnectionStatusMessageVM = "Попытка подключения";
 
                         try
                         {
                             _portInteractor.StartDischarging(_startParameters);
-                            ConnectionStatusMessageVM = "Связь установлена";
                         }
                         catch (System.Exception e)
                         {
                             ConnectionStatusMessageVM = e.Message;
                         }
-                    }));
-            }
-        }
-
-        private RelayCommand _updateData;
-        public RelayCommand UpdateDataCommand
-        {
-            get
-            {
-                return _updateData ??
-                    (_updateData = new RelayCommand(obj =>
-                    {
-                       OnPropertyChanged(nameof(VoltageVM));
                     }));
             }
         }

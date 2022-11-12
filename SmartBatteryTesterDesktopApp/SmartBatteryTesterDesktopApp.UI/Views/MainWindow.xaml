@@ -23,7 +23,15 @@
             <Setter Property="VerticalContentAlignment" Value="Center"/>
             <Setter Property="FontSize" Value="14"/>
             <Style.Triggers>
-                <DataTrigger Binding="{Binding Text, ElementName=ConnectionStatus}" Value="Связь установлена">
+                <DataTrigger Binding="{Binding Text, ElementName=ConnectionStatusTextBlock}" Value="Связь установлена">
+                    <Setter Property="IsEnabled" Value="False"/>
+                    <Setter Property="Foreground" Value="Gray"/>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Text, ElementName=ConnectionStatusTextBlock}" Value="Попытка подключения">
+                    <Setter Property="IsEnabled" Value="False"/>
+                    <Setter Property="Foreground" Value="Gray"/>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Text, ElementName=ConnectionStatusTextBlock}" Value="Ошибка передачи данных">
                     <Setter Property="IsEnabled" Value="False"/>
                     <Setter Property="Foreground" Value="Gray"/>
                 </DataTrigger>
@@ -60,8 +68,19 @@
                 </Setter.Value>
             </Setter>
             <Style.Triggers>
-                <DataTrigger Binding="{Binding Text, ElementName=ConnectionStatus}" Value="Связь установлена">
+                <DataTrigger Binding="{Binding Text, ElementName=ConnectionStatusTextBlock}" Value="Связь установлена">
                     <Setter Property="Background" Value="LightGreen"/>
+                    <Setter Property="Content" Value="Отключиться"/>
+                    <Setter Property="Command" Value="{Binding DisconnectCommand}"/>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding ElementName=ConnectionStatusTextBlock, Path=Text}" Value="Попытка подключения">
+                    <Setter Property="Opacity" Value="0.1"/>
+                    <Setter Property="Background" Value="LightYellow"/>
+                    <Setter Property="IsEnabled" Value="False"/>
+                    <Setter Property="Content" Value="Подключиться к MCU"/>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding ElementName=ConnectionStatusTextBlock, Path=Text}" Value="Ошибка передачи данных">
+                    <Setter Property="Background" Value="LightYellow"/>
                     <Setter Property="Content" Value="Отключиться"/>
                     <Setter Property="Command" Value="{Binding DisconnectCommand}"/>
                 </DataTrigger>
@@ -247,7 +266,7 @@
         <StatusBar Style="{StaticResource StatusBarStyle}">
             <StackPanel Orientation="Horizontal">
                 <TextBlock Style="{StaticResource StatusStyle}" Text="Статус: "/>
-                <TextBlock x:Name="ConnectionStatus" Text="{Binding ConnectionStatusMessageVM}"/>
+                <TextBlock x:Name="ConnectionStatusTextBlock" Text="{Binding ConnectionStatusMessageVM}"/>
             </StackPanel>
         </StatusBar>
     </DockPanel>

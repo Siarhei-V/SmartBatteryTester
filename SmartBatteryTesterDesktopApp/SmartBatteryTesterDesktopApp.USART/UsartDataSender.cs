@@ -8,21 +8,27 @@ namespace SmartBatteryTesterDesktopApp.USART
     {
         SerialPort _port;
         IUsartInteractorInputPort _usartInteractorPort;
-        IUsartDataConverter _usartDataConverter;
 
-        internal UsartDataSender(SerialPort port, IUsartInteractorInputPort usartInteractorPort,
-            IUsartDataConverter usartDataConverter)
+        internal UsartDataSender(SerialPort port, IUsartInteractorInputPort usartInteractorPort)
         {
             _port = port;
+            _port.ReadTimeout = 1000;
             _usartInteractorPort = usartInteractorPort;
-            _usartDataConverter = usartDataConverter;
 
             _port.DataReceived += (sender, args) =>
             {
                 string data;
+                try
+                {
+                    data = ((SerialPort)sender).ReadLine();
+                    data = data.Replace(".", ",");
+                    _usartInteractorPort.SendUsartData(data);
+                }
+                catch (Exception)
+                {
+                    _usartInteractorPort.SendUsartData(string.Empty);
+                }
 
-                data = _usartDataConverter.ConvertDataFromUsart(sender);
-                _usartInteractorPort.SendUsartData(data);
             };
         }
     }
