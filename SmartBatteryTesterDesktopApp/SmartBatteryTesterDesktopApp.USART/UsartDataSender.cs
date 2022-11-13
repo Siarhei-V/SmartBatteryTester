@@ -1,5 +1,4 @@
 ﻿using SmartBatteryTesterDesktopApp.PORT.Interfaces;
-using SmartBatteryTesterDesktopApp.USART.Interfaces;
 using System.IO.Ports;
 
 namespace SmartBatteryTesterDesktopApp.USART
