@@ -1,90 +1,135 @@
-﻿//using Moq;
-//using SmartBatteryTesterDesktopApp.BL.Interfaces;
-//using Xunit;
+﻿using Moq;
+using SmartBatteryTesterDesktopApp.BL.Interfaces;
+using Xunit;
 
-//namespace SmartBatteryTesterDesktopApp.BL.Tests
-//{
-//    public class DischargerTest
-//    {
-//        Mock<IDischargerDataSaver> _dataSaver;
-//        IResultsCalculator _resultsCalculator;
-//        Mock<DischargerDto> _dischargerDto;
-//        Mock<IDischargerController> _controller;
+namespace SmartBatteryTesterDesktopApp.BL.Tests
+{
+    public class DischargerTest
+    {
+        Mock<IResultsCalculator> _resultsCalculatorMock;
+        DischargerDto _dischargerDto;
 
-//        IDischarger _discharger;
+        IDischarger _discharger;
 
-//        public DischargerTest()
-//        {
-//            _dataSaver = new Mock<IDischargerDataSaver>();
-//            _dischargerDto = new Mock<DischargerDto>();
-//            _resultsCalculator = new ResultsCalculator(_dischargerDto.Object);  // TODO: Mock this
-//            _controller = new Mock<IDischargerController>();
+        public DischargerTest()
+        {
+            _dischargerDto = new DischargerDto();
+            _resultsCalculatorMock = new Mock<IResultsCalculator>();
 
-//            _discharger = new Discharger(_dataSaver.Object, _resultsCalculator, _dischargerDto.Object, _controller.Object);
-//        }
+            _discharger = new Discharger(_dischargerDto);
+            _discharger.ResultsCalculator = _resultsCalculatorMock.Object;
+        }
 
-//        [Theory]
-//        [InlineData(11, 1, 1)]
-//        [InlineData(11, 0, 1)]
-//        [InlineData(12, 1, 1)]
-//        [InlineData(11.8, 0, 1)]
-//        [InlineData(12, 0.2, 1)]
-//        public void Discharge_CheckSaveMethodColling(decimal voltage, decimal current, decimal valuesChangeDiscreteness)
-//        {
-//           // Arrange
+        [Theory]
+        [InlineData(3)]
+        [InlineData(6)]
+        [InlineData(1.1)]
+        public void SetDischargingParams_CheckDischargingCurrentSaving(decimal dischargingCurrent)
+        {
+            // Arrange
 
-//            // Act
-//            _discharger.Start(1, 12, valuesChangeDiscreteness);
-//            _discharger.Discharge(voltage, current);
+            // Act
+            _discharger.SetDischargingParams(0, 0, dischargingCurrent);
 
-//            // Assert
-//            if (Math.Abs(12 - voltage) >= valuesChangeDiscreteness ||
-//                Math.Abs(0 - current) >= valuesChangeDiscreteness)
-//            {
-//                _dataSaver.Verify(m => m.Save(It.IsAny<DischargerDto>()), Times.Exactly(2));
-//            }
-//            else
-//            {
-//                _dataSaver.Verify(m => m.Save(It.IsAny<DischargerDto>()), Times.Once);
-//            }
-//        }
+            // Assert
+            Assert.Equal(dischargingCurrent, _dischargerDto.Current);
+        }
 
-//        [Fact]
-//        public void Discharge_CheckPrevValuesSetting()
-//        {
-//            // Arrange
+        [Fact]
+        public void Discharge_CheckFirstDataHandling()
+        {
+            // Arrange
+            _dischargerDto.IsDischargingCompleted = true;
 
-//            List<decimal> voltageValues = new List<decimal>() { 11, 10, 9.9m };
-//            List<decimal> currentValues = new List<decimal>() { 1, 1, 1 };
+            // Act
+            _discharger.Discharge(1, 1, DateTime.Now);
 
-//            decimal valuesChangeDiscreteness = 1;
+            // Assert
+            Assert.False(_dischargerDto.IsDischargingCompleted);
+        }
 
-//            // Act
-//            _discharger.Start(1, 12, valuesChangeDiscreteness);
+        [Fact]
+        public void Discharge_CheckDataSavingToModel()
+        {
+            // Arrange
+            decimal firstVoltage = 2.5m;
+            decimal secondVoltage = 500;
+            var firstDateTime = new DateTime(1, 2, 3);
+            var secondDateTime = new DateTime(3, 4, 5);
 
-//            // Assert
-//            _discharger.Discharge(voltageValues[0], currentValues[0]);
-//            _dataSaver.Verify(m => m.Save(It.IsAny<DischargerDto>()), Times.Exactly(2));
+            // Act
+            _discharger.Discharge(firstVoltage, 0, firstDateTime);
 
-//            _discharger.Discharge(voltageValues[1], currentValues[1]);
-//            _dataSaver.Verify(m => m.Save(It.IsAny<DischargerDto>()), Times.Exactly(3));
+            // Assert
+            Assert.Equal(firstVoltage, _dischargerDto.Voltage);
+            Assert.Equal(firstDateTime, _dischargerDto.CurrentDateTime);
 
-//            _discharger.Discharge(voltageValues[2], currentValues[2]);
-//            _dataSaver.Verify(m => m.Save(It.IsAny<DischargerDto>()), Times.Exactly(3));
-//        }
+            _discharger.Discharge(secondVoltage, 0, secondDateTime);
+            Assert.Equal(secondVoltage, _dischargerDto.Voltage);
+            Assert.Equal(secondDateTime, _dischargerDto.CurrentDateTime);
+        }
 
-//        [Fact]
-//        public void Discharge_ChekDischargingFinish()
-//        {
-//            // Arrange
+        [Theory]
+        [InlineData(1, 0, 3, 1, 1)]
+        [InlineData(10, 0, 1, 5, 0)]
+        [InlineData(1, 2, 1, 1, 1)]
+        public void Discharge_CheckNewDataReceiving(decimal voltage, decimal current, decimal valuesChangeDiscreteness,
+            decimal prevVoltage, decimal prevCurrent)
+        {
+            // Assert
+            _discharger.SetDischargingParams(0, valuesChangeDiscreteness, 0);
 
-//            // Act
-//            _discharger.Start(10.5m, 12, 1);
-//            _discharger.Discharge(10, 1);
+            // Act
+            _discharger.Discharge(voltage, current, DateTime.Now);
 
-//            // Assert
-//            _dataSaver.Verify(m => m.Save(It.IsAny<DischargerDto>()), Times.Exactly(2));
-//            _controller.Verify(m => m.AutoStopDischarging(), Times.Exactly(1));
-//        }
-//    }
-//}
+            // Arrange
+            if (Math.Abs(prevVoltage - voltage) >= valuesChangeDiscreteness ||
+                    Math.Abs(prevCurrent - current) >= valuesChangeDiscreteness)
+            {
+                Assert.True(_discharger.IsNewDataReceived);
+            }
+            else
+            {
+                Assert.False(_discharger.IsNewDataReceived);
+            }
+        }
+
+        [Fact]
+        public void Discharge_CheckDischargingFinish()
+        {
+            // Arrange
+            var date = new DateTime(11, 12, 13);
+            _discharger.SetDischargingParams(3, 2, 4);
+
+            // Act
+            _discharger.Discharge(1, 1.1m, date);
+         
+            // Assert
+            _resultsCalculatorMock.Verify(m => m.CalculateResults(), Times.Once());
+            Assert.True(_dischargerDto.IsDischargingCompleted);
+            Assert.True(_discharger.IsNewDataReceived);
+            Assert.Equal(1, _dischargerDto.Voltage);
+            Assert.Equal(date, _dischargerDto.CurrentDateTime);
+
+            _discharger.Discharge(500, 0, date);
+            Assert.False(_dischargerDto.IsDischargingCompleted);
+        }
+
+        [Fact]
+        public void GetDischargingData_CheckReturnedData()
+        {
+            // Arrange
+            var dateTime = new DateTime(10, 10, 10);
+            _discharger.Discharge(1, 2, dateTime);
+
+            // Act
+            var result = _discharger.GetDischargingData();
+
+            // Assert
+            Assert.NotNull(result);
+            Assert.IsType<DischargerDto>(result);
+            Assert.Equal(1, result.Voltage);
+            Assert.Equal(dateTime, result.CurrentDateTime);
+        }
+    }
+}

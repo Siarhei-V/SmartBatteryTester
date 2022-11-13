@@ -54,7 +54,7 @@ namespace SmartBatteryTesterDesktopApp.BL
             _isNewDataReceived = false;
         }
 
-        public DischargerDto GetNewData()
+        public DischargerDto GetDischargingData()
         {
             return _dataModel;
         }
@@ -97,7 +97,6 @@ namespace SmartBatteryTesterDesktopApp.BL
             _isFirstData = true;
             _prevCurrent = 0;
             _prevVoltage = 0;
-
         }
         #endregion
     }

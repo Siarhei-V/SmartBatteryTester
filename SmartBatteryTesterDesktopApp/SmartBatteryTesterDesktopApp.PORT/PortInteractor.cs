@@ -55,7 +55,7 @@ namespace SmartBatteryTesterDesktopApp.PORT
 
             if (_discharger.IsNewDataReceived)
             {
-                _dischargerDto = _discharger.GetNewData();
+                _dischargerDto = _discharger.GetDischargingData();
 
                 if (_dischargerDto.IsDischargingCompleted)
                 {
