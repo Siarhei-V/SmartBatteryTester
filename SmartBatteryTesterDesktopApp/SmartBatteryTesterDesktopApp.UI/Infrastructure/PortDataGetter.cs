@@ -4,12 +4,12 @@ using System;
 
 namespace SmartBatteryTesterDesktopApp.UI.Infrastructure
 {
-    internal class PortDataGetter : IDataGetter
+    public class PortDataGetter : IDataGetter
     {
         DischargingParameters _dischargingParameters;
-        public event EventHandler DataChanged;
+        public event EventHandler? DataChanged;
 
-        public PortDataGetter(DischargingParameters parameters)
+        internal PortDataGetter(DischargingParameters parameters)
         {
             _dischargingParameters = parameters;
         }

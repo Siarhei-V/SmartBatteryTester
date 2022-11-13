@@ -9,13 +9,15 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SmartBatteryTesterDesktopAp
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SmartBatteryTesterDesktopApp.BL.Tests", "SmartBatteryTesterDesktopApp.BL.Tests\SmartBatteryTesterDesktopApp.BL.Tests.csproj", "{5C20D87D-CECC-47D6-A674-4105D7BAFE51}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmartBatteryTesterDesktopApp.PORT", "SmartBatteryTesterDesktopApp.PORT\SmartBatteryTesterDesktopApp.PORT.csproj", "{14F64F6D-C433-4EC3-BC48-3B95FDC7A6A7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SmartBatteryTesterDesktopApp.PORT", "SmartBatteryTesterDesktopApp.PORT\SmartBatteryTesterDesktopApp.PORT.csproj", "{14F64F6D-C433-4EC3-BC48-3B95FDC7A6A7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmartBatteryTesterDesktopApp.PORT.Tests", "SmartBatteryTesterDesktopApp.PORT.Tests\SmartBatteryTesterDesktopApp.PORT.Tests.csproj", "{246F1F41-0F82-4863-85D6-FA68692E5C32}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SmartBatteryTesterDesktopApp.PORT.Tests", "SmartBatteryTesterDesktopApp.PORT.Tests\SmartBatteryTesterDesktopApp.PORT.Tests.csproj", "{246F1F41-0F82-4863-85D6-FA68692E5C32}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmartBatteryTesterDesktopApp.USART", "SmartBatteryTesterDesktopApp.USART\SmartBatteryTesterDesktopApp.USART.csproj", "{2426FF6D-7472-4728-86D3-90940C4DCE85}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SmartBatteryTesterDesktopApp.USART", "SmartBatteryTesterDesktopApp.USART\SmartBatteryTesterDesktopApp.USART.csproj", "{2426FF6D-7472-4728-86D3-90940C4DCE85}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmartBatteryTesterDesktopApp.USART.Tests", "SmartBatteryTesterDesktopApp.USART.Tests\SmartBatteryTesterDesktopApp.USART.Tests.csproj", "{96499029-3E8E-4140-8481-170D5829BE9C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SmartBatteryTesterDesktopApp.USART.Tests", "SmartBatteryTesterDesktopApp.USART.Tests\SmartBatteryTesterDesktopApp.USART.Tests.csproj", "{96499029-3E8E-4140-8481-170D5829BE9C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmartBatteryTesterDesktopApp.UI.Tests", "SmartBatteryTesterDesktopApp.UI.Tests\SmartBatteryTesterDesktopApp.UI.Tests.csproj", "{E2318CA0-3477-4D2F-BFD4-DFF4AF91F0AF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -51,6 +53,10 @@ Global
 		{96499029-3E8E-4140-8481-170D5829BE9C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{96499029-3E8E-4140-8481-170D5829BE9C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{96499029-3E8E-4140-8481-170D5829BE9C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E2318CA0-3477-4D2F-BFD4-DFF4AF91F0AF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E2318CA0-3477-4D2F-BFD4-DFF4AF91F0AF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E2318CA0-3477-4D2F-BFD4-DFF4AF91F0AF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E2318CA0-3477-4D2F-BFD4-DFF4AF91F0AF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
