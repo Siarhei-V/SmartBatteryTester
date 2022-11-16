@@ -1,0 +1,19 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net6.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Ninject" Version="3.3.6" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\SmartBatteryTesterDesktopApp.PORT\SmartBatteryTesterDesktopApp.PORT.csproj" />
+    <ProjectReference Include="..\SmartBatteryTesterDesktopApp.USART\SmartBatteryTesterDesktopApp.USART.csproj" />
+  </ItemGroup>
+
+</Project>
