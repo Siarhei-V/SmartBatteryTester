@@ -6,7 +6,6 @@ namespace SmartBatteryTesterWebApp.BLL.DTO
     {
         public int Id { get; set; }
         public string? MeasurementName { get; set; }
-        public List<Measurement> MeasurementList { get; set; } = new List<Measurement>();
 
     }
 }

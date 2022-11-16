@@ -2,9 +2,8 @@
 
 namespace SmartBatteryTesterWebApp.BLL.Interfaces
 {
-    public interface IMeasurementService
+    public interface IMeasurementInputService
     {
-        List<MeasurementSetDTO> GetMeasurementSet();
         void MakeMeasurement(MeasurementDTO measurement);
         void MakeMeasurementSet(MeasurementSetDTO measurementSet);
     }

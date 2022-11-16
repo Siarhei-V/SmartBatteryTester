@@ -6,12 +6,12 @@ using SmartBatteryTesterWebApp.DAL.Inrerfaces;
 
 namespace SmartBatteryTesterWebApp.BLL.Services
 {
-    public class MeasurementService : IMeasurementService
+    public class MeasurementOutputService : IMeasurementOutputService
     {
         readonly IMeasurementRepository _measurementRepository;
         readonly IMeasurementSetRepository _measurementSetRepository;
 
-        public MeasurementService(IMeasurementRepository measurementRepository, IMeasurementSetRepository measurementSetRepository)
+        public MeasurementOutputService(IMeasurementRepository measurementRepository, IMeasurementSetRepository measurementSetRepository)
         {
             _measurementRepository = measurementRepository;
             _measurementSetRepository = measurementSetRepository;
@@ -24,19 +24,5 @@ namespace SmartBatteryTesterWebApp.BLL.Services
             var MeasurementSetDtos = mapper.Map<IQueryable<MeasurementSet>, List<MeasurementSetDTO>>(measurementSets);
             return MeasurementSetDtos;
         }
-
-        public void MakeMeasurement(MeasurementDTO measurementDTO)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void MakeMeasurementSet(MeasurementSetDTO measurementSetDto)
-        {
-            var config = new MapperConfiguration(m => m.CreateMap<MeasurementSetDTO, MeasurementSet>());
-            var mapper = new Mapper(config);
-            MeasurementSet measurementSet = mapper.Map<MeasurementSetDTO, MeasurementSet>(measurementSetDto);
-            _measurementSetRepository.Create(measurementSet);
-        }
-
     }
 }

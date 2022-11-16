@@ -10,10 +10,10 @@ namespace SmartBatteryTesterWebApp.UI.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-        IMeasurementService _measurementService;
+        IMeasurementOutputService _measurementService;
         MeasurementViewModel _testModel;
 
-        public HomeController(ILogger<HomeController> logger, IMeasurementService measurementService)
+        public HomeController(ILogger<HomeController> logger, IMeasurementOutputService measurementService)
         {
             _logger = logger;
             _measurementService = measurementService;
@@ -30,16 +30,6 @@ namespace SmartBatteryTesterWebApp.UI.Controllers
             return View(measurements);
         }
 
-        [HttpGet]
-        public IActionResult TestMeasurementName() => View();
-
-        [HttpPost]
-        public IActionResult TestMeasurementName(string measurementName)
-        {
-            MeasurementSetDTO measurementSetDTO = new MeasurementSetDTO() { MeasurementName = measurementName};
-            _measurementService.MakeMeasurementSet(measurementSetDTO);
-            return RedirectToAction("Index");
-        }
 
 
 
