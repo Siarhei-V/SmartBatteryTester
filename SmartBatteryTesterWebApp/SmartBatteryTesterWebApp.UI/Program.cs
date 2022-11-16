@@ -1,4 +1,15 @@
+using SmartBatteryTesterWebApp.BLL.Interfaces;
+using SmartBatteryTesterWebApp.BLL.Services;
+using SmartBatteryTesterWebApp.DAL.EF;
+using SmartBatteryTesterWebApp.DAL.Inrerfaces;
+using SmartBatteryTesterWebApp.DAL.Repositories;
+
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddSingleton<IMeasurementRepository, EFMeasurementRepository>();
+builder.Services.AddSingleton<IMeasurementSetRepository, EFMeasurementSetRepository>();
+builder.Services.AddSingleton<IMeasurementService, MeasurementService>();
+builder.Services.AddSingleton<ApplicationContext>();
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
