@@ -1,47 +1,35 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using SmartBatteryTesterWebApp.BLL.DTO;
 using SmartBatteryTesterWebApp.BLL.Interfaces;
 using SmartBatteryTesterWebApp.UI.Models;
-using System.Diagnostics;
 
 namespace SmartBatteryTesterWebApp.UI.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
         IMeasurementOutputService _measurementService;
-        MeasurementViewModel _testModel;
 
-        public HomeController(ILogger<HomeController> logger, IMeasurementOutputService measurementService)
+        public HomeController(IMeasurementOutputService measurementService)
         {
-            _logger = logger;
             _measurementService = measurementService;
-            _testModel = new MeasurementViewModel();
         }
 
-        public IActionResult Index()
+        public IActionResult Index(int measurementSetNumber)
         {
+            IMapper mapper;
+
             List<MeasurementSetDTO> measurementSetDTOs = _measurementService.GetMeasurementSet();
-            var mapper = new MapperConfiguration(m => m.CreateMap<MeasurementSetDTO, MeasurementSetViewModel>()).CreateMapper();
-            var measurements = mapper.Map<List<MeasurementSetDTO>, List<MeasurementSetViewModel>>(measurementSetDTOs);
+            mapper = new MapperConfiguration(m => m.CreateMap<MeasurementSetDTO, MeasurementSetViewModel>()).CreateMapper();
+            var measurementSets = mapper.Map<List<MeasurementSetDTO>, List<MeasurementSetViewModel>>(measurementSetDTOs);
+            ViewBag.MeasurementSetList = new SelectList(measurementSets, "Id", "MeasurementName");
 
-
-            return View(measurements);
-        }
-
-
-
-
-
-
-
-
-
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            List<MeasurementDTO> measurementDTOs = _measurementService.GetMeasurement(measurementSetNumber);
+            mapper = new MapperConfiguration(m => m.CreateMap<MeasurementDTO, MeasurementViewModel>()).CreateMapper();
+            var measurements = mapper.Map<List<MeasurementDTO>, List<MeasurementViewModel>>(measurementDTOs);
+            ViewBag.Measurements = measurements;
+            return View();
         }
     }
 }

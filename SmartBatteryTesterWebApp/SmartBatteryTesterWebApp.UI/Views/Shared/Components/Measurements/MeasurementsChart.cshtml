@@ -1,0 +1,17 @@
+﻿@model IEnumerable<MeasurementViewModel>
+
+<div>
+    @if (Model != null)
+    {
+        @foreach (var measurement in Model)
+        {
+            <p>Voltage: @measurement.Voltage</p>
+            <p>Current: @measurement.Current</p>
+            <p>Date: @measurement.MeasurementDateTime</p>
+        }
+    }
+    else
+    {
+        <p>Имзерений нет</p>
+    }
+</div>

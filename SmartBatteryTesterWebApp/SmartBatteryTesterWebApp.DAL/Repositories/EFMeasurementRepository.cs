@@ -13,12 +13,16 @@ namespace SmartBatteryTesterWebApp.DAL.Repositories
             _applicationContext = applicationContext;
         }
 
-        public IQueryable<Measurement> Measurements => throw new NotImplementedException();
+        public IQueryable<Measurement> GetMeasurements(int measurementSetId)
+        {
+            return _applicationContext.Measurements.Where(m => m.MeasurementSetId == measurementSetId);
+        }
 
         public void Create(Measurement measurement)
         {
             _applicationContext.Add(measurement);
             _applicationContext.SaveChanges();
         }
+
     }
 }

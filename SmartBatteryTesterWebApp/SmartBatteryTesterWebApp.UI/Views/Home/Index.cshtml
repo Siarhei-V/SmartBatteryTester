@@ -1,15 +1,17 @@
-﻿@model List<MeasurementSetViewModel>
-@{
-    ViewData["Title"] = "Home Page";
+﻿@{
+    ViewData["Title"] = "История измерений";
 }
 
-<div class="text-center row">
-    <P>Списко измерений</P>
-
-    <ul class="col-md-2">
-        @foreach (var measurement in Model)
-        {
-            <li>@measurement.MeasurementName</li>
-        }
-    </ul>
+<div class="text-center">
+    <h3>История измерений</h3>
+    <br/>
 </div>
+
+
+<form asp-controller="Home" asp-action="Index" method="get">
+    <select name="measurementSetNumber" asp-items="ViewBag.MeasurementSetList" class="form-control"></select>
+    <input type="submit" value="Получить данные" />
+</form>
+
+<vc:measurements measurement-view-model=ViewBag.Measurements/>
+
