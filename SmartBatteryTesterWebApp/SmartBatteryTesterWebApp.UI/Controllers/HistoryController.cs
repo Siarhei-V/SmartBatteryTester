@@ -7,11 +7,11 @@ using SmartBatteryTesterWebApp.UI.Models;
 
 namespace SmartBatteryTesterWebApp.UI.Controllers
 {
-    public class HomeController : Controller
+    public class HistoryController : Controller
     {
         IMeasurementOutputService _measurementService;
 
-        public HomeController(IMeasurementOutputService measurementService)
+        public HistoryController(IMeasurementOutputService measurementService)
         {
             _measurementService = measurementService;
         }
