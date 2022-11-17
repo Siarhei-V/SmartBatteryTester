@@ -1,4 +1,6 @@
-﻿@{
+﻿@using SmartBatteryTesterWebApp.UI.Models.Chart
+@model ChartJsData
+@{
     ViewData["Title"] = "История измерений";
 }
 
@@ -13,5 +15,4 @@
     <input type="submit" value="Получить данные" />
 </form>
 
-<vc:measurements measurement-view-model=ViewBag.Measurements/>
-
+<vc:measurements chart-js=Model/>

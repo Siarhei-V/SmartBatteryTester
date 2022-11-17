@@ -11,6 +11,7 @@ builder.Services.AddSingleton<IMeasurementRepository, EFMeasurementRepository>()
 builder.Services.AddSingleton<IMeasurementSetRepository, EFMeasurementSetRepository>();
 builder.Services.AddSingleton<IMeasurementOutputService, MeasurementOutputService>();
 builder.Services.AddSingleton<ApplicationContext>();
+builder.Services.AddSingleton<IMeasurementChartCreator, MeasurementChartCreator>();
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();

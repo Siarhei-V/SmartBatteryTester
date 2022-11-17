@@ -15,6 +15,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Content Update="wwwroot\js\Chart.js\chart.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Update="wwwroot\lib\signalr.js\jquery.signalR.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

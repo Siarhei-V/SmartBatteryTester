@@ -1,17 +1,26 @@
-﻿@model IEnumerable<MeasurementViewModel>
+﻿@using SmartBatteryTesterWebApp.UI.Models.Chart
+@model ChartJsData
 
 <div>
-    @if (Model != null)
-    {
-        @foreach (var measurement in Model)
-        {
-            <p>Voltage: @measurement.Voltage</p>
-            <p>Current: @measurement.Current</p>
-            <p>Date: @measurement.MeasurementDateTime</p>
-        }
-    }
-    else
-    {
-        <p>Имзерений нет</p>
-    }
+    <h5>Measurement chart</h5>
+    <canvas id="measurementLineChart"></canvas>
 </div>
+
+<script src="~/js/Chart.js/chart.umd.js"></script>
+
+<script type="text/javascript">
+
+    let showChart = (isAnimation) => {
+        let context = document.getElementById("measurementLineChart");
+        let lineChart = new Chart(context, {
+            type: 'line',
+            data: @Html.Raw(Json.Serialize(Model)),
+            
+            options: {
+                animation: isAnimation,
+            }
+        });
+    }
+
+    showChart(true);
+</script>

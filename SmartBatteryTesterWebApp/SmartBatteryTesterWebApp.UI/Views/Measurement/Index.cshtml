@@ -10,14 +10,26 @@
 
 <script src="/js/aspnet-signalr/signalr.min.js"></script>
 
-<script>
+<script type="text/javascript">
     const hubConnection = new signalR.HubConnectionBuilder().withUrl("/measurementsHub").build();
 
-    hubConnection.on("Receive", function(message) {
-        let newElement = document.createElement("p");
-        newElement.textContent = message;
-        document.getElementById("signalRMessage").appendChild(newElement);
+    hubConnection.on("Receive", function(message, measurement) {
+        let newMessage = document.createElement("p");
+        let newVoltage = document.createElement("p");
+        let divElement = document.getElementById("signalRMessage");
+
+        newMessage.textContent = message;
+        divElement.appendChild(newMessage);
+        
+        //measurement = (MeasurementViewModel)JSON.parse(measurement);
+        //newVoltage.textContent = "Voltage = " + measurement.Voltage + ", Current = " + measurement.Current;
+        //divElement.appendChild(newVoltage);
+        
+
+        
     });
 
     hubConnection.start();
 </script>
+
+<vc:measurements measurement-view-model=@null/>

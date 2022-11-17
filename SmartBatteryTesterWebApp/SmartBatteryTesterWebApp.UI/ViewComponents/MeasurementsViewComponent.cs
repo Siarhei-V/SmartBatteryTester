@@ -1,13 +1,13 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using SmartBatteryTesterWebApp.UI.Models;
+using SmartBatteryTesterWebApp.UI.Models.Chart;
 
 namespace SmartBatteryTesterWebApp.UI.ViewComponents
 {
     public class MeasurementsViewComponent : ViewComponent
     {
-        public IViewComponentResult Invoke(List<MeasurementViewModel> measurementViewModel)
+        public IViewComponentResult Invoke(ChartJsData chartJs)
         {
-            return View("MeasurementsChart", measurementViewModel);
+            return View("MeasurementsChart", chartJs);
         }
     }
 }
