@@ -3,6 +3,7 @@ using SmartBatteryTesterWebApp.BLL.Services;
 using SmartBatteryTesterWebApp.DAL.EF;
 using SmartBatteryTesterWebApp.DAL.Inrerfaces;
 using SmartBatteryTesterWebApp.DAL.Repositories;
+using SmartBatteryTesterWebApp.UI.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,6 +14,7 @@ builder.Services.AddSingleton<ApplicationContext>();
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+builder.Services.AddSignalR();
 
 var app = builder.Build();
 
@@ -34,5 +36,7 @@ app.UseAuthorization();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
+
+app.MapHub<MeasurementsHub>("/measurementsHub");
 
 app.Run();
