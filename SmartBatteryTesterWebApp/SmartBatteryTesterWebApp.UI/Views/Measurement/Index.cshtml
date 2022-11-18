@@ -1,4 +1,6 @@
-﻿@{
+﻿@using SmartBatteryTesterWebApp.UI.Models.Chart
+@model ChartJsData
+@{
     ViewData["Title"] = "Измерения";
 }
 
@@ -7,29 +9,47 @@
 </div>
 
 <div id="signalRMessage"></div>
+<div>
+    <canvas id="measurementLineChart"></canvas>
+</div>
 
 <script src="/js/aspnet-signalr/signalr.min.js"></script>
+<script src="~/js/Chart.js/chart.umd.js"></script>
+
 
 <script type="text/javascript">
     const hubConnection = new signalR.HubConnectionBuilder().withUrl("/measurementsHub").build();
+        
+    let context = document.getElementById("measurementLineChart");
+    let lineChart = new Chart(context, {
+        type: 'line',
+        data: @Json.Serialize(Model),
+    });
 
-    hubConnection.on("Receive", function(message, measurement) {
+        
+    function addData(chart, label, newVoltageData, newCurrentData) {
+        chart.data.labels.push(label);
+        chart.data.datasets[0].data.push(newVoltageData);
+        chart.data.datasets[1].data.push(newCurrentData);
+        chart.update();
+    }
+
+
+    hubConnection.on("Receive", function(message, chartData) {
         let newMessage = document.createElement("p");
-        let newVoltage = document.createElement("p");
         let divElement = document.getElementById("signalRMessage");
+        let newVoltageData = chartData.datasets[0].data[0];
+        let newCurrentData = chartData.datasets[1].data[0];
 
         newMessage.textContent = message;
         divElement.appendChild(newMessage);
-        
-        //measurement = (MeasurementViewModel)JSON.parse(measurement);
-        //newVoltage.textContent = "Voltage = " + measurement.Voltage + ", Current = " + measurement.Current;
-        //divElement.appendChild(newVoltage);
-        
 
-        
+        addData(lineChart, chartData.labels, newVoltageData, newCurrentData);
     });
 
     hubConnection.start();
+
+
 </script>
 
-<vc:measurements measurement-view-model=@null/>
+<vc:measurements />
