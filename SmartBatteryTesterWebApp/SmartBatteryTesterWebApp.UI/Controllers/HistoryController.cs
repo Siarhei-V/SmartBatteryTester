@@ -11,9 +11,9 @@ namespace SmartBatteryTesterWebApp.UI.Controllers
     public class HistoryController : Controller
     {
         IMeasurementOutputService _measurementService;
-        IMeasurementChartCreator _chartCreator;
+        IMeasurementChartDataCreator _chartCreator;
 
-        public HistoryController(IMeasurementOutputService measurementService, IMeasurementChartCreator chartCreator)
+        public HistoryController(IMeasurementOutputService measurementService, IMeasurementChartDataCreator chartCreator)
         {
             _measurementService = measurementService;
             _chartCreator = chartCreator;

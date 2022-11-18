@@ -14,7 +14,7 @@
         let context = document.getElementById("measurementLineChart");
         let lineChart = new Chart(context, {
             type: 'line',
-            data: @Html.Raw(Json.Serialize(Model)),
+            data: @Json.Serialize(Model),
             
             options: {
                 animation: isAnimation,
