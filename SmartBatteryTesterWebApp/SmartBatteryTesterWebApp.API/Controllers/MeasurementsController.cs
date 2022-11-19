@@ -16,21 +16,21 @@ namespace SmartBatteryTesterWebApp.API.Controllers
         }
 
         [HttpPost]
-        public void AddMeasurementSet(MeasurementSetDTO measurementSetDTO)
+        public async Task AddMeasurementSetAsync(MeasurementSetDTO measurementSetDTO)
         {
-            _measurementService.MakeMeasurementSet(measurementSetDTO);
+            await _measurementService.MakeMeasurementSetAsync(measurementSetDTO);
         }
 
         [HttpPost]
-        public void AddMeasurement(MeasurementDTO measurementDTO)
+        public async Task AddMeasurementAsync(MeasurementDTO measurementDTO)
         {
-            _measurementService.MakeMeasurement(measurementDTO);
+            await _measurementService.MakeMeasurementAsync(measurementDTO);
         }
 
         [HttpPost]
-        public void UpdateMeasurementSet(MeasurementSetDTO measurementSetDTO)
+        public async Task UpdateMeasurementSetAsync(MeasurementSetDTO measurementSetDTO)
         {
-            _measurementService.UpdateMeasurementSet(measurementSetDTO);
+            await _measurementService.UpdateMeasurementSetAsync(measurementSetDTO);
         }
     }
 }
