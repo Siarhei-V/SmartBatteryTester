@@ -22,7 +22,6 @@ namespace SmartBatteryTesterWebApp.UI.Controllers
         public async Task<IActionResult> IndexAsync(int measurementSetNumber)
         {
             IMapper mapper;
-
             List<MeasurementSetDTO> measurementSetDTOs = await _measurementService.GetMeasurementSetAsync();
             mapper = new MapperConfiguration(m => m.CreateMap<MeasurementSetDTO, MeasurementSetViewModel>()).CreateMapper();
             var measurementSets = mapper.Map<List<MeasurementSetDTO>, List<MeasurementSetViewModel>>(measurementSetDTOs);

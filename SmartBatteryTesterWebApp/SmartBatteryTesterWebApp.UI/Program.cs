@@ -8,9 +8,9 @@ using SmartBatteryTesterWebApp.UI.Models.Chart;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddSingleton<IMeasurementRepository, EFMeasurementRepository>();
-builder.Services.AddSingleton<IMeasurementSetRepository, EFMeasurementSetRepository>();
-builder.Services.AddSingleton<IMeasurementOutputService, MeasurementOutputService>();
+builder.Services.AddScoped<IMeasurementRepository, EFMeasurementRepository>();
+builder.Services.AddScoped<IMeasurementSetRepository, EFMeasurementSetRepository>();
+builder.Services.AddScoped<IMeasurementOutputService, MeasurementOutputService>();
 builder.Services.AddSingleton<ApplicationContext>();
 builder.Services.AddTransient<IMeasurementChartDataCreator, MeasurementChartDataCreator>();
 builder.Services.AddTransient<ChartJsData>();

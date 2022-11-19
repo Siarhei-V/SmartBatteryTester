@@ -27,7 +27,7 @@ namespace SmartBatteryTesterWebApp.DAL.Repositories
 
         public async Task UpdateAsync(MeasurementSet measurementSet)
         {
-            _applicationContext.Update(measurementSet);
+            _applicationContext.MeasurementSets.Update(measurementSet);
             await _applicationContext.SaveChangesAsync();
         }
 
