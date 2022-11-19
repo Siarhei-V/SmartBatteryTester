@@ -21,8 +21,24 @@ namespace SmartBatteryTesterWebApp.BLL.Services
         {
             var measurementSets = _measurementSetRepository.GetMeasurementSets();
             var mapper = new MapperConfiguration(m => m.CreateMap<MeasurementSet, MeasurementSetDTO>()).CreateMapper();
-            var MeasurementSetDtos = mapper.Map<IQueryable<MeasurementSet>, List<MeasurementSetDTO>>(measurementSets);
-            return MeasurementSetDtos;
+            var measurementSetDtos = mapper.Map<IQueryable<MeasurementSet>, List<MeasurementSetDTO>>(measurementSets);
+            return measurementSetDtos;
+        }
+
+        public List<MeasurementDTO> GetMeasurement(int measurementSetId)
+        {
+            var measurements = _measurementRepository.GetMeasurements(measurementSetId);
+            var mapper = new MapperConfiguration(m => m.CreateMap<Measurement, MeasurementDTO>()).CreateMapper();
+            var measurementDtos = mapper.Map<IQueryable<Measurement>, List<MeasurementDTO>>(measurements);
+            return measurementDtos;
+        }
+
+        public MeasurementSetDTO FindMeasurementSet(string measurementSetStatus)
+        {
+            var measurementSet = _measurementSetRepository.Find(measurementSetStatus);
+            var mapper = new MapperConfiguration(m => m.CreateMap<MeasurementSet, MeasurementSetDTO>()).CreateMapper();
+            var measurementSetDtos = mapper.Map<MeasurementSet, MeasurementSetDTO>(measurementSet);
+            return measurementSetDtos;
         }
     }
 }

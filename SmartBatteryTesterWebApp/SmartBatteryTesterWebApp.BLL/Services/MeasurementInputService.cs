@@ -8,16 +8,22 @@ namespace SmartBatteryTesterWebApp.BLL.Services
 {
     public class MeasurementInputService : IMeasurementInputService
     {
-        IMeasurementSetRepository _measurementSetRepository;
+        readonly IMeasurementRepository _measurementRepository;
+        readonly IMeasurementSetRepository _measurementSetRepository;
 
-        public MeasurementInputService(IMeasurementSetRepository measurementSetRepository)
+        public MeasurementInputService(IMeasurementRepository measurementRepository, 
+            IMeasurementSetRepository measurementSetRepository)
         {
+            _measurementRepository = measurementRepository;
             _measurementSetRepository = measurementSetRepository;
         }
 
-        public void MakeMeasurement(MeasurementDTO measurement)
+        public void MakeMeasurement(MeasurementDTO measurementDto)
         {
-            throw new NotImplementedException();
+            var config = new MapperConfiguration(m => m.CreateMap<MeasurementDTO, Measurement>());
+            var mapper = new Mapper(config);
+            Measurement measurement = mapper.Map<MeasurementDTO, Measurement>(measurementDto);
+            _measurementRepository.Create(measurement);
         }
 
         public void MakeMeasurementSet(MeasurementSetDTO measurementSetDto)
@@ -26,6 +32,14 @@ namespace SmartBatteryTesterWebApp.BLL.Services
             var mapper = new Mapper(config);
             MeasurementSet measurementSet = mapper.Map<MeasurementSetDTO, MeasurementSet>(measurementSetDto);
             _measurementSetRepository.Create(measurementSet);
+        }
+
+        public void UpdateMeasurementSet(MeasurementSetDTO measurementSetDto)
+        {
+            var config = new MapperConfiguration(m => m.CreateMap<MeasurementSetDTO, MeasurementSet>());
+            var mapper = new Mapper(config);
+            MeasurementSet measurementSet = mapper.Map<MeasurementSetDTO, MeasurementSet>(measurementSetDto);
+            _measurementSetRepository.Update(measurementSet);
         }
     }
 }

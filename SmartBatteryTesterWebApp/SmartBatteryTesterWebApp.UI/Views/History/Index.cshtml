@@ -1,0 +1,29 @@
+﻿@using SmartBatteryTesterWebApp.UI.Models.Chart
+@model ChartJsData
+@{
+    ViewData["Title"] = "История измерений";
+}
+
+<div class="text-center">
+    <h3>История измерений</h3>
+</div>
+
+<div class="container">
+    <div class="row">
+        <div class="col-8">
+            <vc:measurements chart-js=Model/>
+        </div>
+        <div class="col-4">
+            <form class="row align-items-center" asp-controller="History" asp-action="Index" method="get">
+                <div class="col-7">
+                    <select class="form-select" name="measurementSetNumber" asp-items="ViewBag.MeasurementSetList">
+                        <option selected="selected" value="0">Выберите имя теста</option>
+                    </select>
+                </div>
+                <div class="col-3">
+                    <input class="btn-sm btn-primary" type="submit" value="Получить данные" />
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

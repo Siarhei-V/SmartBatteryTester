@@ -16,10 +16,21 @@ namespace SmartBatteryTesterWebApp.API.Controllers
         }
 
         [HttpPost]
-        public void AddMeasurementSet(string measurementName)
+        public void AddMeasurementSet(MeasurementSetDTO measurementSetDTO)
         {
-            MeasurementSetDTO measurementSetDTO = new MeasurementSetDTO() { MeasurementName = measurementName};
             _measurementService.MakeMeasurementSet(measurementSetDTO);
+        }
+
+        [HttpPost]
+        public void AddMeasurement(MeasurementDTO measurementDTO)
+        {
+            _measurementService.MakeMeasurement(measurementDTO);
+        }
+
+        [HttpPost]
+        public void UpdateMeasurementSet(MeasurementSetDTO measurementSetDTO)
+        {
+            _measurementService.UpdateMeasurementSet(measurementSetDTO);
         }
     }
 }

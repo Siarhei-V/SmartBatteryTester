@@ -6,6 +6,6 @@
         public decimal Voltage { get; set; }
         public decimal Current { get; set; }
         public string? MeasurementDateTime { get; set; }
-        public string? MeasurementName { get; set; }
+        public int MeasurementSetId { get; set; }
     }
 }

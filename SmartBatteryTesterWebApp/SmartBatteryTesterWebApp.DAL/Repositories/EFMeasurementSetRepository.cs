@@ -23,5 +23,16 @@ namespace SmartBatteryTesterWebApp.DAL.Repositories
             _applicationContext.Add(measurementSet);
             _applicationContext.SaveChanges();
         }
+
+        public void Update(MeasurementSet measurementSet)
+        {
+            _applicationContext.Update(measurementSet);
+            _applicationContext.SaveChanges();
+        }
+
+        public MeasurementSet Find(string str)
+        {
+            return _applicationContext.MeasurementSets.Where(m => m.MeasurementStatus == str).FirstOrDefault();
+        }
     }
 }
