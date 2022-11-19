@@ -33,5 +33,13 @@ namespace SmartBatteryTesterWebApp.BLL.Services
             MeasurementSet measurementSet = mapper.Map<MeasurementSetDTO, MeasurementSet>(measurementSetDto);
             _measurementSetRepository.Create(measurementSet);
         }
+
+        public void UpdateMeasurementSet(MeasurementSetDTO measurementSetDto)
+        {
+            var config = new MapperConfiguration(m => m.CreateMap<MeasurementSetDTO, MeasurementSet>());
+            var mapper = new Mapper(config);
+            MeasurementSet measurementSet = mapper.Map<MeasurementSetDTO, MeasurementSet>(measurementSetDto);
+            _measurementSetRepository.Update(measurementSet);
+        }
     }
 }

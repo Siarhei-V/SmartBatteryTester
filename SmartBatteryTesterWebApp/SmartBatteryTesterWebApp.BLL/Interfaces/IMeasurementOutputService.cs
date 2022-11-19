@@ -6,5 +6,6 @@ namespace SmartBatteryTesterWebApp.BLL.Interfaces
     {
         List<MeasurementSetDTO> GetMeasurementSet();
         List<MeasurementDTO> GetMeasurement(int measurementSetId);
+        public MeasurementSetDTO FindMeasurementSet(string measurementSetStatus);
     }
 }

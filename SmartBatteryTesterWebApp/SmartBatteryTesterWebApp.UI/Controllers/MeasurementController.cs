@@ -22,7 +22,13 @@ namespace SmartBatteryTesterWebApp.UI.Controllers
         {
             IMapper mapper;
 
-            List<MeasurementDTO> measurementDTOs = _measurementService.GetMeasurement(3);
+            var measurementSetDTO = _measurementService.FindMeasurementSet("Батарея разряжается");
+            mapper = new MapperConfiguration(m => m.CreateMap<MeasurementSetDTO, MeasurementSetViewModel>()).CreateMapper();
+            var measurementSet = mapper.Map<MeasurementSetDTO, MeasurementSetViewModel>(measurementSetDTO);
+
+            if (measurementSet == null) return View(null);
+
+            List<MeasurementDTO> measurementDTOs = _measurementService.GetMeasurement(measurementSet.Id);
             mapper = new MapperConfiguration(m => m.CreateMap<MeasurementDTO, MeasurementViewModel>()).CreateMapper();
             var measurements = mapper.Map<List<MeasurementDTO>, List<MeasurementViewModel>>(measurementDTOs);
 

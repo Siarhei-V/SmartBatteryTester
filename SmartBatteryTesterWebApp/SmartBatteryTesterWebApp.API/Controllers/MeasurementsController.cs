@@ -26,5 +26,11 @@ namespace SmartBatteryTesterWebApp.API.Controllers
         {
             _measurementService.MakeMeasurement(measurementDTO);
         }
+
+        [HttpPost]
+        public void UpdateMeasurementSet(MeasurementSetDTO measurementSetDTO)
+        {
+            _measurementService.UpdateMeasurementSet(measurementSetDTO);
+        }
     }
 }
