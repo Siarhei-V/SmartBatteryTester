@@ -7,7 +7,7 @@ using SmartBatteryTesterWebApp.BLL.Interfaces;
 namespace SmartBatteryTesterWebApp.API.Controllers
 {
     [ApiController]
-    [Route("[controller]/[action]")]
+    [Route("api/[controller]/[action]")]
     public class MeasurementsController : ControllerBase
     {
         IMeasurementInputService _measurementService;
