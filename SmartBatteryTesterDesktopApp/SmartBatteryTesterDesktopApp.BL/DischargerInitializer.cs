@@ -6,13 +6,13 @@ namespace SmartBatteryTesterDesktopApp.BL
     {
         IDischarger? _discharger;
         IResultsCalculator? _resultsCalculator;
-        DischargerDto? _dischargerDto;
+        DischargerModel? _dischargerModel;
 
         public IDischarger InitializeDischarger()
         {
-            _dischargerDto = new DischargerDto();
-            _resultsCalculator = new ResultsCalculator(_dischargerDto);
-            _discharger = new Discharger(_dischargerDto);
+            _dischargerModel = new DischargerModel();
+            _resultsCalculator = new ResultsCalculator(_dischargerModel);
+            _discharger = new Discharger(_dischargerModel);
             _discharger.ResultsCalculator = _resultsCalculator;
 
             return _discharger;

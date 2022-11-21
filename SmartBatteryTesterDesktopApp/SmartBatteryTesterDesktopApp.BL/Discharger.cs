@@ -4,7 +4,7 @@ namespace SmartBatteryTesterDesktopApp.BL
 {
     public class Discharger : IDischarger
     {
-        private DischargerDto _dataModel;
+        private DischargerModel _dataModel;
 
         private IResultsCalculator? _resultsCalculator;
         private decimal _lowerDischargeThreshold;
@@ -14,9 +14,9 @@ namespace SmartBatteryTesterDesktopApp.BL
         private bool _isFirstData = true;
         private bool _isNewDataReceived;
 
-        public Discharger(DischargerDto dischargerDto)
+        public Discharger(DischargerModel dischargerModel)
         {
-            _dataModel = dischargerDto;
+            _dataModel = dischargerModel;
         }
 
         IResultsCalculator IDischarger.ResultsCalculator 
@@ -54,7 +54,7 @@ namespace SmartBatteryTesterDesktopApp.BL
             _isNewDataReceived = false;
         }
 
-        public DischargerDto GetDischargingData()
+        public DischargerModel GetDischargingData()
         {
             return _dataModel;
         }

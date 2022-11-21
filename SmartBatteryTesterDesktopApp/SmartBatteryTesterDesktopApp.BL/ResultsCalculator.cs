@@ -4,11 +4,11 @@ namespace SmartBatteryTesterDesktopApp.BL
 {
     internal class ResultsCalculator : IResultsCalculator
     {
-        private DischargerDto _dischargerDto;
+        private DischargerModel _dischargerModel;
 
-        internal ResultsCalculator(DischargerDto dischargerDto)
+        internal ResultsCalculator(DischargerModel dischargerModel)
         {
-            _dischargerDto = dischargerDto;
+            _dischargerModel = dischargerModel;
         }
 
         private DateTime _dischargingStartDateTime;
@@ -31,10 +31,10 @@ namespace SmartBatteryTesterDesktopApp.BL
 
         void IResultsCalculator.CalculateResults()
         {
-            _dischargerDto.ResultCapacity = Convert.ToDecimal((_dischargingEndDateTime - _dischargingStartDateTime)
+            _dischargerModel.ResultCapacity = Convert.ToDecimal((_dischargingEndDateTime - _dischargingStartDateTime)
                 .TotalHours) * _dischargingCurrent;
 
-            _dischargerDto.DischargeDuration = _dischargingEndDateTime - _dischargingStartDateTime;
+            _dischargerModel.DischargeDuration = _dischargingEndDateTime - _dischargingStartDateTime;
         }
     }
 }

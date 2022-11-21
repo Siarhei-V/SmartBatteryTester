@@ -7,16 +7,16 @@ namespace SmartBatteryTesterDesktopApp.BL.Tests
     public class DischargerTest
     {
         Mock<IResultsCalculator> _resultsCalculatorMock;
-        DischargerDto _dischargerDto;
+        DischargerModel _dischargerModel;
 
         IDischarger _discharger;
 
         public DischargerTest()
         {
-            _dischargerDto = new DischargerDto();
+            _dischargerModel = new DischargerModel();
             _resultsCalculatorMock = new Mock<IResultsCalculator>();
 
-            _discharger = new Discharger(_dischargerDto);
+            _discharger = new Discharger(_dischargerModel);
             _discharger.ResultsCalculator = _resultsCalculatorMock.Object;
         }
 
@@ -32,20 +32,20 @@ namespace SmartBatteryTesterDesktopApp.BL.Tests
             _discharger.SetDischargingParams(0, 0, dischargingCurrent);
 
             // Assert
-            Assert.Equal(dischargingCurrent, _dischargerDto.Current);
+            Assert.Equal(dischargingCurrent, _dischargerModel.Current);
         }
 
         [Fact]
         public void Discharge_CheckFirstDataHandling()
         {
             // Arrange
-            _dischargerDto.IsDischargingCompleted = true;
+            _dischargerModel.IsDischargingCompleted = true;
 
             // Act
             _discharger.Discharge(1, 1, DateTime.Now);
 
             // Assert
-            Assert.False(_dischargerDto.IsDischargingCompleted);
+            Assert.False(_dischargerModel.IsDischargingCompleted);
         }
 
         [Fact]
@@ -61,12 +61,12 @@ namespace SmartBatteryTesterDesktopApp.BL.Tests
             _discharger.Discharge(firstVoltage, 0, firstDateTime);
 
             // Assert
-            Assert.Equal(firstVoltage, _dischargerDto.Voltage);
-            Assert.Equal(firstDateTime, _dischargerDto.CurrentDateTime);
+            Assert.Equal(firstVoltage, _dischargerModel.Voltage);
+            Assert.Equal(firstDateTime, _dischargerModel.CurrentDateTime);
 
             _discharger.Discharge(secondVoltage, 0, secondDateTime);
-            Assert.Equal(secondVoltage, _dischargerDto.Voltage);
-            Assert.Equal(secondDateTime, _dischargerDto.CurrentDateTime);
+            Assert.Equal(secondVoltage, _dischargerModel.Voltage);
+            Assert.Equal(secondDateTime, _dischargerModel.CurrentDateTime);
         }
 
         [Theory]
@@ -106,13 +106,13 @@ namespace SmartBatteryTesterDesktopApp.BL.Tests
          
             // Assert
             _resultsCalculatorMock.Verify(m => m.CalculateResults(), Times.Once());
-            Assert.True(_dischargerDto.IsDischargingCompleted);
+            Assert.True(_dischargerModel.IsDischargingCompleted);
             Assert.True(_discharger.IsNewDataReceived);
-            Assert.Equal(1, _dischargerDto.Voltage);
-            Assert.Equal(date, _dischargerDto.CurrentDateTime);
+            Assert.Equal(1, _dischargerModel.Voltage);
+            Assert.Equal(date, _dischargerModel.CurrentDateTime);
 
             _discharger.Discharge(500, 0, date);
-            Assert.False(_dischargerDto.IsDischargingCompleted);
+            Assert.False(_dischargerModel.IsDischargingCompleted);
         }
 
         [Fact]
@@ -127,7 +127,7 @@ namespace SmartBatteryTesterDesktopApp.BL.Tests
 
             // Assert
             Assert.NotNull(result);
-            Assert.IsType<DischargerDto>(result);
+            Assert.IsType<DischargerModel>(result);
             Assert.Equal(1, result.Voltage);
             Assert.Equal(dateTime, result.CurrentDateTime);
         }

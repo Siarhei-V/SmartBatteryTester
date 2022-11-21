@@ -11,7 +11,7 @@ namespace SmartBatteryTesterDesktopApp.PORT
         IDataGetter _dataGetter;
         IDischargerInitializer _dischargerInitializer;
         IDischarger _discharger;
-        DischargerDto _dischargerDto;
+        DischargerModel _dischargerModel;
 
         // TODO: remove this
         ITempDataSaver _tempDataSaver;
@@ -55,20 +55,20 @@ namespace SmartBatteryTesterDesktopApp.PORT
 
             if (_discharger.IsNewDataReceived)
             {
-                _dischargerDto = _discharger.GetDischargingData();
+                _dischargerModel = _discharger.GetDischargingData();
 
-                if (_dischargerDto.IsDischargingCompleted)
+                if (_dischargerModel.IsDischargingCompleted)
                 {
                     _tempDataSaver.SaveData($"Discharging was finished\n" +
-                        $"Discharging duration: {_dischargerDto.DischargeDuration}\n" +
-                        $"Total capacity: {_dischargerDto.ResultCapacity}");
+                        $"Discharging duration: {_dischargerModel.DischargeDuration}\n" +
+                        $"Total capacity: {_dischargerModel.ResultCapacity}");
                     _portController.StopDischarging();
                     _dataGetter.GetData("Порт закрыт");
                     return;
                 }
                 else
                 {
-                    _tempDataSaver.SaveData(_dischargerDto.Voltage.ToString());
+                    _tempDataSaver.SaveData(_dischargerModel.Voltage.ToString());
                 }
             }
 

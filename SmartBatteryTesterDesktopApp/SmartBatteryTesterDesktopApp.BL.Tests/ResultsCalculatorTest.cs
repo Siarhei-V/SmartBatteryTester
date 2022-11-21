@@ -6,11 +6,11 @@ namespace SmartBatteryTesterDesktopApp.BL.Tests
     public class ResultsCalculatorTest
     {
         IResultsCalculator _resultsCalculator;
-        DischargerDto _dataModel;
+        DischargerModel _dataModel;
 
         public ResultsCalculatorTest()
         {
-            _dataModel = new DischargerDto();
+            _dataModel = new DischargerModel();
             _resultsCalculator = new ResultsCalculator(_dataModel);
         }
 

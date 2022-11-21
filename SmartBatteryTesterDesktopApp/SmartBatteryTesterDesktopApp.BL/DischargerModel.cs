@@ -1,6 +1,6 @@
 ﻿namespace SmartBatteryTesterDesktopApp.BL
 {
-    public class DischargerDto
+    public class DischargerModel
     {
         public bool IsDischargingCompleted { get; internal set; }
         public DateTime CurrentDateTime { get; internal set; }
