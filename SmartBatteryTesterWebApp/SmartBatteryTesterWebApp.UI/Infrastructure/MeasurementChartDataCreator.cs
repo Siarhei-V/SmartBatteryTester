@@ -9,11 +9,11 @@ namespace SmartBatteryTesterWebApp.UI.Infrastructure
         ChartDataset _firstDataset;
         ChartDataset _secondDataset;
 
-        public MeasurementChartDataCreator(ChartJsData chartJsData, ChartDataset chartDataset, ChartDataset secondDataset)
+        public MeasurementChartDataCreator()
         {
-            _chartJsData = chartJsData;
-            _firstDataset = chartDataset;
-            _secondDataset = secondDataset;
+            _chartJsData = new ChartJsData();
+            _firstDataset = new ChartDataset();
+            _secondDataset = new ChartDataset();
         }
 
         public ChartJsData GetLineChartData(List<MeasurementViewModel> measurements)
