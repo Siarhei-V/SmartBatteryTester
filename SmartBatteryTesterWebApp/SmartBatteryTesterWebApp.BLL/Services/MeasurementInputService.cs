@@ -18,28 +18,31 @@ namespace SmartBatteryTesterWebApp.BLL.Services
             _measurementSetRepository = measurementSetRepository;
         }
 
-        public void MakeMeasurement(MeasurementDTO measurementDto)
+        public async Task MakeMeasurementAsync(MeasurementDTO measurementDto)
         {
-            var config = new MapperConfiguration(m => m.CreateMap<MeasurementDTO, Measurement>());
-            var mapper = new Mapper(config);
+            var mapper = new MapperConfiguration(m => m.CreateMap<MeasurementDTO, Measurement>()).CreateMapper();
             Measurement measurement = mapper.Map<MeasurementDTO, Measurement>(measurementDto);
-            _measurementRepository.Create(measurement);
+            await _measurementRepository.CreateAsync(measurement);
         }
 
-        public void MakeMeasurementSet(MeasurementSetDTO measurementSetDto)
+        public async Task MakeMeasurementSetAsync(MeasurementSetDTO measurementSetDto)
         {
-            var config = new MapperConfiguration(m => m.CreateMap<MeasurementSetDTO, MeasurementSet>());
-            var mapper = new Mapper(config);
-            MeasurementSet measurementSet = mapper.Map<MeasurementSetDTO, MeasurementSet>(measurementSetDto);
-            _measurementSetRepository.Create(measurementSet);
+            var measurementSet = MapMeasurementSetDtoToMeasurementSet(measurementSetDto);
+            await _measurementSetRepository.CreateAsync(measurementSet);
         }
 
-        public void UpdateMeasurementSet(MeasurementSetDTO measurementSetDto)
+        public async Task UpdateMeasurementSetAsync(MeasurementSetDTO measurementSetDto)
         {
-            var config = new MapperConfiguration(m => m.CreateMap<MeasurementSetDTO, MeasurementSet>());
-            var mapper = new Mapper(config);
-            MeasurementSet measurementSet = mapper.Map<MeasurementSetDTO, MeasurementSet>(measurementSetDto);
-            _measurementSetRepository.Update(measurementSet);
+            var measurementSet = MapMeasurementSetDtoToMeasurementSet(measurementSetDto);
+            await _measurementSetRepository.UpdateAsync(measurementSet);
         }
+
+        #region Private Methods
+        private MeasurementSet MapMeasurementSetDtoToMeasurementSet(MeasurementSetDTO measurementSetDTO)
+        {
+            var mapper = new MapperConfiguration(m => m.CreateMap<MeasurementSetDTO, MeasurementSet>()).CreateMapper();
+            return mapper.Map<MeasurementSetDTO, MeasurementSet>(measurementSetDTO);
+        }
+        #endregion
     }
 }

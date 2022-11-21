@@ -1,4 +1,5 @@
-﻿using SmartBatteryTesterWebApp.DAL.EF;
+﻿using Microsoft.EntityFrameworkCore;
+using SmartBatteryTesterWebApp.DAL.EF;
 using SmartBatteryTesterWebApp.DAL.Entities;
 using SmartBatteryTesterWebApp.DAL.Inrerfaces;
 
@@ -13,15 +14,15 @@ namespace SmartBatteryTesterWebApp.DAL.Repositories
             _applicationContext = applicationContext;
         }
 
-        public IQueryable<Measurement> GetMeasurements(int measurementSetId)
+        public async Task<List<Measurement>> GetMeasurementsAsync(int measurementSetId)
         {
-            return _applicationContext.Measurements.Where(m => m.MeasurementSetId == measurementSetId);
+            return await _applicationContext.Measurements.Where(m => m.MeasurementSetId == measurementSetId).ToListAsync();
         }
 
-        public void Create(Measurement measurement)
+        public async Task CreateAsync(Measurement measurement)
         {
             _applicationContext.Add(measurement);
-            _applicationContext.SaveChanges();
+            await _applicationContext.SaveChangesAsync();
         }
 
     }

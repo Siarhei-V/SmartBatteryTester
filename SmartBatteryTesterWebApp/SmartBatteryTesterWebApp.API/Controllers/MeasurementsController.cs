@@ -1,11 +1,13 @@
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using SmartBatteryTesterWebApp.API.Models;
 using SmartBatteryTesterWebApp.BLL.DTO;
 using SmartBatteryTesterWebApp.BLL.Interfaces;
 
 namespace SmartBatteryTesterWebApp.API.Controllers
 {
     [ApiController]
-    [Route("[controller]/[action]")]
+    [Route("api/[controller]/[action]")]
     public class MeasurementsController : ControllerBase
     {
         IMeasurementInputService _measurementService;
@@ -16,21 +18,33 @@ namespace SmartBatteryTesterWebApp.API.Controllers
         }
 
         [HttpPost]
-        public void AddMeasurementSet(MeasurementSetDTO measurementSetDTO)
+        public async Task AddMeasurementSetAsync(MeasurementSetModel measurementSet)
         {
-            _measurementService.MakeMeasurementSet(measurementSetDTO);
+            var measurementSetDTO = MapMeasurementSetModelToMeasurementSetDTO(measurementSet);
+            await _measurementService.MakeMeasurementSetAsync(measurementSetDTO);
         }
 
         [HttpPost]
-        public void AddMeasurement(MeasurementDTO measurementDTO)
+        public async Task AddMeasurementAsync(MeasurementModel measurement)
         {
-            _measurementService.MakeMeasurement(measurementDTO);
+            IMapper mapper = new MapperConfiguration(m => m.CreateMap<MeasurementModel, MeasurementDTO>()).CreateMapper();
+            var measurementDTO = mapper.Map<MeasurementModel, MeasurementDTO>(measurement);
+            await _measurementService.MakeMeasurementAsync(measurementDTO);
         }
 
         [HttpPost]
-        public void UpdateMeasurementSet(MeasurementSetDTO measurementSetDTO)
+        public async Task UpdateMeasurementSetAsync(MeasurementSetModel measurementSet)
         {
-            _measurementService.UpdateMeasurementSet(measurementSetDTO);
+            var measurementSetDTO = MapMeasurementSetModelToMeasurementSetDTO(measurementSet);
+            await _measurementService.UpdateMeasurementSetAsync(measurementSetDTO);
         }
+
+        #region Private Methods
+        private MeasurementSetDTO MapMeasurementSetModelToMeasurementSetDTO(MeasurementSetModel measurementSet)
+        {
+            IMapper mapper = new MapperConfiguration(m => m.CreateMap<MeasurementSetModel, MeasurementSetDTO>()).CreateMapper();
+            return mapper.Map<MeasurementSetModel, MeasurementSetDTO>(measurementSet);
+        }
+        #endregion
     }
 }

@@ -9,7 +9,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SmartBatteryTesterWebApp.DA
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SmartBatteryTesterWebApp.BLL", "SmartBatteryTesterWebApp.BLL\SmartBatteryTesterWebApp.BLL.csproj", "{16574172-BFB3-4151-9F5A-589DC736020A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmartBatteryTesterWebApp.API", "SmartBatteryTesterWebApp.API\SmartBatteryTesterWebApp.API.csproj", "{DE14F476-F469-436F-A9DD-CA5C1081F370}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SmartBatteryTesterWebApp.API", "SmartBatteryTesterWebApp.API\SmartBatteryTesterWebApp.API.csproj", "{DE14F476-F469-436F-A9DD-CA5C1081F370}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SmartBatteryTesterWebApp.API.Tests", "SmartBatteryTesterWebApp.API.Tests\SmartBatteryTesterWebApp.API.Tests.csproj", "{1523644B-DD66-4793-894E-36D49E4F8338}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SmartBatteryTesterWebApp.BLL.Tests", "SmartBatteryTesterWebApp.BLL.Tests\SmartBatteryTesterWebApp.BLL.Tests.csproj", "{5A7C4591-7E38-45FC-A7B9-8B4C05063CF9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmartBatteryTesterWebApp.UI.Tests", "SmartBatteryTesterWebApp.UI.Tests\SmartBatteryTesterWebApp.UI.Tests.csproj", "{C016BB16-F718-4354-A4B0-DD91062AF4FB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +39,18 @@ Global
 		{DE14F476-F469-436F-A9DD-CA5C1081F370}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DE14F476-F469-436F-A9DD-CA5C1081F370}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DE14F476-F469-436F-A9DD-CA5C1081F370}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1523644B-DD66-4793-894E-36D49E4F8338}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1523644B-DD66-4793-894E-36D49E4F8338}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1523644B-DD66-4793-894E-36D49E4F8338}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1523644B-DD66-4793-894E-36D49E4F8338}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5A7C4591-7E38-45FC-A7B9-8B4C05063CF9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5A7C4591-7E38-45FC-A7B9-8B4C05063CF9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5A7C4591-7E38-45FC-A7B9-8B4C05063CF9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5A7C4591-7E38-45FC-A7B9-8B4C05063CF9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C016BB16-F718-4354-A4B0-DD91062AF4FB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C016BB16-F718-4354-A4B0-DD91062AF4FB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C016BB16-F718-4354-A4B0-DD91062AF4FB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C016BB16-F718-4354-A4B0-DD91062AF4FB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

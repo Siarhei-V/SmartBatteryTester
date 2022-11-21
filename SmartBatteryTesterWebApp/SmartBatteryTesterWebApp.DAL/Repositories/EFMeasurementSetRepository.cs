@@ -1,4 +1,5 @@
-﻿using SmartBatteryTesterWebApp.DAL.EF;
+﻿using Microsoft.EntityFrameworkCore;
+using SmartBatteryTesterWebApp.DAL.EF;
 using SmartBatteryTesterWebApp.DAL.Entities;
 using SmartBatteryTesterWebApp.DAL.Inrerfaces;
 
@@ -13,26 +14,26 @@ namespace SmartBatteryTesterWebApp.DAL.Repositories
             _applicationContext = applicationContext;
         }
 
-        public IQueryable<MeasurementSet> GetMeasurementSets() 
+        public async Task<List<MeasurementSet>> GetMeasurementSetsAsync() 
         {
-            return _applicationContext.MeasurementSets;
+            return await _applicationContext.MeasurementSets.ToListAsync();
         }
 
-        public void Create(MeasurementSet measurementSet)
+        public async Task CreateAsync(MeasurementSet measurementSet)
         {
             _applicationContext.Add(measurementSet);
-            _applicationContext.SaveChanges();
+            await _applicationContext.SaveChangesAsync();
         }
 
-        public void Update(MeasurementSet measurementSet)
+        public async Task UpdateAsync(MeasurementSet measurementSet)
         {
-            _applicationContext.Update(measurementSet);
-            _applicationContext.SaveChanges();
+            _applicationContext.MeasurementSets.Update(measurementSet);
+            await _applicationContext.SaveChangesAsync();
         }
 
-        public MeasurementSet Find(string str)
+        public async Task<MeasurementSet> FindAsync(string str)
         {
-            return _applicationContext.MeasurementSets.Where(m => m.MeasurementStatus == str).FirstOrDefault();
+            return await _applicationContext.MeasurementSets.Where(m => m.MeasurementStatus == str).FirstOrDefaultAsync();
         }
     }
 }

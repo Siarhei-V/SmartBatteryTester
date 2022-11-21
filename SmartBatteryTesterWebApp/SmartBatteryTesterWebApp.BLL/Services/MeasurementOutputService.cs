@@ -17,25 +17,25 @@ namespace SmartBatteryTesterWebApp.BLL.Services
             _measurementSetRepository = measurementSetRepository;
         }
 
-        public List<MeasurementSetDTO> GetMeasurementSet()
+        public async Task<List<MeasurementSetDTO>> GetMeasurementSetAsync()
         {
-            var measurementSets = _measurementSetRepository.GetMeasurementSets();
+            var measurementSets = await _measurementSetRepository.GetMeasurementSetsAsync();
             var mapper = new MapperConfiguration(m => m.CreateMap<MeasurementSet, MeasurementSetDTO>()).CreateMapper();
-            var measurementSetDtos = mapper.Map<IQueryable<MeasurementSet>, List<MeasurementSetDTO>>(measurementSets);
+            var measurementSetDtos = mapper.Map<List<MeasurementSet>, List<MeasurementSetDTO>>(measurementSets);
             return measurementSetDtos;
         }
 
-        public List<MeasurementDTO> GetMeasurement(int measurementSetId)
+        public async Task<List<MeasurementDTO>> GetMeasurementAsync(int measurementSetId)
         {
-            var measurements = _measurementRepository.GetMeasurements(measurementSetId);
+            var measurements = await _measurementRepository.GetMeasurementsAsync(measurementSetId);
             var mapper = new MapperConfiguration(m => m.CreateMap<Measurement, MeasurementDTO>()).CreateMapper();
-            var measurementDtos = mapper.Map<IQueryable<Measurement>, List<MeasurementDTO>>(measurements);
+            var measurementDtos = mapper.Map<List<Measurement>, List<MeasurementDTO>>(measurements);
             return measurementDtos;
         }
 
-        public MeasurementSetDTO FindMeasurementSet(string measurementSetStatus)
+        public async Task<MeasurementSetDTO> FindMeasurementSetAsync(string measurementSetStatus)
         {
-            var measurementSet = _measurementSetRepository.Find(measurementSetStatus);
+            var measurementSet = await _measurementSetRepository.FindAsync(measurementSetStatus);
             var mapper = new MapperConfiguration(m => m.CreateMap<MeasurementSet, MeasurementSetDTO>()).CreateMapper();
             var measurementSetDtos = mapper.Map<MeasurementSet, MeasurementSetDTO>(measurementSet);
             return measurementSetDtos;
