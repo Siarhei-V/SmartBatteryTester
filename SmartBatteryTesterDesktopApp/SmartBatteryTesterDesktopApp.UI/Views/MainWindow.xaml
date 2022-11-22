@@ -1,9 +1,11 @@
-﻿<Window
+﻿<Window x:Class="SmartBatteryTesterDesktopApp.Views.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:av="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="av" x:Class="SmartBatteryTesterDesktopApp.Views.MainWindow"
-        Title="Smart Battery Discharger" Height="500" Width="800"
-        WindowStartupLocation="CenterScreen">
+        xmlns:av="http://schemas.microsoft.com/expression/blend/2008" 
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+        mc:Ignorable="av"
+        
+        Title="Smart Battery Discharger" Height="500" Width="800">
 
     <!--#region Resources -->
     <Window.Resources>
@@ -238,7 +240,7 @@
                     </Button>
 
                     <Button Grid.Column="1" Grid.Row="0" Template="{DynamicResource ConnectButtonTemplate}" 
-                        Command="{Binding OpenLoginWindowCommand}" Content="Подкллючиться к веб-приложению">
+                        Command="{Binding ConnectToWebAppCommand}" Content="Подкллючиться к веб-приложению">
                         <Button.Resources>
                             <Style TargetType="{x:Type Border}">
                                 <Setter Property="CornerRadius" Value="5"/>

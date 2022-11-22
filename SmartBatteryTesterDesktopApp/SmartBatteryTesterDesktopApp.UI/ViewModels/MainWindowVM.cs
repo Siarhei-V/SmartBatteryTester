@@ -3,13 +3,12 @@ using SmartBatteryTesterDesktopApp.PORT;
 using SmartBatteryTesterDesktopApp.PORT.Interfaces;
 using SmartBatteryTesterDesktopApp.UI.Infrastructure;
 using SmartBatteryTesterDesktopApp.UI.Models;
-using SmartBatteryTesterDesktopApp.UI.Temp;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
-namespace SmartBatteryTesterDesktopApp.ViewModels
+namespace SmartBatteryTesterDesktopApp.UI.ViewModels
 {
     internal class MainWindowVM : INotifyPropertyChanged
     {
@@ -18,11 +17,14 @@ namespace SmartBatteryTesterDesktopApp.ViewModels
         IUiInteractorInputPort _portInteractor;
         IDataGetter _dataGetter;
         Dictionary<string, string> _startParameters;
+        IDisplayRootRegistry _displayRootRegistry;
 
-        public MainWindowVM(ComPortConnectionParameters connectionparameters, DischargingParameters dischargingParameters)
+        public MainWindowVM(ComPortConnectionParameters connectionparameters, DischargingParameters dischargingParameters,
+            IDisplayRootRegistry displayRootRegistry)
         {
             _connectionParameters = connectionparameters;
             _dischargingParameters = dischargingParameters;
+            _displayRootRegistry = displayRootRegistry;
             _dataGetter = new PortDataGetter(dischargingParameters);    // TODO: inject this using ninject?
 
             _portInteractor = PortInteractor.Instance;
@@ -30,8 +32,6 @@ namespace SmartBatteryTesterDesktopApp.ViewModels
             _portInteractor.DataSender = _dataGetter;
 
             _dataGetter.DataChanged += HandleDataChangedEvent;
-
-            _portInteractor.TempDataSaver = new TempDataSaver();
         }
 
         #region Parameters
@@ -171,6 +171,20 @@ namespace SmartBatteryTesterDesktopApp.ViewModels
                         VoltageVM = string.Empty;
                         _portInteractor.StopDischarging();
                         ConnectionStatusMessageVM = "Порт закрыт";
+                    }));
+            }
+        }
+
+        private RelayCommand _connectToWebAppCommand;
+        public RelayCommand ConnectToWebAppCommand
+        {
+            get
+            {
+                return _connectToWebAppCommand ??
+                    (_connectToWebAppCommand = new RelayCommand(async obj =>
+                    {
+                        var newMeasurementDialogWindowWM = new NewMeasurementModalWindowVM();
+                        await _displayRootRegistry.ShowModalPresentation(newMeasurementDialogWindowWM);
                     }));
             }
         }

@@ -1,7 +1,9 @@
 ﻿using Ninject;
+using SmartBatteryTesterDesktopApp.UI;
 using SmartBatteryTesterDesktopApp.UI.Models;
+using SmartBatteryTesterDesktopApp.UI.ViewModels;
+using SmartBatteryTesterDesktopApp.UI.Views;
 using SmartBatteryTesterDesktopApp.USART;
-using SmartBatteryTesterDesktopApp.ViewModels;
 using SmartBatteryTesterDesktopApp.Views;
 using System.Windows;
 
@@ -12,21 +14,32 @@ namespace SmartBatteryTesterDesktopApp
     /// </summary>
     public partial class App : Application
     {
-        static IKernel _kernel;
-        public static IKernel Kernel => _kernel;
+        internal IDisplayRootRegistry _displayRootRegistry;
+        internal MainWindowVM _mainWindowWM;
 
-        protected override void OnStartup(StartupEventArgs e)
+        IKernel _kernel;
+        public IKernel Kernel => _kernel;
+
+        public App()
         {
-            new UsartInitializer();
             _kernel = new StandardKernel();
+            _kernel.Bind<IDisplayRootRegistry>().To<DisplayRootRegistry>().InSingletonScope();
+            _displayRootRegistry = _kernel.Get<IDisplayRootRegistry>();
+            _displayRootRegistry.RegisterWindowType<MainWindowVM, MainWindow>();
+            _displayRootRegistry.RegisterWindowType<NewMeasurementModalWindowVM, NewMeasurementModalWindow>();
+        }
+
+        protected override async void OnStartup(StartupEventArgs e)
+        {
+            base.OnStartup(e);
+            new UsartInitializer();
+
 
             _kernel.Bind<DischargingParameters>().ToSelf().InSingletonScope();
 
-            var appVM = _kernel.Get<MainWindowVM>();
+            _mainWindowWM = _kernel.Get<MainWindowVM>();
 
-            MainWindow = new MainWindow();
-            MainWindow.DataContext = appVM;
-            MainWindow.Show();
+            await _displayRootRegistry.ShowModalPresentation(_mainWindowWM);
         }
     }
 }
