@@ -1,22 +1,20 @@
 ﻿using System;
-using System.Windows.Input;
+using SmartBatteryTesterDesktopApp.UI.Commands.Base;
 
-namespace SmartBatteryTesterDesktopApp.Commands
+namespace SmartBatteryTesterDesktopApp.UI.Commands
 {
-    internal class RelayCommand : ICommand
+    public class RelayCommand : Command
     {
         private readonly Action<object> _execute;
         private readonly Func<object, bool> _canExecute;
-
-        public event EventHandler CanExecuteChanged;
-
-        public RelayCommand(Action<object> execute, Func<object, bool> canExecute = null)
+        public RelayCommand(Action<object> Execute, Func<object, bool> CanExecute = null)
         {
-            _execute = execute;
-            _canExecute = canExecute;
-        }
+            _execute = Execute ?? throw new ArgumentNullException(nameof(Execute));
+            _canExecute = CanExecute;
 
-        public bool CanExecute(object parameter) => _canExecute == null || _canExecute(parameter);
-        public void Execute(object parameter) => _execute(parameter);
+        }
+        public override bool CanExecute(object parameter) => _canExecute?.Invoke(parameter) ?? true;
+
+        public override void Execute(object parameter) => _execute(parameter);
     }
 }

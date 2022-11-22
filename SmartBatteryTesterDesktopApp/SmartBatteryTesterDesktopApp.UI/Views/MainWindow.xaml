@@ -3,9 +3,10 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:av="http://schemas.microsoft.com/expression/blend/2008" 
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+        xmlns:cmd="clr-namespace:SmartBatteryTesterDesktopApp.UI.Commands"
         mc:Ignorable="av"
         
-        Title="Smart Battery Discharger" Height="500" Width="800">
+        Title="Smart Battery Discharger" Height="500" Width="800" WindowStartupLocation="CenterScreen">
 
     <!--#region Resources -->
     <Window.Resources>
@@ -162,7 +163,7 @@
                     <StackPanel Grid.Column="1" Style="{StaticResource ParametersStackPanelStyle}">
                         <TextBlock Style="{StaticResource ParametersTextBlockStyle}" Text="Baud Rate"/>
                         <ComboBox Style="{StaticResource ParametersComboBoxStyle}"
-                                  ItemsSource="{Binding BaudRateListVM}" SelectedValue="{Binding SelectedBaudRateVM}" SelectedItem="{Binding BaudRateListVM[9]}"/>
+                                  ItemsSource="{Binding BaudRateListVM}" SelectedValue="{Binding SelectedBaudRateVM}" SelectedItem="{Binding BaudRateListVM[7]}"/>
                     </StackPanel>
                     <StackPanel Grid.Column="2" Style="{StaticResource ParametersStackPanelStyle}">
                         <TextBlock Style="{StaticResource ParametersTextBlockStyle}" Text="Data Bits"/>
@@ -240,7 +241,7 @@
                     </Button>
 
                     <Button Grid.Column="1" Grid.Row="0" Template="{DynamicResource ConnectButtonTemplate}" 
-                        Command="{Binding ConnectToWebAppCommand}" Content="Подкллючиться к веб-приложению">
+                        Content="Подкллючиться к веб-приложению">
                         <Button.Resources>
                             <Style TargetType="{x:Type Border}">
                                 <Setter Property="CornerRadius" Value="5"/>
@@ -249,6 +250,9 @@
                         <Button.Style>
                             <StaticResource ResourceKey="ConnectButton"/>
                         </Button.Style>
+                        <Button.Command>
+                            <cmd:CreateNewMeasurementModalWindowCommand/>
+                        </Button.Command>
                     </Button>
 
                     <StackPanel Grid.Column="0" Grid.Row="1" Style="{StaticResource ParametersStackPanelStyle}">

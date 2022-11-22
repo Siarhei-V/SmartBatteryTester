@@ -1,6 +1,6 @@
-﻿using SmartBatteryTesterDesktopApp.Commands;
-using SmartBatteryTesterDesktopApp.PORT;
+﻿using SmartBatteryTesterDesktopApp.PORT;
 using SmartBatteryTesterDesktopApp.PORT.Interfaces;
+using SmartBatteryTesterDesktopApp.UI.Commands;
 using SmartBatteryTesterDesktopApp.UI.Infrastructure;
 using SmartBatteryTesterDesktopApp.UI.Models;
 using System;
@@ -8,7 +8,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
-namespace SmartBatteryTesterDesktopApp.UI.ViewModels
+namespace SmartBatteryTesterDesktopApp.ViewModels
 {
     internal class MainWindowVM : INotifyPropertyChanged
     {
@@ -17,14 +17,11 @@ namespace SmartBatteryTesterDesktopApp.UI.ViewModels
         IUiInteractorInputPort _portInteractor;
         IDataGetter _dataGetter;
         Dictionary<string, string> _startParameters;
-        IDisplayRootRegistry _displayRootRegistry;
 
-        public MainWindowVM(ComPortConnectionParameters connectionparameters, DischargingParameters dischargingParameters,
-            IDisplayRootRegistry displayRootRegistry)
+        public MainWindowVM(ComPortConnectionParameters connectionparameters, DischargingParameters dischargingParameters)
         {
             _connectionParameters = connectionparameters;
             _dischargingParameters = dischargingParameters;
-            _displayRootRegistry = displayRootRegistry;
             _dataGetter = new PortDataGetter(dischargingParameters);    // TODO: inject this using ninject?
 
             _portInteractor = PortInteractor.Instance;
@@ -171,20 +168,6 @@ namespace SmartBatteryTesterDesktopApp.UI.ViewModels
                         VoltageVM = string.Empty;
                         _portInteractor.StopDischarging();
                         ConnectionStatusMessageVM = "Порт закрыт";
-                    }));
-            }
-        }
-
-        private RelayCommand _connectToWebAppCommand;
-        public RelayCommand ConnectToWebAppCommand
-        {
-            get
-            {
-                return _connectToWebAppCommand ??
-                    (_connectToWebAppCommand = new RelayCommand(async obj =>
-                    {
-                        var newMeasurementDialogWindowWM = new NewMeasurementModalWindowVM();
-                        await _displayRootRegistry.ShowModalPresentation(newMeasurementDialogWindowWM);
                     }));
             }
         }
