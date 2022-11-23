@@ -2,17 +2,17 @@
 
 namespace SmartBatteryTesterDesktopApp.UI.Models
 {
-    internal class ComPortConnectionParameters
+    public class ComPortConnectionParameters
     {
         #region Parameters
-        public List<string> PortNamesList { get; } = new List<string>() {   "COM1",
+        internal List<string> PortNamesList { get; } = new List<string>() {   "COM1",
                                                                             "COM2",
                                                                             "COM3",
                                                                             "COM4",
                                                                             "COM5" };
 
 
-        public List<string> BaudRatesList { get; } = new List<string>() {   "2400",
+        internal List<string> BaudRatesList { get; } = new List<string>() {   "2400",
                                                                             "4800",
                                                                             "9600",
                                                                             "14400",
@@ -25,32 +25,31 @@ namespace SmartBatteryTesterDesktopApp.UI.Models
                                                                             "230400",
                                                                             "250000" };
 
-        public List<string> ParityList { get; } = new List<string>() {  "None",
+        internal List<string> ParityList { get; } = new List<string>() {  "None",
                                                                         "Odd",
                                                                         "Even",
                                                                         "Mark",
                                                                         "Space" };
 
-        public List<string> DataBitsList { get; } = new List<string>() {    "5",
+        internal List<string> DataBitsList { get; } = new List<string>() {    "5",
                                                                             "6",
                                                                             "7",
                                                                             "8",
                                                                             "9" };
 
-        public List<string> StopBitsList { get; } = new List<string>() {    "None",
+        internal List<string> StopBitsList { get; } = new List<string>() {    "None",
                                                                             "One",
                                                                             "Two",
                                                                             "OnePointFive"};
         #endregion
 
         #region SelectedParameters
-        public string? SelectedPortName { get; set; }
-        public string? SelectedBaudRate { get; set; }
-        public string? SelectedParity { get; set; }
-        public string? SelectedDataBits { get; set; }
-        public string? SelectedStopBits { get; set; }
+        internal string? SelectedPortName { get; set; }
+        internal string? SelectedBaudRate { get; set; }
+        internal string? SelectedParity { get; set; }
+        internal string? SelectedDataBits { get; set; }
+        internal string? SelectedStopBits { get; set; }
         #endregion
-
-        public string? ConnectionStatus { get; set; } = "Готов";
+        internal string? ConnectionStatus { get; set; } = "Готов";
     }
 }

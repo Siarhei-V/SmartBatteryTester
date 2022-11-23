@@ -1,6 +1,9 @@
 ﻿using SmartBatteryTesterDesktopApp.BL;
 using SmartBatteryTesterDesktopApp.BL.Interfaces;
+using SmartBatteryTesterDesktopApp.PORT.DataSaver;
 using SmartBatteryTesterDesktopApp.PORT.Interfaces;
+using SmartBatteryTesterDesktopApp.PORT.Interfaces.DataSaver;
+using SmartBatteryTesterDesktopApp.PORT.Models;
 
 namespace SmartBatteryTesterDesktopApp.PORT
 {
@@ -12,21 +15,18 @@ namespace SmartBatteryTesterDesktopApp.PORT
         IDischargerInitializer _dischargerInitializer;
         IDischarger _discharger;
         DischargerModel _dischargerModel;
-
-        // TODO: remove this
-        ITempDataSaver _tempDataSaver;
+        MeasurementModel _portDataModel;
+        IDataSaverFacade _dataSaver;
+        IDataSaverFactory _dataSaverFactory;
 
 
         private PortInteractor() 
         {
             _dischargerInitializer = new DischargerInitializer();
+            _portDataModel = new MeasurementModel();
+            _dataSaverFactory = new DataSaverFactory();
+            _dataSaver = new DataSaverFacade(_dataSaverFactory);
             _discharger = _dischargerInitializer.InitializeDischarger();
-        }
-
-        // TODO: remove this prop
-        public ITempDataSaver TempDataSaver
-        {
-            set => _tempDataSaver = value;
         }
 
         public static PortInteractor Instance
@@ -43,7 +43,7 @@ namespace SmartBatteryTesterDesktopApp.PORT
             set => _dataGetter = value; 
         }
 
-        public void SendUsartData(string data)
+        public async void SendUsartData(string data)
         {
             try
             {
@@ -56,22 +56,32 @@ namespace SmartBatteryTesterDesktopApp.PORT
             if (_discharger.IsNewDataReceived)
             {
                 _dischargerModel = _discharger.GetDischargingData();
+                _portDataModel.Voltage = _dischargerModel.Voltage;
+                _portDataModel.Current = _dischargerModel.Current;
+                _portDataModel.MeasurementDateTime = _dischargerModel.CurrentDateTime.ToString();
 
                 if (_dischargerModel.IsDischargingCompleted)
                 {
-                    _tempDataSaver.SaveData($"Discharging was finished\n" +
-                        $"Discharging duration: {_dischargerModel.DischargeDuration}\n" +
-                        $"Total capacity: {_dischargerModel.ResultCapacity}");
+                    //_dataSaver.SaveData($"Discharging was finished\n" +
+                    //    $"Discharging duration: {_dischargerModel.DischargeDuration}\n" +
+                    //    $"Total capacity: {_dischargerModel.ResultCapacity}");
                     _portController.StopDischarging();
                     _dataGetter.GetData("Порт закрыт");
                     return;
                 }
                 else
                 {
-                    _tempDataSaver.SaveData(_dischargerModel.Voltage.ToString());
+                    try
+                    {
+                        await _dataSaver.SaveData(_portDataModel);
+                    }
+                    catch (Exception)
+                    {
+                        throw;
+                    }
                 }
-            }
 
+            }
             _dataGetter.GetData(data);
         }
 
@@ -90,6 +100,18 @@ namespace SmartBatteryTesterDesktopApp.PORT
         public void StopDischarging()
         {
             _portController.StopDischarging();
+        }
+
+        public async void CreateNewTest(string testName)
+        {
+            try
+            {
+                await _dataSaver.CreateNewTest(testName);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿<Window x:Class="SmartBatteryTesterDesktopApp.Views.MainWindow"
+﻿<Window x:Class="SmartBatteryTesterDesktopApp.UI.Views.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:av="http://schemas.microsoft.com/expression/blend/2008" 
@@ -251,7 +251,7 @@
                             <StaticResource ResourceKey="ConnectButton"/>
                         </Button.Style>
                         <Button.Command>
-                            <cmd:CreateNewMeasurementModalWindowCommand/>
+                            <cmd:NewMeasurementModalWindowCommand/>
                         </Button.Command>
                     </Button>
 

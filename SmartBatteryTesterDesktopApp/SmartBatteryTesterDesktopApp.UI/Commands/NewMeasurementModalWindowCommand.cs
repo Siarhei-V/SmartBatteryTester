@@ -1,14 +1,17 @@
-﻿using SmartBatteryTesterDesktopApp.UI.Commands.Base;
+﻿using Ninject;
+using SmartBatteryTesterDesktopApp.UI.Commands.Base;
+using SmartBatteryTesterDesktopApp.UI.Models;
+using SmartBatteryTesterDesktopApp.UI.ViewModels;
 using SmartBatteryTesterDesktopApp.UI.Views;
 using System;
 using System.Windows;
 
 namespace SmartBatteryTesterDesktopApp.UI.Commands
 {
-    internal class CreateNewMeasurementModalWindowCommand : Command
+    public class NewMeasurementModalWindowCommand : Command
     {
-        private NewMeasurementModalWindow _window;
-
+        IKernel _kernel = App.Kernel;
+        NewMeasurementModalWindow _window;
 
         public override bool CanExecute(object parameter) => _window == null;
 
@@ -18,8 +21,8 @@ namespace SmartBatteryTesterDesktopApp.UI.Commands
             {
                 Owner = Application.Current.MainWindow
             };
-
             _window = window;
+            window.DataContext = new NewMeasurementModalWindowVM(_kernel.Get<DischargingParameters>());
             window.Closed += OnWindowClosed;
             window.ShowDialog();
         }

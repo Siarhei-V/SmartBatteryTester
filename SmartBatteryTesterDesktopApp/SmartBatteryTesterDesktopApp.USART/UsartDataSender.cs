@@ -28,7 +28,14 @@ namespace SmartBatteryTesterDesktopApp.USART
                     data = string.Empty;
                 }
 
-                _usartInteractorPort.SendUsartData(data);
+                try
+                {
+                    _usartInteractorPort.SendUsartData(data);
+                }
+                catch (Exception)
+                {
+                    throw;
+                }
             };
         }
     }

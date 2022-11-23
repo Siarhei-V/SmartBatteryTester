@@ -2,24 +2,23 @@
 
 namespace SmartBatteryTesterDesktopApp.UI.Models
 {
-    internal class DischargingParameters
+    public class DischargingParameters
     {
-        #region new code
-        public string? Voltage { get; set; }
+        internal string? Voltage { get; set; }
 
-        #endregion
+        internal string? Current { get; set; }
 
-        public List<string> ValuesChangeDiscretennesList { get; } = new List<string>()
+        internal List<string> ValuesChangeDiscretennesList { get; } = new List<string>()
         {
             "0,1",
             "0,5",
             "1,0"
         };
-        
-        public string? ValuesChangeDiscretennes { get; set; }
 
-        public string? LowerVoltageThreshold { get; set; }
+        internal string? ValuesChangeDiscretennes { get; set; }
 
-        public string? Current { get; set; }
+        internal string? LowerVoltageThreshold { get; set; }
+
+        internal string? TestName { get; set; }
     }
 }

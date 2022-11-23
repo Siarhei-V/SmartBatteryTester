@@ -8,9 +8,9 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
-namespace SmartBatteryTesterDesktopApp.ViewModels
+namespace SmartBatteryTesterDesktopApp.UI.ViewModels
 {
-    internal class MainWindowVM : INotifyPropertyChanged
+    public class MainWindowVM : INotifyPropertyChanged
     {
         ComPortConnectionParameters _connectionParameters;
         DischargingParameters _dischargingParameters;
@@ -18,14 +18,15 @@ namespace SmartBatteryTesterDesktopApp.ViewModels
         IDataGetter _dataGetter;
         Dictionary<string, string> _startParameters;
 
-        public MainWindowVM(ComPortConnectionParameters connectionparameters, DischargingParameters dischargingParameters)
+        public MainWindowVM(IUiInteractorInputPort portInteractor, ComPortConnectionParameters connectionparameters, 
+            DischargingParameters dischargingParameters)
         {
             _connectionParameters = connectionparameters;
             _dischargingParameters = dischargingParameters;
+
             _dataGetter = new PortDataGetter(dischargingParameters);    // TODO: inject this using ninject?
 
-            _portInteractor = PortInteractor.Instance;
-
+            _portInteractor = portInteractor;
             _portInteractor.DataSender = _dataGetter;
 
             _dataGetter.DataChanged += HandleDataChangedEvent;
