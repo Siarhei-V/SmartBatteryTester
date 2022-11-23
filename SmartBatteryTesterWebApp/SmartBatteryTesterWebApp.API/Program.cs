@@ -8,10 +8,11 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-builder.Services.AddSingleton<IMeasurementRepository, EFMeasurementRepository>();
-builder.Services.AddSingleton<IMeasurementSetRepository, EFMeasurementSetRepository>();
-builder.Services.AddSingleton<IMeasurementInputService, MeasurementInputService>();
-builder.Services.AddSingleton<ApplicationContext>();
+builder.Services.AddScoped<IMeasurementRepository, EFMeasurementRepository>();
+builder.Services.AddScoped<IMeasurementSetRepository, EFMeasurementSetRepository>();
+builder.Services.AddScoped<IMeasurementInputService, MeasurementInputService>();
+builder.Services.AddScoped<IMeasurementOutputService, MeasurementOutputService>();
+builder.Services.AddScoped<ApplicationContext>();
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();

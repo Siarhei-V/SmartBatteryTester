@@ -60,25 +60,31 @@ namespace SmartBatteryTesterDesktopApp.PORT
                 _portDataModel.Current = _dischargerModel.Current;
                 _portDataModel.MeasurementDateTime = _dischargerModel.CurrentDateTime.ToString();
 
-                if (_dischargerModel.IsDischargingCompleted)
+                try
                 {
-                    //_dataSaver.SaveData($"Discharging was finished\n" +
-                    //    $"Discharging duration: {_dischargerModel.DischargeDuration}\n" +
-                    //    $"Total capacity: {_dischargerModel.ResultCapacity}");
-                    _portController.StopDischarging();
-                    _dataGetter.GetData("Порт закрыт");
-                    return;
+                    await _dataSaver.SaveData(_portDataModel);
                 }
-                else
+                catch (Exception)
+                {
+                    throw;
+                }
+
+
+                if (_dischargerModel.IsDischargingCompleted)
                 {
                     try
                     {
-                        await _dataSaver.SaveData(_portDataModel);
+                        await _dataSaver.FinishTest();
                     }
                     catch (Exception)
                     {
                         throw;
                     }
+
+                    _portController.StopDischarging();
+
+                    _dataGetter.GetData("Порт закрыт");
+                    return;
                 }
 
             }
@@ -106,7 +112,7 @@ namespace SmartBatteryTesterDesktopApp.PORT
         {
             try
             {
-                await _dataSaver.CreateNewTest(testName);
+                _portDataModel.MeasurementSetId = await _dataSaver.CreateNewTest(testName);
             }
             catch (Exception)
             {

@@ -11,10 +11,12 @@ namespace SmartBatteryTesterWebApp.API.Controllers
     public class MeasurementsController : ControllerBase
     {
         IMeasurementInputService _measurementService;
+        IMeasurementOutputService _measurementOutputService;
 
-        public MeasurementsController(IMeasurementInputService measurementService)
+        public MeasurementsController(IMeasurementInputService measurementService, IMeasurementOutputService measurementOutputService)
         {
             _measurementService = measurementService;
+            _measurementOutputService = measurementOutputService;
         }
 
         [HttpPost]
@@ -37,6 +39,15 @@ namespace SmartBatteryTesterWebApp.API.Controllers
         {
             var measurementSetDTO = MapMeasurementSetModelToMeasurementSetDTO(measurementSet);
             await _measurementService.UpdateMeasurementSetAsync(measurementSetDTO);
+        }
+
+        [HttpGet]
+        public async Task<MeasurementSetModel> FindMeasurementSetAsync(string status)
+        {
+            var measurementSet = await _measurementOutputService.FindMeasurementSetAsync(status);
+            var mapper = new MapperConfiguration(m => m.CreateMap<MeasurementSetDTO, MeasurementSetModel>()).CreateMapper();
+            var result = mapper.Map<MeasurementSetDTO, MeasurementSetModel>(measurementSet);
+            return result;
         }
 
         #region Private Methods
