@@ -18,24 +18,23 @@ namespace SmartBatteryTesterDesktopApp.PORT.DataSaver
             _testModel = new TestModel();
         }
 
-        async Task<int> IDataSaverFacade.CreateNewTest(string testName)
+        async Task IDataSaverFacade.StartDataTransfer(string testName)
         {
             _testModel.MeasurementName = testName;
             _testModel.MeasurementStatus = "Батарея разряжается";
-            _testModel.Id = await _dataToWebApiSender.CreateNewTest(_testModel);
-            return _testModel.Id;
+            await _dataToWebApiSender.StartDataTransfer(_testModel);
         }
 
-        async Task IDataSaverFacade.SaveData(MeasurementModel portDataModel)
+        async Task IDataSaverFacade.TransmitData(MeasurementModel portDataModel)
         {
-            await _dataToWebApiSender.SaveData(portDataModel);
-            _dataToSignalRSender?.SaveData(portDataModel);
+            await _dataToWebApiSender.TransmitData(portDataModel);
+            _dataToSignalRSender?.TransmitData(portDataModel);
         }
 
-        async Task IDataSaverFacade.FinishTest()
+        async Task IDataSaverFacade.FinishDataTransfer()
         {
             _testModel.MeasurementStatus = "Батарея разряжена";
-            await _dataToWebApiSender.FinishTest(_testModel);
+            await _dataToWebApiSender.FinishDataTransfer();
         }
     }
 }

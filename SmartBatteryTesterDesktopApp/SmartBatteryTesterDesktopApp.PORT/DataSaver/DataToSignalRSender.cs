@@ -5,17 +5,16 @@ namespace SmartBatteryTesterDesktopApp.PORT.DataSaver
 {
     internal class DataToSignalRSender : IDataSaver
     {
-        async Task<int> IDataSaver.CreateNewTest(TestModel testModel)
+        async Task IDataSaver.StartDataTransfer(TestModel testModel)
         {
             throw new NotImplementedException();
         }
 
-        Task IDataSaver.FinishTest(TestModel testModel)
+        async Task IDataSaver.TransmitData(MeasurementModel portDataModel)
         {
             throw new NotImplementedException();
         }
-
-        async Task IDataSaver.SaveData(MeasurementModel portDataModel)
+        async Task IDataSaver.FinishDataTransfer()
         {
             throw new NotImplementedException();
         }

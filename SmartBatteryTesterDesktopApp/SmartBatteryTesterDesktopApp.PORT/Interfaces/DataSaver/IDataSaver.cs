@@ -4,8 +4,8 @@ namespace SmartBatteryTesterDesktopApp.PORT.Interfaces.DataSaver
 {
     internal interface IDataSaver
     {
-        internal Task<int> CreateNewTest(TestModel testModel);
-        internal Task SaveData(MeasurementModel portDataModel);
-        internal Task FinishTest(TestModel testModel);
+        internal Task StartDataTransfer(TestModel testModel);
+        internal Task TransmitData(MeasurementModel portDataModel);
+        internal Task FinishDataTransfer();
     }
 }

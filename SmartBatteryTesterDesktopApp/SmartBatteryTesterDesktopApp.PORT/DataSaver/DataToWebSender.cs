@@ -6,8 +6,12 @@ namespace SmartBatteryTesterDesktopApp.PORT.DataSaver
 {
     internal class DataToWebApiSender : IDataSaver
     {
-        async Task<int> IDataSaver.CreateNewTest(TestModel testModel)
+        int _currentTestId = 0;
+        TestModel _model;
+
+        async Task IDataSaver.StartDataTransfer(TestModel testModel)
         {
+            _model = testModel;
             using (HttpClient httpClient = new HttpClient())
             {
                 await httpClient.PostAsJsonAsync("https://localhost:44373/api/Measurements/AddMeasurementSet", testModel);
@@ -17,24 +21,25 @@ namespace SmartBatteryTesterDesktopApp.PORT.DataSaver
             {
                 var receivedTest = await httpClient.GetAsync(
                     "https://localhost:44373/api/Measurements/FindMeasurementSet?status=Батарея разряжается");
-                var deserializedTest = await receivedTest.Content.ReadFromJsonAsync<TestModel>();
-                return deserializedTest.Id;
+                _currentTestId = (await receivedTest.Content.ReadFromJsonAsync<TestModel>()).Id;
             }
         }
 
-        async Task IDataSaver.SaveData(MeasurementModel portDataModel)
+        async Task IDataSaver.TransmitData(MeasurementModel portDataModel)
         {
+            portDataModel.MeasurementSetId = _currentTestId;
             using (HttpClient httpClient = new HttpClient())
             {
                 await httpClient.PostAsJsonAsync("https://localhost:44373/api/Measurements/AddMeasurement", portDataModel);
             }
         }
 
-        async Task IDataSaver.FinishTest(TestModel testModel)
+        async Task IDataSaver.FinishDataTransfer()
         {
+            _model.Id = _currentTestId;
             using (HttpClient httpClient = new HttpClient())
             {
-                await httpClient.PostAsJsonAsync("https://localhost:44373/api/Measurements/UpdateMeasurementSet", testModel);
+                await httpClient.PostAsJsonAsync("https://localhost:44373/api/Measurements/UpdateMeasurementSet", _model);
             }
         }
     }

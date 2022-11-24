@@ -62,7 +62,7 @@ namespace SmartBatteryTesterDesktopApp.PORT
 
                 try
                 {
-                    await _dataSaver.SaveData(_portDataModel);
+                    await _dataSaver.TransmitData(_portDataModel);
                 }
                 catch (Exception)
                 {
@@ -74,7 +74,7 @@ namespace SmartBatteryTesterDesktopApp.PORT
                 {
                     try
                     {
-                        await _dataSaver.FinishTest();
+                        await _dataSaver.FinishDataTransfer();
                     }
                     catch (Exception)
                     {
@@ -112,7 +112,7 @@ namespace SmartBatteryTesterDesktopApp.PORT
         {
             try
             {
-                _portDataModel.MeasurementSetId = await _dataSaver.CreateNewTest(testName);
+                await _dataSaver.StartDataTransfer(testName);
             }
             catch (Exception)
             {
