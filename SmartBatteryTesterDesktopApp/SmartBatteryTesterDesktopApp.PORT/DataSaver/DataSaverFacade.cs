@@ -23,6 +23,7 @@ namespace SmartBatteryTesterDesktopApp.PORT.DataSaver
             _testModel.MeasurementName = testName;
             _testModel.MeasurementStatus = "Батарея разряжается";
             await _dataToWebApiSender.StartDataTransfer(_testModel);
+            await _dataToSignalRSender.StartDataTransfer(_testModel);
         }
 
         async Task IDataSaverFacade.TransmitData(MeasurementModel portDataModel)

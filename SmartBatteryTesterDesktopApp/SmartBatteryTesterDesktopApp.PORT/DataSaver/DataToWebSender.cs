@@ -25,12 +25,12 @@ namespace SmartBatteryTesterDesktopApp.PORT.DataSaver
             }
         }
 
-        async Task IDataSaver.TransmitData(MeasurementModel portDataModel)
+        async Task IDataSaver.TransmitData(MeasurementModel measurementModel)
         {
-            portDataModel.MeasurementSetId = _currentTestId;
+            measurementModel.MeasurementSetId = _currentTestId;
             using (HttpClient httpClient = new HttpClient())
             {
-                await httpClient.PostAsJsonAsync("https://localhost:44373/api/Measurements/AddMeasurement", portDataModel);
+                await httpClient.PostAsJsonAsync("https://localhost:44373/api/Measurements/AddMeasurement", measurementModel);
             }
         }
 

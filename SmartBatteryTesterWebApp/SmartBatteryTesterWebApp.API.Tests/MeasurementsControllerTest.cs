@@ -10,12 +10,15 @@ namespace SmartBatteryTesterWebApp.API.Tests
     public class MeasurementsControllerTest
     {
         Mock<IMeasurementInputService> _measurementInputServiceMock;
+        Mock<IMeasurementOutputService> _measurementOutputServiceMock;
         MeasurementsController _measurementsController;
 
         public MeasurementsControllerTest()
         {
             _measurementInputServiceMock = new Mock<IMeasurementInputService>();
-            _measurementsController = new MeasurementsController(_measurementInputServiceMock.Object);
+            _measurementOutputServiceMock = new Mock<IMeasurementOutputService>();
+            _measurementsController = new MeasurementsController(_measurementInputServiceMock.Object, 
+                _measurementOutputServiceMock.Object);
         }
 
         [Fact]

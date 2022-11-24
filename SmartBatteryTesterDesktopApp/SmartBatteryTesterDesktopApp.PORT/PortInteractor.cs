@@ -105,7 +105,16 @@ namespace SmartBatteryTesterDesktopApp.PORT
 
         public void StopDischarging()
         {
+            try
+            {
+                _dataSaver.FinishDataTransfer();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
             _portController.StopDischarging();
+
         }
 
         public async void CreateNewTest(string testName)

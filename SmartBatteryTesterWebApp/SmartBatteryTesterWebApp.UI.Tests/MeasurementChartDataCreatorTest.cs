@@ -39,9 +39,9 @@ namespace SmartBatteryTesterWebApp.UI.Tests
         {
             return new List<MeasurementViewModel>()
             {
-                new MeasurementViewModel() { Voltage = 10, Current = 5, MeasurementDateTime = new DateTime(1, 1, 1, 2, 2, 2)},
-                new MeasurementViewModel() { Voltage = 20, Current = 15, MeasurementDateTime = new DateTime(3, 3, 3, 4, 4, 4)},
-                new MeasurementViewModel() { Voltage = 30, Current = 25, MeasurementDateTime = new DateTime(5, 5, 5, 6, 6, 6)},
+                new MeasurementViewModel() { Voltage = 10, Current = 5, MeasurementDateTime = new DateTime(1, 1, 1, 2, 2, 2).ToString()},
+                new MeasurementViewModel() { Voltage = 20, Current = 15, MeasurementDateTime = new DateTime(3, 3, 3, 4, 4, 4).ToString()},
+                new MeasurementViewModel() { Voltage = 30, Current = 25, MeasurementDateTime = new DateTime(5, 5, 5, 6, 6, 6).ToString()},
             };
         }
         #endregion

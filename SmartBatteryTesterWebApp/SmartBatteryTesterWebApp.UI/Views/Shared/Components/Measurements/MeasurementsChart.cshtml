@@ -6,21 +6,17 @@
     <canvas id="measurementLineChart"></canvas>
 </div>
 
-<script src="~/js/Chart.js/chart.umd.js"></script>
+<script src="~/js/Chart.js/chart.umd.min.js"></script>
 
 <script type="text/javascript">
 
-    let showChart = (isAnimation) => {
+    let showChart = () => {
         let context = document.getElementById("measurementLineChart");
         let lineChart = new Chart(context, {
             type: 'line',
             data: @Json.Serialize(Model),
-            
-            options: {
-                animation: isAnimation,
-            }
         });
     }
 
-    showChart(true);
+    showChart();
 </script>

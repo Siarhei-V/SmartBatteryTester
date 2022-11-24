@@ -21,7 +21,7 @@ namespace SmartBatteryTesterWebApp.UI.Infrastructure
             // labels and datasets
             foreach (var item in measurements)
             {
-                _chartJsData.Labels.Add(item.MeasurementDateTime.ToString());
+                _chartJsData.Labels.Add(item.MeasurementDateTime);
                 _firstDataset.Data.Add(item.Voltage);
                 _secondDataset.Data.Add(item.Current);
             }

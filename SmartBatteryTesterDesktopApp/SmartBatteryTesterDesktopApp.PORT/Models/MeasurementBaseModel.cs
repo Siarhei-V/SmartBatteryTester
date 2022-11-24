@@ -1,6 +1,6 @@
-﻿namespace SmartBatteryTesterWebApp.UI.Models
+﻿namespace SmartBatteryTesterDesktopApp.PORT.Models
 {
-    public class MeasurementViewModel
+    public class MeasurementBaseModel
     {
         public decimal Voltage { get; set; }
         public decimal Current { get; set; }
