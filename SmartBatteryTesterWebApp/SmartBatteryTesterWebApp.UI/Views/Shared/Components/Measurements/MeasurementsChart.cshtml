@@ -15,6 +15,13 @@
         let lineChart = new Chart(context, {
             type: 'line',
             data: @Json.Serialize(Model),
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
         });
     }
 

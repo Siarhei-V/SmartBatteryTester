@@ -7,14 +7,22 @@
 <div class="text-center">
     <h3>Текущие измерения</h3>
 </div>
-<div>
-    <p id="signalRMessage"></p>
 
-    <div id="chartContainer">
-        <h5>График разряда</h5>
-        <canvas id="measurementLineChart" ></canvas>
+<div class="row">
+    <div class="col-8">
+        <p id="firstMessage">Начтине тест на ПК</p>
+        <div id="chartContainer">
+            <h5>График разряда</h5>
+            <canvas id="measurementLineChart"></canvas>
+        </div>
+    </div>
+    <div class="col-4 d-flex justify-content-center mt-5">
+        <div class="align-middle">
+            <span class="align-middle fw-bold" id="signalRMessage"></span>
+        </div>
     </div>
 </div>
+
 
 <script src="/js/aspnet-signalr/signalr.min.js"></script>
 <script src="~/js/Chart.js/chart.umd.js"></script>
@@ -23,18 +31,25 @@
 {
     <script>
         document.getElementById('chartContainer').hidden = true;
-        document.getElementById('signalRMessage').innerHTML = 'Начтине тест на ПК';
     </script>
 }
 
 <script type="text/javascript">
     const hubConnection = new signalR.HubConnectionBuilder().withUrl('/measurementsHub').build();
     const chartElement = document.getElementById('chartContainer');
+    const statusElement = document.getElementById('signalRMessage');
+    const context = document.getElementById('measurementLineChart');
 
-    let context = document.getElementById('measurementLineChart');
     let lineChart = new Chart(context, {
         type: 'line',
         data: @Json.Serialize(Model),
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
     });
         
     function addData(chart, label, newVoltageData, newCurrentData) {
@@ -42,31 +57,39 @@
             return;
         }
 
+        chartElement.hidden = false;
+
         chart.data.labels.push(label);
         chart.data.datasets[0].data.push(newVoltageData);
         chart.data.datasets[1].data.push(newCurrentData);
         chart.update();
     }
 
+    function changeTextColor(element) {
+        element.style.color = 'red';
+
+        setTimeout(() => {
+            element.style.color = 'black';
+        }, 1000);
+    }
+
     hubConnection.on('Receive', function(message, chartData) {
         let newVoltageData = chartData.datasets[0].data[0];
         let newCurrentData = chartData.datasets[1].data[0];
-
-        chartElement.hidden = false;
-
-        let statusElement = document.getElementById('signalRMessage');
         
         if (statusElement.childElementCount === 0) {
             statusElement.innerHTML = message;
+
+        }
+        else {
+            statusElement.childNodes[0].nodeValue = message;
         }
 
-        statusElement.childNodes[0].nodeValue = message;
+        changeTextColor(statusElement);
+        document.getElementById('firstMessage').hidden = true;
 
         addData(lineChart, chartData.labels, newVoltageData, newCurrentData);
     });
 
     hubConnection.start();
 </script>
-
-
-

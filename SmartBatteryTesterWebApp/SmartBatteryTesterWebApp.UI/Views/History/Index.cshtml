@@ -14,7 +14,7 @@
             <vc:measurements chart-js=Model/>
         </div>
         <div class="col-4">
-            <form class="row align-items-center" asp-controller="History" asp-action="Index" method="get">
+            <form class="row align-items-center mb-4" asp-controller="History" asp-action="Index" method="get">
                 <div class="col-7">
                     <select class="form-select" name="measurementSetNumber" asp-items="ViewBag.MeasurementSetList">
                         <option selected="selected" value="0">Выберите имя теста</option>
@@ -24,6 +24,20 @@
                     <input class="btn-sm btn-primary" type="submit" value="Получить данные" />
                 </div>
             </form>
+
+            <div>
+                @{
+                    if (ViewBag.MeasurementResults == null) return;
+                    
+                    <p>@ViewBag.MeasurementResults.MeasurementStatus</p>
+                    
+                    if (ViewBag.MeasurementResults.MeasurementStatus == "Батарея разряжена")
+                    {
+                        <p>Длительность разряда: @ViewBag.MeasurementResults.DischargeDuration.ToString(@"hh\:mm\:ss")</p>
+                        <p>Измеренная емкость: @ViewBag.MeasurementResults.ResultCapacity Ач</p>
+                    }
+                }
+            </div>
         </div>
     </div>
 </div>

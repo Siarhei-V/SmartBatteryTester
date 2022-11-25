@@ -27,6 +27,15 @@ namespace SmartBatteryTesterWebApp.UI.Controllers
             var measurementSets = mapper.Map<List<MeasurementSetDTO>, List<MeasurementSetViewModel>>(measurementSetDTOs);
             ViewBag.MeasurementSetList = new SelectList(measurementSets, "Id", "MeasurementName");
 
+            if (measurementSetNumber == 0)
+            {
+                ViewBag.MeasurementResults = null;
+            }
+            else
+            {
+                ViewBag.MeasurementResults = measurementSets.Where(m => m.Id == measurementSetNumber).FirstOrDefault();
+            }
+
             List<MeasurementDTO> measurementDTOs = await _measurementService.GetMeasurementAsync(measurementSetNumber);
             mapper = new MapperConfiguration(m => m.CreateMap<MeasurementDTO, MeasurementViewModel>()).CreateMapper();
             var measurements = mapper.Map<List<MeasurementDTO>, List<MeasurementViewModel>>(measurementDTOs);

@@ -205,7 +205,9 @@ namespace SmartBatteryTesterDesktopApp.UI.ViewModels
                 ["BaudRate"] = _connectionParameters.SelectedBaudRate,
                 ["DataBits"] = _connectionParameters.SelectedDataBits,
                 ["Parity"] = _connectionParameters.SelectedParity,
-                ["StopBits"] = _connectionParameters.SelectedStopBits
+                ["StopBits"] = _connectionParameters.SelectedStopBits,
+
+                ["TempDischargingCurrent"] = _dischargingParameters.Current,    // TODO: this is a temporary parameter
             };
         }
 

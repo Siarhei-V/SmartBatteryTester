@@ -32,10 +32,13 @@ namespace SmartBatteryTesterDesktopApp.PORT.DataSaver
             _dataToSignalRSender?.TransmitData(portDataModel);
         }
 
-        async Task IDataSaverFacade.FinishDataTransfer()
+        async Task IDataSaverFacade.FinishDataTransfer(TimeSpan dischargingDuration, decimal resultCapacity, string status)
         {
-            _testModel.MeasurementStatus = "Батарея разряжена";
+            _testModel.MeasurementStatus = status;
+            _testModel.DischargeDuration = dischargingDuration;
+            _testModel.ResultCapacity = resultCapacity;
             await _dataToWebApiSender.FinishDataTransfer();
+            await _dataToSignalRSender.FinishDataTransfer();
         }
     }
 }

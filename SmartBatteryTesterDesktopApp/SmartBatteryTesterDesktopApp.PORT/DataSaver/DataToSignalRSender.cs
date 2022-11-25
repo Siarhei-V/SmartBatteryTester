@@ -26,7 +26,7 @@ namespace SmartBatteryTesterDesktopApp.PORT.DataSaver
 
             try
             {
-                await _hubConnection.InvokeAsync("Send", $"Начат новый тест {_model.MeasurementName}", new MeasurementBaseModel());
+                await _hubConnection.InvokeAsync("Send", $"Начат новый тест \"{_model.MeasurementName}\"", new MeasurementBaseModel());
             }
             catch (Exception)
             {
@@ -44,7 +44,7 @@ namespace SmartBatteryTesterDesktopApp.PORT.DataSaver
                     Current = measurementModel.Current,
                     MeasurementDateTime = measurementModel.MeasurementDateTime,
                 };
-                await _hubConnection.InvokeAsync("Send", "Получены новые данные", baseMeasurement);
+                await _hubConnection.InvokeAsync("Send", "Батарея разряжается", baseMeasurement);
             }
             catch (Exception)
             {
@@ -54,7 +54,28 @@ namespace SmartBatteryTesterDesktopApp.PORT.DataSaver
 
         async Task IDataSaver.FinishDataTransfer()
         {
-            throw new NotImplementedException();
+            string resultMessage = string.Empty;
+            var resDuration = _model.DischargeDuration.ToString(@"hh\:mm\:ss");
+
+            if (_model.MeasurementStatus == "Батарея разряжена")
+            {
+                resultMessage = $"Тест \"{_model.MeasurementName}\" окончен<br>" +
+                    $"Длительность теста: {resDuration}<br>" +
+                    $"Измеренная емкость: {Decimal.Round(_model.ResultCapacity, 2)} Ач";
+            }
+            if (_model.MeasurementStatus == "Разряд батареи прерван")
+            {
+                resultMessage = $"Тест \"{_model.MeasurementName}\" прерван";
+            }
+
+            try
+            {
+                await _hubConnection.InvokeAsync("Send", resultMessage, new MeasurementBaseModel());
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
     }
 }

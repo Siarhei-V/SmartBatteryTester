@@ -15,7 +15,7 @@ namespace SmartBatteryTesterDesktopApp.PORT
         IDischargerInitializer _dischargerInitializer;
         IDischarger _discharger;
         DischargerModel _dischargerModel;
-        MeasurementModel _portDataModel;
+        MeasurementModel _measurementModel;
         IDataSaverFacade _dataSaver;
         IDataSaverFactory _dataSaverFactory;
 
@@ -23,7 +23,7 @@ namespace SmartBatteryTesterDesktopApp.PORT
         private PortInteractor() 
         {
             _dischargerInitializer = new DischargerInitializer();
-            _portDataModel = new MeasurementModel();
+            _measurementModel = new MeasurementModel();
             _dataSaverFactory = new DataSaverFactory();
             _dataSaver = new DataSaverFacade(_dataSaverFactory);
             _discharger = _dischargerInitializer.InitializeDischarger();
@@ -56,13 +56,13 @@ namespace SmartBatteryTesterDesktopApp.PORT
             if (_discharger.IsNewDataReceived)
             {
                 _dischargerModel = _discharger.GetDischargingData();
-                _portDataModel.Voltage = _dischargerModel.Voltage;
-                _portDataModel.Current = _dischargerModel.Current;
-                _portDataModel.MeasurementDateTime = _dischargerModel.CurrentDateTime.ToString();
+                _measurementModel.Voltage = _dischargerModel.Voltage;
+                //_measurementModel.Current = _dischargerModel.Current;
+                _measurementModel.MeasurementDateTime = _dischargerModel.CurrentDateTime.ToString();
 
                 try
                 {
-                    await _dataSaver.TransmitData(_portDataModel);
+                    await _dataSaver.TransmitData(_measurementModel);
                 }
                 catch (Exception)
                 {
@@ -74,7 +74,8 @@ namespace SmartBatteryTesterDesktopApp.PORT
                 {
                     try
                     {
-                        await _dataSaver.FinishDataTransfer();
+                        await _dataSaver.FinishDataTransfer(_dischargerModel.DischargeDuration, _dischargerModel.ResultCapacity,
+                            "Батарея разряжена");
                     }
                     catch (Exception)
                     {
@@ -101,13 +102,15 @@ namespace SmartBatteryTesterDesktopApp.PORT
         public void StartDischarging(Dictionary<string, string> portConnectionParameters)
         {
             _portController.StartDischarging(portConnectionParameters);
+            _measurementModel.Current = Convert.ToDecimal(portConnectionParameters["TempDischargingCurrent"]);  // TODO: temp
         }
 
         public void StopDischarging()
         {
             try
             {
-                _dataSaver.FinishDataTransfer();
+                _dataSaver.FinishDataTransfer(_dischargerModel.DischargeDuration, _dischargerModel.ResultCapacity,
+                    "Разряд батареи прерван");
             }
             catch (Exception)
             {

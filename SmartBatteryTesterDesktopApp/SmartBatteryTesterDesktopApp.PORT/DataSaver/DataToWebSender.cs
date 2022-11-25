@@ -37,6 +37,7 @@ namespace SmartBatteryTesterDesktopApp.PORT.DataSaver
         async Task IDataSaver.FinishDataTransfer()
         {
             _model.Id = _currentTestId;
+
             using (HttpClient httpClient = new HttpClient())
             {
                 await httpClient.PostAsJsonAsync("https://localhost:44373/api/Measurements/UpdateMeasurementSet", _model);

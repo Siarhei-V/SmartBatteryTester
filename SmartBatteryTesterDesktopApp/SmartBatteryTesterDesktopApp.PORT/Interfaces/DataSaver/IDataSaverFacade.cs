@@ -6,6 +6,6 @@ namespace SmartBatteryTesterDesktopApp.PORT.Interfaces.DataSaver
     {
         internal Task StartDataTransfer(string testName);
         internal Task TransmitData(MeasurementModel portDataModel);
-        internal Task FinishDataTransfer();
+        internal Task FinishDataTransfer(TimeSpan dischargingDuration, decimal resultCapacity, string status);
     }
 }

@@ -10,7 +10,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddScoped<IMeasurementRepository, EFMeasurementRepository>();
 builder.Services.AddScoped<IMeasurementSetRepository, EFMeasurementSetRepository>();
 builder.Services.AddScoped<IMeasurementOutputService, MeasurementOutputService>();
-builder.Services.AddSingleton<ApplicationContext>();
+builder.Services.AddScoped<ApplicationContext>();
 builder.Services.AddTransient<IMeasurementChartDataCreator, MeasurementChartDataCreator>();
 
 // Add services to the container.
