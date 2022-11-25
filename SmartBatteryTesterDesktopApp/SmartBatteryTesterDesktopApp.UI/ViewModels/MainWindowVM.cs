@@ -17,6 +17,7 @@ namespace SmartBatteryTesterDesktopApp.UI.ViewModels
         IUiInteractorInputPort _portInteractor;
         IDataGetter _dataGetter;
         Dictionary<string, string> _startParameters;
+        bool _isOnlineModeEnabled = true;
 
         public MainWindowVM(IUiInteractorInputPort portInteractor, ComPortConnectionParameters connectionparameters, 
             DischargingParameters dischargingParameters)
@@ -172,6 +173,19 @@ namespace SmartBatteryTesterDesktopApp.UI.ViewModels
                     }));
             }
         }
+
+        private RelayCommand _switchOfflineModeCommand;
+        public RelayCommand SwitchOfflineModeCommand
+        {
+            get
+            {
+                return _switchOfflineModeCommand ??
+                    (_switchOfflineModeCommand = new RelayCommand(obj =>
+                    {
+                        _isOnlineModeEnabled = _isOnlineModeEnabled ? false : true;
+                    }));
+            }
+        }
         #endregion
 
         #region Private Methods
@@ -183,7 +197,7 @@ namespace SmartBatteryTesterDesktopApp.UI.ViewModels
                 OnPropertyChanged(nameof(VoltageVM));
                 ConnectionStatusMessageVM = "Связь установлена";
             }
-            catch (System.Exception)
+            catch (Exception)
             {
                 if (_dischargingParameters.Voltage == "Порт закрыт")
                 {
@@ -208,6 +222,7 @@ namespace SmartBatteryTesterDesktopApp.UI.ViewModels
                 ["StopBits"] = _connectionParameters.SelectedStopBits,
 
                 ["TempDischargingCurrent"] = _dischargingParameters.Current,    // TODO: this is a temporary parameter
+                ["Mode"] = _isOnlineModeEnabled ? "OnlineMode" : "OfflineMode"
             };
         }
 

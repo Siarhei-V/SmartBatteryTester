@@ -6,12 +6,13 @@
         xmlns:cmd="clr-namespace:SmartBatteryTesterDesktopApp.UI.Commands"
         mc:Ignorable="av"
         
-        Title="Smart Battery Discharger" Height="500" Width="800" WindowStartupLocation="CenterScreen">
+        Title="Smart Battery Discharger" Height="500" Width="800" 
+        WindowStartupLocation="CenterScreen" ResizeMode="CanMinimize">
 
     <!--#region Resources -->
     <Window.Resources>
         <Style x:Key="MainDockPanelStyle" TargetType="{x:Type DockPanel}">
-            <Setter Property="LastChildFill" Value="True"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
         </Style>
 
         <Style x:Key="MainGridStyle" TargetType="{x:Type Grid}">
@@ -55,11 +56,12 @@
             <Setter Property="Height" Value="30"/>
             <Setter Property="Width" Value="250"/>
             <Setter Property="TextAlignment" Value="Center"/>
+            <Setter Property="FontSize" Value="14"/>
         </Style>
 
-        <Style x:Key="ConnectButton" TargetType="{x:Type Button}">
+        <Style x:Key="ConnectToMcuButton" TargetType="{x:Type Button}">
             <Setter Property="Height" Value="30"/>
-            <Setter Property="Width" Value="300"/>
+            <Setter Property="Width" Value="260"/>
             <Setter Property="Content" Value="Подключиться к MCU"/>
             <Setter Property="Command" Value="{Binding ConnectToComPortCommand}"/>
             <Setter Property="Background" Value="LightPink"/>
@@ -90,6 +92,47 @@
                 <Trigger Property="IsMouseOver" Value="True">
                     <Setter Property="Opacity" Value="0.9"/>
                 </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style x:Key="ConnectToWebButton" TargetType="{x:Type Button}">
+            <Setter Property="Height" Value="30"/>
+            <Setter Property="Width" Value="260"/>
+            <Setter Property="Content" Value="Подключиться к MCU"/>
+            <Setter Property="Background" Value="LightPink"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect ShadowDepth="3"/>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding Text, ElementName=ConnectionStatusTextBlock}" Value="Связь установлена">
+                    <Setter Property="Background" Value="LightGreen"/>
+                    <Setter Property="Content" Value="Отключиться"/>
+                    <Setter Property="Command" Value="{Binding DisconnectCommand}"/>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding ElementName=ConnectionStatusTextBlock, Path=Text}" Value="Попытка подключения">
+                    <Setter Property="Opacity" Value="0.1"/>
+                    <Setter Property="Background" Value="LightYellow"/>
+                    <Setter Property="IsEnabled" Value="False"/>
+                    <Setter Property="Content" Value="Подключиться к веб-приложению"/>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding ElementName=ConnectionStatusTextBlock, Path=Text}" Value="Ошибка передачи данных">
+                    <Setter Property="Background" Value="LightYellow"/>
+                    <Setter Property="Content" Value="Отключиться"/>
+                    <Setter Property="Command" Value="{Binding DisconnectCommand}"/>
+                </DataTrigger>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Opacity" Value="0.9"/>
+                </Trigger>
+                <DataTrigger Binding="{Binding ElementName=OfflineModeCheckBox, Path=IsChecked}" Value="true">
+                    <Setter Property="IsEnabled" Value="False"/>
+                    <Setter Property="Opacity" Value="0.1"/>
+                    <Setter Property="Background" Value="LightYellow"/>
+                    <Setter Property="IsEnabled" Value="False"/>
+                </DataTrigger>
             </Style.Triggers>
         </Style>
 
@@ -127,11 +170,26 @@
 
         <Style x:Key="StatusBarStyle" TargetType="{x:Type StatusBar}">
             <Setter Property="DockPanel.Dock" Value="Bottom"/>
+            <Setter Property="Height" Value="30px"/>
         </Style>
 
         <Style x:Key="StatusStyle" TargetType="{x:Type TextBlock}">
             <Setter Property="Width" Value="60"/>
             <Setter Property="TextAlignment" Value="Center"/>
+        </Style>
+
+        <Style x:Key="OfflineModeStackPanelStyle" TargetType="StackPanel">
+            <Setter Property="VerticalAlignment" Value="Center"/>
+        </Style>
+
+        <Style x:Key="OfflineModeTextblockStyle" TargetType="TextBlock">
+            <Setter Property="TextAlignment" Value="Center"/>
+            <Setter Property="Margin" Value="20"/>
+            <Setter Property="FontSize" Value="14"/>
+        </Style>
+
+        <Style x:Key="OfflineModeCheckBoxStyle" TargetType="CheckBox">
+            <Setter Property="HorizontalAlignment" Value="Center"/>
         </Style>
     </Window.Resources>
     <!--#endregion-->
@@ -220,51 +278,73 @@
 
             <Grid Grid.Row="2">
                 <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition/>
-                        <ColumnDefinition/>
-                    </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
                         <RowDefinition/>
                         <RowDefinition/>
                     </Grid.RowDefinitions>
 
-                    <Button Grid.Column="0" Grid.Row="0" Template="{DynamicResource ConnectButtonTemplate}">
-                        <Button.Resources>
-                            <Style TargetType="{x:Type Border}">
-                                <Setter Property="CornerRadius" Value="5"/>
-                            </Style>
-                        </Button.Resources>
-                        <Button.Style>
-                            <StaticResource ResourceKey="ConnectButton"/>
-                        </Button.Style>
-                    </Button>
+                    <Grid Grid.Row="0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="1*"/>
+                            <ColumnDefinition Width="0.7*"/>
+                            <ColumnDefinition Width="1*"/>
+                        </Grid.ColumnDefinitions>
 
-                    <Button Grid.Column="1" Grid.Row="0" Template="{DynamicResource ConnectButtonTemplate}" 
-                        Content="Подкллючиться к веб-приложению">
-                        <Button.Resources>
-                            <Style TargetType="{x:Type Border}">
-                                <Setter Property="CornerRadius" Value="5"/>
-                            </Style>
-                        </Button.Resources>
-                        <Button.Style>
-                            <StaticResource ResourceKey="ConnectButton"/>
-                        </Button.Style>
-                        <Button.Command>
-                            <cmd:NewMeasurementModalWindowCommand/>
-                        </Button.Command>
-                    </Button>
+                        <Button Grid.Row="0" Grid.Column="0" Template="{DynamicResource ConnectButtonTemplate}">
+                            <Button.Resources>
+                                <Style TargetType="{x:Type Border}">
+                                    <Setter Property="CornerRadius" Value="5"/>
+                                </Style>
+                            </Button.Resources>
+                            <Button.Style>
+                                <StaticResource ResourceKey="ConnectToMcuButton"/>
+                            </Button.Style>
+                        </Button>
 
-                    <StackPanel Grid.Column="0" Grid.Row="1" Style="{StaticResource ParametersStackPanelStyle}">
-                        <TextBlock Style="{StaticResource GotDataTextBlockStyle}" Text="Текущее значение напряжения, В"/>
-                        <TextBox x:Name="VoltageView" Style="{StaticResource ResultsTextBox}" Text="{Binding VoltageVM, Mode=OneWay}"/>
-                    </StackPanel>
+                        <StackPanel Grid.Row="0" Grid.Column="1" Style="{StaticResource OfflineModeStackPanelStyle}">
+                            <TextBlock Style="{StaticResource OfflineModeTextblockStyle}" Text="Работать оффлайн"/>
 
-                    <StackPanel Grid.Column="1" Grid.Row="1" Style="{StaticResource ParametersStackPanelStyle}">
-                        <TextBlock Style="{StaticResource GotDataTextBlockStyle}" Text="Текущее значение тока, А"/>
-                        <TextBox Style="{StaticResource ResultsTextBox}" 
+                            <CheckBox Grid.Row="0" Grid.Column="1" Style="{StaticResource OfflineModeCheckBoxStyle}"
+                                      x:Name="OfflineModeCheckBox" Command="{Binding SwitchOfflineModeCommand}">
+                                <CheckBox.LayoutTransform>
+                                    <ScaleTransform ScaleX="1.5" ScaleY="1.5"/>
+                                </CheckBox.LayoutTransform>
+                            </CheckBox>
+                        </StackPanel>
+
+                        <Button Grid.Row="0" Grid.Column="2" Template="{DynamicResource ConnectButtonTemplate}" 
+                            Content="Подкллючиться к веб-приложению">
+                            <Button.Resources>
+                                <Style TargetType="{x:Type Border}">
+                                    <Setter Property="CornerRadius" Value="5"/>
+                                </Style>
+                            </Button.Resources>
+                            <Button.Style>
+                                <StaticResource ResourceKey="ConnectToWebButton"/>
+                            </Button.Style>
+                            <Button.Command>
+                                <cmd:NewMeasurementModalWindowCommand/>
+                            </Button.Command>
+                        </Button>
+                    </Grid>
+
+                    <Grid Grid.Row="1">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+
+                        <StackPanel Grid.Column="0" Grid.Row="1" Style="{StaticResource ParametersStackPanelStyle}">
+                            <TextBlock Style="{StaticResource GotDataTextBlockStyle}" Text="Текущее значение напряжения, В"/>
+                            <TextBox x:Name="VoltageView" Style="{StaticResource ResultsTextBox}" Text="{Binding VoltageVM, Mode=OneWay}"/>
+                        </StackPanel>
+
+                        <StackPanel Grid.Column="1" Grid.Row="1" Style="{StaticResource ParametersStackPanelStyle}">
+                            <TextBlock Style="{StaticResource GotDataTextBlockStyle}" Text="Текущее значение тока, А"/>
+                            <TextBox Style="{StaticResource ResultsTextBox}" 
                         Text="{Binding SelectedDischargingCurrent}"/>
-                    </StackPanel>
+                        </StackPanel>
+                    </Grid>
                 </Grid>
             </Grid>
         </Grid>

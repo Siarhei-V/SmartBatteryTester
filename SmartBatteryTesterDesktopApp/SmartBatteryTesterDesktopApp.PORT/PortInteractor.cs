@@ -18,7 +18,7 @@ namespace SmartBatteryTesterDesktopApp.PORT
         MeasurementModel _measurementModel;
         IDataSaverFacade _dataSaver;
         IDataSaverFactory _dataSaverFactory;
-
+        bool _isOnlineModeEnabled;
 
         private PortInteractor() 
         {
@@ -45,51 +45,17 @@ namespace SmartBatteryTesterDesktopApp.PORT
 
         public async void SendUsartData(string data)
         {
-            try
-            {
-                _discharger.Discharge(Convert.ToDecimal(data), 0, DateTime.Now);
-            }
-            catch (Exception)
-            {
-            }
+            _dischargerModel = _discharger.GetDischargingData();
+            HandleDataFromUsart(data);
 
-            if (_discharger.IsNewDataReceived)
-            {
-                _dischargerModel = _discharger.GetDischargingData();
-                _measurementModel.Voltage = _dischargerModel.Voltage;
-                //_measurementModel.Current = _dischargerModel.Current;
-                _measurementModel.MeasurementDateTime = _dischargerModel.CurrentDateTime.ToString();
+            if (!_discharger.IsNewDataReceived) return;
 
-                try
-                {
-                    await _dataSaver.TransmitData(_measurementModel);
-                }
-                catch (Exception)
-                {
-                    throw;
-                }
+            if (_isOnlineModeEnabled) 
+                await SendDataToWeb();
 
+            if (!_dischargerModel.IsDischargingCompleted) return;
 
-                if (_dischargerModel.IsDischargingCompleted)
-                {
-                    try
-                    {
-                        await _dataSaver.FinishDataTransfer(_dischargerModel.DischargeDuration, _dischargerModel.ResultCapacity,
-                            "Батарея разряжена");
-                    }
-                    catch (Exception)
-                    {
-                        throw;
-                    }
-
-                    _portController.StopDischarging();
-
-                    _dataGetter.GetData("Порт закрыт");
-                    return;
-                }
-
-            }
-            _dataGetter.GetData(data);
+            await HandleDischargingFinish();
         }
 
         public void SetDischargingParams(string lowerDischargeThreshold, string valuesChangeDiscreteness, string dischargingCurrent)
@@ -103,10 +69,20 @@ namespace SmartBatteryTesterDesktopApp.PORT
         {
             _portController.StartDischarging(portConnectionParameters);
             _measurementModel.Current = Convert.ToDecimal(portConnectionParameters["TempDischargingCurrent"]);  // TODO: temp
+
+            if (portConnectionParameters["Mode"] == "OnlineMode")
+                _isOnlineModeEnabled = true;
+            else if (portConnectionParameters["Mode"] == "OfflineMode")
+                _isOnlineModeEnabled = false;
         }
 
         public void StopDischarging()
         {
+            _portController.StopDischarging();
+
+            if (!_isOnlineModeEnabled) 
+                return;
+
             try
             {
                 _dataSaver.FinishDataTransfer(_dischargerModel.DischargeDuration, _dischargerModel.ResultCapacity,
@@ -116,8 +92,6 @@ namespace SmartBatteryTesterDesktopApp.PORT
             {
                 throw;
             }
-            _portController.StopDischarging();
-
         }
 
         public async void CreateNewTest(string testName)
@@ -131,5 +105,57 @@ namespace SmartBatteryTesterDesktopApp.PORT
                 throw;
             }
         }
+
+        #region Private Methods
+
+        private void HandleDataFromUsart(string data)
+        {
+            try
+            {
+                _discharger.Discharge(Convert.ToDecimal(data), 0, DateTime.Now);
+            }
+            catch (Exception)
+            {
+            }
+
+            _dataGetter.GetData(data);
+        }
+
+        private async Task SendDataToWeb()
+        {
+            _measurementModel.Voltage = _dischargerModel.Voltage;
+            //_measurementModel.Current = _dischargerModel.Current;
+            _measurementModel.MeasurementDateTime = _dischargerModel.CurrentDateTime.ToString();
+
+            try
+            {
+                await _dataSaver.TransmitData(_measurementModel);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        private async Task HandleDischargingFinish()
+        {
+            if (_isOnlineModeEnabled)
+            {
+                try
+                {
+                    await _dataSaver.FinishDataTransfer(_dischargerModel.DischargeDuration, _dischargerModel.ResultCapacity,
+                        "Батарея разряжена");
+                }
+                catch (Exception)
+                {
+                    throw;
+                }
+            }
+
+            _portController.StopDischarging();
+
+            _dataGetter.GetData("Порт закрыт");
+        }
+        #endregion
     }
 }
