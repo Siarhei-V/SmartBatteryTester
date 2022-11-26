@@ -29,7 +29,7 @@ namespace SmartBatteryTesterDesktopApp.PORT.DataSaver
         async Task IDataSaverFacade.TransmitData(MeasurementModel portDataModel)
         {
             await _dataToWebApiSender.TransmitData(portDataModel);
-            _dataToSignalRSender?.TransmitData(portDataModel);
+            await _dataToSignalRSender.TransmitData(portDataModel);
         }
 
         async Task IDataSaverFacade.FinishDataTransfer(TimeSpan dischargingDuration, decimal resultCapacity, string status)

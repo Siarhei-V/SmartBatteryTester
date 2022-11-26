@@ -216,7 +216,7 @@
                     <StackPanel Grid.Column="0" Style="{StaticResource ParametersStackPanelStyle}">
                         <TextBlock Style="{StaticResource ParametersTextBlockStyle}" Text="Имя порта"/>
                         <ComboBox Style="{StaticResource ParametersComboBoxStyle}" 
-                                  ItemsSource="{Binding PortNameListVM}" SelectedValue="{Binding SelectedPortNameVM}" SelectedItem="{Binding PortNameListVM[0]}"/>
+                                  ItemsSource="{Binding PortNameListVM}" SelectedValue="{Binding SelectedPortNameVM}" SelectedItem="{Binding PortNameListVM[2]}"/>
                     </StackPanel>
                     <StackPanel Grid.Column="1" Style="{StaticResource ParametersStackPanelStyle}">
                         <TextBlock Style="{StaticResource ParametersTextBlockStyle}" Text="Baud Rate"/>
