@@ -19,5 +19,17 @@ namespace SmartBatteryTesterDesktopApp.UI.Infrastructure
             _dischargingParameters.Voltage = data;
             DataChanged?.Invoke(this, EventArgs.Empty);
         }
+
+        public void GetPortStatus(string status)
+        {
+            _dischargingParameters.PortConnectionStatus = status;
+            DataChanged?.Invoke(this, EventArgs.Empty);
+        }
+
+        public void GetWebStatus(string status)
+        {
+            _dischargingParameters.WebConnectionStatus = status;
+            DataChanged?.Invoke(this, EventArgs.Empty);
+        }
     }
 }

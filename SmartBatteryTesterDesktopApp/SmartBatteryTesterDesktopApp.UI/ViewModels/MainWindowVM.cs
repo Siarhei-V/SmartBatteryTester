@@ -122,12 +122,22 @@ namespace SmartBatteryTesterDesktopApp.UI.ViewModels
             }
         }
 
-        public string ConnectionStatusMessageVM
+        public string PortConnectionStatusMessageVM
         {
-            get => _connectionParameters.ConnectionStatus;
+            get => _dischargingParameters.PortConnectionStatus;
             set
             {
-                _connectionParameters.ConnectionStatus = value;
+                _dischargingParameters.PortConnectionStatus = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public string WebConnectionStatusMessageVM
+        {
+            get => _dischargingParameters.WebConnectionStatus;
+            set
+            {
+                _dischargingParameters.WebConnectionStatus = value;
                 OnPropertyChanged();
             }
         }
@@ -142,19 +152,32 @@ namespace SmartBatteryTesterDesktopApp.UI.ViewModels
                     (_connectToComPortCommand = new RelayCommand(obj =>
                     {
                         CreateParameterDictionary();
-                        ConnectionStatusMessageVM = "Попытка подключения";
+                        PortConnectionStatusMessageVM = "Попытка подключения";
 
                         try
                         {
                             _portInteractor.SetDischargingParams(_dischargingParameters.LowerVoltageThreshold,
                                 _dischargingParameters.ValuesChangeDiscretennes, 
                                 _dischargingParameters.Current);
-                            _portInteractor.StartDischarging(_startParameters);
+                            _portInteractor.ConnectToPort(_startParameters);
                         }
-                        catch (System.Exception e)
+                        catch (Exception e)
                         {
-                            ConnectionStatusMessageVM = e.Message;
+                            PortConnectionStatusMessageVM = e.Message;
                         }
+                    }));
+            }
+        }
+
+        private RelayCommand _startDischargingCommand;
+        public RelayCommand StartDischargingCommand
+        {
+            get
+            {
+                return _startDischargingCommand ??
+                    (_startDischargingCommand = new RelayCommand(obj =>
+                    {
+                        _portInteractor.StartDischarging(_isOnlineModeEnabled);
                     }));
             }
         }
@@ -169,7 +192,20 @@ namespace SmartBatteryTesterDesktopApp.UI.ViewModels
                     {
                         VoltageVM = string.Empty;
                         _portInteractor.StopDischarging();
-                        ConnectionStatusMessageVM = "Порт закрыт";
+                        PortConnectionStatusMessageVM = "Порт закрыт";
+                    }));
+            }
+        }
+
+        private RelayCommand _disconnectWebCommand;
+        public RelayCommand DisconnectWebCommand
+        {
+            get
+            {
+                return _disconnectWebCommand ??
+                    (_disconnectWebCommand = new RelayCommand(obj =>
+                    {
+                        _portInteractor.DisconnectWeb();
                     }));
             }
         }
@@ -191,24 +227,7 @@ namespace SmartBatteryTesterDesktopApp.UI.ViewModels
         #region Private Methods
         void HandleDataChangedEvent(object? sender, EventArgs args)
         {
-            try
-            {
-                Convert.ToDecimal(_dischargingParameters.Voltage);
-                OnPropertyChanged(nameof(VoltageVM));
-                ConnectionStatusMessageVM = "Связь установлена";
-            }
-            catch (Exception)
-            {
-                if (_dischargingParameters.Voltage == "Порт закрыт")
-                {
-                    ConnectionStatusMessageVM = "Порт закрыт";
-                    VoltageVM = String.Empty;
-                }
-                else
-                {
-                    ConnectionStatusMessageVM = "Ошибка передачи данных";
-                }
-            }
+            WebConnectionStatusMessageVM = _dischargingParameters.WebConnectionStatus;
         }
 
         private void CreateParameterDictionary()

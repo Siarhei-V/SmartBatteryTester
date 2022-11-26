@@ -73,18 +73,18 @@
                 </Setter.Value>
             </Setter>
             <Style.Triggers>
-                <DataTrigger Binding="{Binding Text, ElementName=ConnectionStatusTextBlock}" Value="Связь установлена">
+                <DataTrigger Binding="{Binding Text, ElementName=PortConnectionStatusTextBlock}" Value="Связь установлена">
                     <Setter Property="Background" Value="LightGreen"/>
                     <Setter Property="Content" Value="Отключиться"/>
                     <Setter Property="Command" Value="{Binding DisconnectCommand}"/>
                 </DataTrigger>
-                <DataTrigger Binding="{Binding ElementName=ConnectionStatusTextBlock, Path=Text}" Value="Попытка подключения">
+                <DataTrigger Binding="{Binding ElementName=PortConnectionStatusTextBlock, Path=Text}" Value="Попытка подключения">
                     <Setter Property="Opacity" Value="0.1"/>
                     <Setter Property="Background" Value="LightYellow"/>
                     <Setter Property="IsEnabled" Value="False"/>
                     <Setter Property="Content" Value="Подключиться к MCU"/>
                 </DataTrigger>
-                <DataTrigger Binding="{Binding ElementName=ConnectionStatusTextBlock, Path=Text}" Value="Ошибка передачи данных">
+                <DataTrigger Binding="{Binding ElementName=PortConnectionStatusTextBlock, Path=Text}" Value="Ошибка передачи данных">
                     <Setter Property="Background" Value="LightYellow"/>
                     <Setter Property="Content" Value="Отключиться"/>
                     <Setter Property="Command" Value="{Binding DisconnectCommand}"/>
@@ -95,10 +95,10 @@
             </Style.Triggers>
         </Style>
 
-        <Style x:Key="ConnectToWebButton" TargetType="{x:Type Button}">
+        <Style x:Key="ConnectToWebButton" TargetType="Button">
             <Setter Property="Height" Value="30"/>
             <Setter Property="Width" Value="260"/>
-            <Setter Property="Content" Value="Подключиться к MCU"/>
+            <Setter Property="Content" Value="Подключиться к веб-приложению"/>
             <Setter Property="Background" Value="LightPink"/>
             <Setter Property="Cursor" Value="Hand"/>
             <Setter Property="BorderThickness" Value="0"/>
@@ -107,23 +107,28 @@
                     <DropShadowEffect ShadowDepth="3"/>
                 </Setter.Value>
             </Setter>
+            <Setter Property="Command">
+                <Setter.Value>
+                    <cmd:NewMeasurementModalWindowCommand/>
+                </Setter.Value>
+            </Setter>
             <Style.Triggers>
-                <DataTrigger Binding="{Binding Text, ElementName=ConnectionStatusTextBlock}" Value="Связь установлена">
+                <DataTrigger Binding="{Binding Text, ElementName=WebConnectionStatusTextBlock}" Value="Связь с веб установлена">
                     <Setter Property="Background" Value="LightGreen"/>
                     <Setter Property="Content" Value="Отключиться"/>
-                    <Setter Property="Command" Value="{Binding DisconnectCommand}"/>
+                    <Setter Property="Command" Value="{Binding DisconnectWebCommand}"/>
                 </DataTrigger>
-                <DataTrigger Binding="{Binding ElementName=ConnectionStatusTextBlock, Path=Text}" Value="Попытка подключения">
+                <DataTrigger Binding="{Binding ElementName=WebConnectionStatusTextBlock, Path=Text}" Value="Попытка подключения к веб">
                     <Setter Property="Opacity" Value="0.1"/>
                     <Setter Property="Background" Value="LightYellow"/>
                     <Setter Property="IsEnabled" Value="False"/>
                     <Setter Property="Content" Value="Подключиться к веб-приложению"/>
                 </DataTrigger>
-                <DataTrigger Binding="{Binding ElementName=ConnectionStatusTextBlock, Path=Text}" Value="Ошибка передачи данных">
+                <DataTrigger Binding="{Binding ElementName=WebConnectionStatusTextBlock, Path=Text}" Value="Ошибка подключения к веб">
                     <Setter Property="Background" Value="LightYellow"/>
-                    <Setter Property="Content" Value="Отключиться"/>
-                    <Setter Property="Command" Value="{Binding DisconnectCommand}"/>
                 </DataTrigger>
+                <DataTrigger Binding="{Binding ElementName=WebConnectionStatusTextBlock, Path=Text}" 
+                             Value="Соединение с веб остановлено"/>
                 <Trigger Property="IsMouseOver" Value="True">
                     <Setter Property="Opacity" Value="0.9"/>
                 </Trigger>
@@ -133,6 +138,33 @@
                     <Setter Property="Background" Value="LightYellow"/>
                     <Setter Property="IsEnabled" Value="False"/>
                 </DataTrigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style x:Key="StartButtonStyle" TargetType="Button">
+            <Setter Property="Width" Value="150"/>
+            <Setter Property="Height" Value="50"/>
+            <Setter Property="Opacity" Value="0.1"/>
+            <Setter Property="Background" Value="LightYellow"/>
+            <Setter Property="IsEnabled" Value="False"/>
+            <Setter Property="FontSize" Value="15"/>
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect ShadowDepth="3"/>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="Command" Value="{Binding StartDischargingCommand}"/>
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding ElementName=PortConnectionStatusTextBlock, Path=Text}" Value="Связь установлена">
+                    <Setter Property="IsEnabled" Value="True"/>
+                    <Setter Property="Opacity" Value="1"/>
+                    <Setter Property="Background" Value="LightPink"/>
+                    <Setter Property="Cursor" Value="Hand"/>
+                    <Setter Property="BorderThickness" Value="0"/>
+                </DataTrigger>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Opacity" Value="0.9"/>
+                </Trigger>
             </Style.Triggers>
         </Style>
 
@@ -174,7 +206,7 @@
         </Style>
 
         <Style x:Key="StatusStyle" TargetType="{x:Type TextBlock}">
-            <Setter Property="Width" Value="60"/>
+            <Setter Property="Width" Value="80"/>
             <Setter Property="TextAlignment" Value="Center"/>
         </Style>
 
@@ -184,7 +216,7 @@
 
         <Style x:Key="OfflineModeTextblockStyle" TargetType="TextBlock">
             <Setter Property="TextAlignment" Value="Center"/>
-            <Setter Property="Margin" Value="20"/>
+            <Setter Property="Margin" Value="0 0 0 10"/>
             <Setter Property="FontSize" Value="14"/>
         </Style>
 
@@ -202,52 +234,48 @@
                 <RowDefinition Height="1.5*"/>
             </Grid.RowDefinitions>
 
-            <StackPanel Grid.Row="0" Style="{StaticResource ParametersStackPanelStyle}">
-                <TextBlock Style="{StaticResource ParametersHeaderTextBlockStyle}" Text="Параметры подключения RS232"/>
+            <GroupBox Grid.Row="0" Header="Параметры подключения RS232">
+                <StackPanel Grid.Row="0" Style="{StaticResource ParametersStackPanelStyle}">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="1*"/>
+                            <ColumnDefinition Width="1*"/>
+                            <ColumnDefinition Width="1*"/>
+                            <ColumnDefinition Width="1*"/>
+                            <ColumnDefinition Width="1*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <StackPanel Grid.Column="0" Style="{StaticResource ParametersStackPanelStyle}">
+                            <TextBlock Style="{StaticResource ParametersTextBlockStyle}" Text="Имя порта"/>
+                            <ComboBox Style="{StaticResource ParametersComboBoxStyle}" 
+                                      ItemsSource="{Binding PortNameListVM}" SelectedValue="{Binding SelectedPortNameVM}" SelectedItem="{Binding PortNameListVM[2]}"/>
+                        </StackPanel>
+                        <StackPanel Grid.Column="1" Style="{StaticResource ParametersStackPanelStyle}">
+                            <TextBlock Style="{StaticResource ParametersTextBlockStyle}" Text="Baud Rate"/>
+                            <ComboBox Style="{StaticResource ParametersComboBoxStyle}"
+                                      ItemsSource="{Binding BaudRateListVM}" SelectedValue="{Binding SelectedBaudRateVM}" SelectedItem="{Binding BaudRateListVM[7]}"/>
+                        </StackPanel>
+                        <StackPanel Grid.Column="2" Style="{StaticResource ParametersStackPanelStyle}">
+                            <TextBlock Style="{StaticResource ParametersTextBlockStyle}" Text="Data Bits"/>
+                            <ComboBox Style="{StaticResource ParametersComboBoxStyle}"
+                                      ItemsSource="{Binding DataBitsListVM}" SelectedValue="{Binding SelectedDataBitsVM}" SelectedItem="{Binding DataBitsListVM[3]}"/>
+                        </StackPanel>
+                        <StackPanel Grid.Column="3" Style="{StaticResource ParametersStackPanelStyle}">
+                            <TextBlock Style="{StaticResource ParametersTextBlockStyle}" Text="Parity"/>
+                            <ComboBox Style="{StaticResource ParametersComboBoxStyle}"
+                                      ItemsSource="{Binding ParityListVM}" SelectedValue="{Binding SelectedParityVM}" SelectedItem="{Binding ParityListVM[0]}"/>
+                        </StackPanel>
+                        <StackPanel Grid.Column="4" Style="{StaticResource ParametersStackPanelStyle}">
+                            <TextBlock Style="{StaticResource ParametersTextBlockStyle}" Text="Stop Bits"/>
+                            <ComboBox Style="{StaticResource ParametersComboBoxStyle}"
+                                      ItemsSource="{Binding StopBitsListVM}" SelectedValue="{Binding SelectedStopBitsVM}" SelectedItem="{Binding StopBitsListVM[1]}"/>
+                        </StackPanel>
+                    </Grid>
+                </StackPanel>
+            </GroupBox>
+
+            <GroupBox Grid.Row="1" Header="Параметры разряда">
                 <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="1*"/>
-                        <ColumnDefinition Width="1*"/>
-                        <ColumnDefinition Width="1*"/>
-                        <ColumnDefinition Width="1*"/>
-                        <ColumnDefinition Width="1*"/>
-                    </Grid.ColumnDefinitions>
-
-                    <StackPanel Grid.Column="0" Style="{StaticResource ParametersStackPanelStyle}">
-                        <TextBlock Style="{StaticResource ParametersTextBlockStyle}" Text="Имя порта"/>
-                        <ComboBox Style="{StaticResource ParametersComboBoxStyle}" 
-                                  ItemsSource="{Binding PortNameListVM}" SelectedValue="{Binding SelectedPortNameVM}" SelectedItem="{Binding PortNameListVM[2]}"/>
-                    </StackPanel>
-                    <StackPanel Grid.Column="1" Style="{StaticResource ParametersStackPanelStyle}">
-                        <TextBlock Style="{StaticResource ParametersTextBlockStyle}" Text="Baud Rate"/>
-                        <ComboBox Style="{StaticResource ParametersComboBoxStyle}"
-                                  ItemsSource="{Binding BaudRateListVM}" SelectedValue="{Binding SelectedBaudRateVM}" SelectedItem="{Binding BaudRateListVM[7]}"/>
-                    </StackPanel>
-                    <StackPanel Grid.Column="2" Style="{StaticResource ParametersStackPanelStyle}">
-                        <TextBlock Style="{StaticResource ParametersTextBlockStyle}" Text="Data Bits"/>
-                        <ComboBox Style="{StaticResource ParametersComboBoxStyle}"
-                                  ItemsSource="{Binding DataBitsListVM}" SelectedValue="{Binding SelectedDataBitsVM}" SelectedItem="{Binding DataBitsListVM[3]}"/>
-                    </StackPanel>
-                    <StackPanel Grid.Column="3" Style="{StaticResource ParametersStackPanelStyle}">
-                        <TextBlock Style="{StaticResource ParametersTextBlockStyle}" Text="Parity"/>
-                        <ComboBox Style="{StaticResource ParametersComboBoxStyle}"
-                                  ItemsSource="{Binding ParityListVM}" SelectedValue="{Binding SelectedParityVM}" SelectedItem="{Binding ParityListVM[0]}"/>
-                    </StackPanel>
-                    <StackPanel Grid.Column="4" Style="{StaticResource ParametersStackPanelStyle}">
-                        <TextBlock Style="{StaticResource ParametersTextBlockStyle}" Text="Stop Bits"/>
-                        <ComboBox Style="{StaticResource ParametersComboBoxStyle}"
-                                  ItemsSource="{Binding StopBitsListVM}" SelectedValue="{Binding SelectedStopBitsVM}" SelectedItem="{Binding StopBitsListVM[1]}"/>
-                    </StackPanel>
-                </Grid>
-            </StackPanel>
-
-            <Grid Grid.Row="1" >
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="*"/>
-                    <RowDefinition Height="2*"/>
-                </Grid.RowDefinitions>
-                <TextBlock Grid.Row="0" Style="{StaticResource ParametersHeaderTextBlockStyle}" Text="Параметры разряда"/>
-                <Grid Grid.Row="1">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition/>
                         <ColumnDefinition/>
@@ -259,102 +287,103 @@
                     </Grid.RowDefinitions>
 
                     <TextBlock Grid.Column="0" Grid.Row="0" Style="{StaticResource ParametersHeaderTextBlockStyle}" 
-                               Text="Напряжение окончания разряда, В"/>
+                                Text="Напряжение окончания разряда, В"/>
                     <TextBox Grid.Column="0" Grid.Row="1" Style="{StaticResource ThresholdTextBox}" 
-                             Text="{Binding LowerVoltageThresholdVM}"/>
+                                Text="{Binding LowerVoltageThresholdVM}"/>
 
                     <TextBlock Grid.Column="1" Grid.Row="0" Style="{StaticResource ParametersHeaderTextBlockStyle}" 
-                               Text="Шаг сохранения результатов, В"/>
+                                Text="Шаг сохранения результатов, В"/>
                     <ComboBox Grid.Column="1" Grid.Row="1" Style="{StaticResource ParametersComboBoxStyle}" 
                     ItemsSource="{Binding ValuesChangeDiscretennesListVM}" SelectedValue="{Binding ValuesChangeDiscretennesVM}" 
-                              SelectedItem="{Binding ValuesChangeDiscretennesListVM[0]}"/>
+                                SelectedItem="{Binding ValuesChangeDiscretennesListVM[0]}"/>
 
                     <TextBlock Grid.Column="2" Grid.Row="0" Style="{StaticResource ParametersHeaderTextBlockStyle}" 
-                               Text="Ток разряда, А"/>
+                                Text="Ток разряда, А"/>
                     <TextBox Grid.Column="2" Grid.Row="1" Style="{StaticResource ThresholdTextBox}"
                     Text="{Binding SelectedDischargingCurrent}"/>
                 </Grid>
-            </Grid>
+            </GroupBox>
 
-            <Grid Grid.Row="2">
+            <GroupBox Grid.Row="2" Header="Подключение">
                 <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="1*"/>
+                        <ColumnDefinition Width="0.7*"/>
+                        <ColumnDefinition Width="1*"/>
+                    </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
                         <RowDefinition/>
                         <RowDefinition/>
                     </Grid.RowDefinitions>
 
-                    <Grid Grid.Row="0">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="1*"/>
-                            <ColumnDefinition Width="0.7*"/>
-                            <ColumnDefinition Width="1*"/>
-                        </Grid.ColumnDefinitions>
+                    <Button Grid.Row="0" Grid.Column="0" Template="{DynamicResource ConnectButtonTemplate}">
+                        <Button.Resources>
+                            <Style TargetType="{x:Type Border}">
+                                <Setter Property="CornerRadius" Value="5"/>
+                            </Style>
+                        </Button.Resources>
+                        <Button.Style>
+                            <StaticResource ResourceKey="ConnectToMcuButton"/>
+                        </Button.Style>
+                    </Button>
 
-                        <Button Grid.Row="0" Grid.Column="0" Template="{DynamicResource ConnectButtonTemplate}">
-                            <Button.Resources>
-                                <Style TargetType="{x:Type Border}">
-                                    <Setter Property="CornerRadius" Value="5"/>
-                                </Style>
-                            </Button.Resources>
-                            <Button.Style>
-                                <StaticResource ResourceKey="ConnectToMcuButton"/>
-                            </Button.Style>
-                        </Button>
+                    <StackPanel Grid.Row="0" Grid.Column="1" Style="{StaticResource OfflineModeStackPanelStyle}">
+                        <TextBlock Style="{StaticResource OfflineModeTextblockStyle}" Text="Работать оффлайн"/>
 
-                        <StackPanel Grid.Row="0" Grid.Column="1" Style="{StaticResource OfflineModeStackPanelStyle}">
-                            <TextBlock Style="{StaticResource OfflineModeTextblockStyle}" Text="Работать оффлайн"/>
+                        <CheckBox Grid.Row="0" Grid.Column="1" Style="{StaticResource OfflineModeCheckBoxStyle}"
+                                    x:Name="OfflineModeCheckBox" Command="{Binding SwitchOfflineModeCommand}">
+                            <CheckBox.LayoutTransform>
+                                <ScaleTransform ScaleX="1.5" ScaleY="1.5"/>
+                            </CheckBox.LayoutTransform>
+                        </CheckBox>
+                    </StackPanel>
 
-                            <CheckBox Grid.Row="0" Grid.Column="1" Style="{StaticResource OfflineModeCheckBoxStyle}"
-                                      x:Name="OfflineModeCheckBox" Command="{Binding SwitchOfflineModeCommand}">
-                                <CheckBox.LayoutTransform>
-                                    <ScaleTransform ScaleX="1.5" ScaleY="1.5"/>
-                                </CheckBox.LayoutTransform>
-                            </CheckBox>
-                        </StackPanel>
+                    <Button Grid.Row="0" Grid.Column="2" Template="{DynamicResource ConnectButtonTemplate}">
+                        <Button.Resources>
+                            <Style TargetType="{x:Type Border}">
+                                <Setter Property="CornerRadius" Value="5"/>
+                            </Style>
+                        </Button.Resources>
+                        <Button.Style>
+                            <StaticResource ResourceKey="ConnectToWebButton"/>
+                        </Button.Style>
+                    </Button>
 
-                        <Button Grid.Row="0" Grid.Column="2" Template="{DynamicResource ConnectButtonTemplate}" 
-                            Content="Подкллючиться к веб-приложению">
-                            <Button.Resources>
-                                <Style TargetType="{x:Type Border}">
-                                    <Setter Property="CornerRadius" Value="5"/>
-                                </Style>
-                            </Button.Resources>
-                            <Button.Style>
-                                <StaticResource ResourceKey="ConnectToWebButton"/>
-                            </Button.Style>
-                            <Button.Command>
-                                <cmd:NewMeasurementModalWindowCommand/>
-                            </Button.Command>
-                        </Button>
-                    </Grid>
+                    <StackPanel Grid.Column="0" Grid.Row="1" Style="{StaticResource ParametersStackPanelStyle}">
+                        <TextBlock Style="{StaticResource GotDataTextBlockStyle}" Text="Текущее значение напряжения, В"/>
+                        <TextBox x:Name="VoltageView" Style="{StaticResource ResultsTextBox}" Text="{Binding VoltageVM, Mode=OneWay}"/>
+                    </StackPanel>
 
-                    <Grid Grid.Row="1">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition/>
-                            <ColumnDefinition/>
-                        </Grid.ColumnDefinitions>
+                    <Button Grid.Row="1" Grid.Column="1" Template="{DynamicResource ConnectButtonTemplate}"
+                            Content="Старт разряда">
+                        <Button.Resources>
+                            <Style TargetType="{x:Type Border}">
+                                <Setter Property="CornerRadius" Value="5"/>
+                            </Style>
+                        </Button.Resources>
+                        <Button.Style>
+                            <StaticResource ResourceKey="StartButtonStyle"/>
+                        </Button.Style>
 
-                        <StackPanel Grid.Column="0" Grid.Row="1" Style="{StaticResource ParametersStackPanelStyle}">
-                            <TextBlock Style="{StaticResource GotDataTextBlockStyle}" Text="Текущее значение напряжения, В"/>
-                            <TextBox x:Name="VoltageView" Style="{StaticResource ResultsTextBox}" Text="{Binding VoltageVM, Mode=OneWay}"/>
-                        </StackPanel>
+                    </Button>
 
-                        <StackPanel Grid.Column="1" Grid.Row="1" Style="{StaticResource ParametersStackPanelStyle}">
-                            <TextBlock Style="{StaticResource GotDataTextBlockStyle}" Text="Текущее значение тока, А"/>
-                            <TextBox Style="{StaticResource ResultsTextBox}" 
-                        Text="{Binding SelectedDischargingCurrent}"/>
-                        </StackPanel>
-                    </Grid>
+                    <StackPanel Grid.Column="2" Grid.Row="1" Style="{StaticResource ParametersStackPanelStyle}">
+                        <TextBlock Style="{StaticResource GotDataTextBlockStyle}" Text="Текущее значение тока, А"/>
+                        <TextBox Style="{StaticResource ResultsTextBox}" 
+                    Text="{Binding SelectedDischargingCurrent}"/>
+                    </StackPanel>
                 </Grid>
-            </Grid>
+            </GroupBox>
         </Grid>
-
         <StatusBar Style="{StaticResource StatusBarStyle}">
             <StackPanel Orientation="Horizontal">
-                <TextBlock Style="{StaticResource StatusStyle}" Text="Статус: "/>
-                <TextBlock x:Name="ConnectionStatusTextBlock" Text="{Binding ConnectionStatusMessageVM}"/>
+                <TextBlock Style="{StaticResource StatusStyle}" Text="Port статус: "/>
+                <TextBlock x:Name="PortConnectionStatusTextBlock" Text="{Binding PortConnectionStatusMessageVM}"
+                           Margin="0 0 30 0"/>
+
+                <TextBlock Style="{StaticResource StatusStyle}" Text="Web статус: "/>
+                <TextBlock x:Name="WebConnectionStatusTextBlock" Text="{Binding WebConnectionStatusMessageVM}"/>
             </StackPanel>
         </StatusBar>
     </DockPanel>
-
 </Window>

@@ -49,15 +49,16 @@ namespace SmartBatteryTesterDesktopApp.PORT
                 Convert.ToDecimal(dischargingCurrent));
         }
 
-        public void StartDischarging(Dictionary<string, string> portConnectionParameters)
+        public void ConnectToPort(Dictionary<string, string> portConnectionParameters)
         {
-            _portController.StartDischarging(portConnectionParameters);
+            _portController.Connect(portConnectionParameters);
             _measurementModel.Current = Convert.ToDecimal(portConnectionParameters["TempDischargingCurrent"]);  // TODO: temp
+        }
 
-            if (portConnectionParameters["Mode"] == "OnlineMode")
-                _isOnlineModeEnabled = true;
-            else if (portConnectionParameters["Mode"] == "OfflineMode")
-                _isOnlineModeEnabled = false;
+        public void StartDischarging(bool isOnlineMode)
+        {
+            _isOnlineModeEnabled = isOnlineMode;
+            _portController.Start();
         }
 
         public async void SendUsartData(string data)
@@ -70,9 +71,8 @@ namespace SmartBatteryTesterDesktopApp.PORT
             if (_isOnlineModeEnabled)
                 await SendDataToWeb();
 
-            if (!_dischargerModel.IsDischargingCompleted) return;
-
-            await HandleDischargingFinish();
+            if (_dischargerModel.IsDischargingCompleted)
+                await HandleDischargingFinish();
         }
 
         public void StopDischarging()
@@ -95,17 +95,25 @@ namespace SmartBatteryTesterDesktopApp.PORT
             _discharger.Discharge(0, 0, new DateTime());
         }
 
+        public void DisconnectWeb()
+        {
+            _dataSaver.FinishDataTransfer(new TimeSpan(), 0, "Разряд батареи не был запущен");
+            _dataGetter.GetWebStatus("Соединение с веб остановлено");
+        }
+
         public async void CreateNewTest(string testName)
         {
             _dataSaver = new DataSaverFacade(_dataSaverFactory);
 
             try
             {
+                _dataGetter.GetWebStatus("Попытка подключения к веб");
                 await _dataSaver.StartDataTransfer(testName);
+                _dataGetter.GetWebStatus("Связь с веб установлена");
             }
             catch (Exception)
             {
-                throw;
+                _dataGetter.GetWebStatus("Ошибка подключения к веб");
             }
         }
 

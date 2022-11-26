@@ -15,7 +15,7 @@ namespace SmartBatteryTesterDesktopApp.USART
             _converter = usartDataConverter;
         }
 
-        public void StartDischarging(Dictionary<string, string> parameters)
+        public void Connect(Dictionary<string, string> parameters)
         {
             _port.PortName  = parameters["PortName"];
             _port.BaudRate  = Convert.ToInt32(parameters["BaudRate"]);
@@ -26,12 +26,16 @@ namespace SmartBatteryTesterDesktopApp.USART
             try
             {
                 _port.Open();
-                _port.WriteLine("2");
             }
             catch (Exception)
             {
                 throw;      // TODO: Implement exceptions handling everywhere
             }
+        }
+
+        public void Start()
+        {
+            _port.WriteLine("2");
         }
 
         public void StopDischarging()

@@ -57,15 +57,22 @@ namespace SmartBatteryTesterDesktopApp.PORT.DataSaver
             string resultMessage = string.Empty;
             var resDuration = _model.DischargeDuration.ToString(@"hh\:mm\:ss");
 
-            if (_model.MeasurementStatus == "Батарея разряжена")
+            switch (_model.MeasurementStatus)
             {
-                resultMessage = $"Тест \"{_model.MeasurementName}\" окончен<br>" +
-                    $"Длительность теста: {resDuration}<br>" +
-                    $"Измеренная емкость: {Decimal.Round(_model.ResultCapacity, 2)} Ач";
-            }
-            if (_model.MeasurementStatus == "Разряд батареи прерван")
-            {
-                resultMessage = $"Тест \"{_model.MeasurementName}\" прерван";
+                case "Батарея разряжена":
+                    resultMessage = $"Тест \"{_model.MeasurementName}\" окончен<br>" +
+                        $"Длительность теста: {resDuration}<br>" +
+                        $"Измеренная емкость: {Decimal.Round(_model.ResultCapacity, 2)} Ач";
+                    break;
+
+                case "Разряд батареи прерван":
+                    resultMessage = $"Тест \"{_model.MeasurementName}\" прерван";
+                    break;
+                case "Разряд батареи не был запущен":
+                    resultMessage = _model.MeasurementStatus;
+                    break;
+                default:
+                    break;
             }
 
             try

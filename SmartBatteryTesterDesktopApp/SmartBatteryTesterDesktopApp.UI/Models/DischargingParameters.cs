@@ -20,5 +20,7 @@ namespace SmartBatteryTesterDesktopApp.UI.Models
         internal string? LowerVoltageThreshold { get; set; }
 
         internal string? TestName { get; set; }
+        internal string? PortConnectionStatus { get; set; } = "Готов";
+        internal string? WebConnectionStatus { get; set; } = "Готов";
     }
 }

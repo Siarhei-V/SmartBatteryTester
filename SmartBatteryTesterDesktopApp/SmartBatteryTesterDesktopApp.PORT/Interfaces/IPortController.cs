@@ -2,7 +2,8 @@
 {
     public interface IPortController
     {
-        public void StartDischarging(Dictionary<string, string> parameters);
-        public void StopDischarging();
+        void Connect(Dictionary<string, string> parameters);
+        void Start();
+        void StopDischarging();
     }
 }
