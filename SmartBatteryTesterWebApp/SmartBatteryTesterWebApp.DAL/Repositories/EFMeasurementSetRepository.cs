@@ -33,7 +33,8 @@ namespace SmartBatteryTesterWebApp.DAL.Repositories
 
         public async Task<MeasurementSet> FindAsync(string str)
         {
-            return await _applicationContext.MeasurementSets.Where(m => m.MeasurementStatus == str).FirstOrDefaultAsync();
+            var res = await _applicationContext.MeasurementSets.Where(m => m.MeasurementStatus == str).ToListAsync();
+            return res.LastOrDefault();
         }
     }
 }

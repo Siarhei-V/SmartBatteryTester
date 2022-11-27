@@ -27,15 +27,15 @@
             <Setter Property="VerticalContentAlignment" Value="Center"/>
             <Setter Property="FontSize" Value="14"/>
             <Style.Triggers>
-                <DataTrigger Binding="{Binding Text, ElementName=ConnectionStatusTextBlock}" Value="Связь установлена">
+                <DataTrigger Binding="{Binding Text, ElementName=PortConnectionStatusTextBlock}" Value="Связь установлена">
                     <Setter Property="IsEnabled" Value="False"/>
                     <Setter Property="Foreground" Value="Gray"/>
                 </DataTrigger>
-                <DataTrigger Binding="{Binding Text, ElementName=ConnectionStatusTextBlock}" Value="Попытка подключения">
+                <DataTrigger Binding="{Binding Text, ElementName=PortConnectionStatusTextBlock}" Value="Попытка подключения">
                     <Setter Property="IsEnabled" Value="False"/>
                     <Setter Property="Foreground" Value="Gray"/>
                 </DataTrigger>
-                <DataTrigger Binding="{Binding Text, ElementName=ConnectionStatusTextBlock}" Value="Ошибка передачи данных">
+                <DataTrigger Binding="{Binding Text, ElementName=PortConnectionStatusTextBlock}" Value="Ошибка передачи данных">
                     <Setter Property="IsEnabled" Value="False"/>
                     <Setter Property="Foreground" Value="Gray"/>
                 </DataTrigger>
@@ -76,10 +76,10 @@
                 <DataTrigger Binding="{Binding Text, ElementName=PortConnectionStatusTextBlock}" Value="Связь установлена">
                     <Setter Property="Background" Value="LightGreen"/>
                     <Setter Property="Content" Value="Отключиться"/>
-                    <Setter Property="Command" Value="{Binding DisconnectCommand}"/>
+                    <Setter Property="Command" Value="{Binding DisconnectPortCommand}"/>
                 </DataTrigger>
                 <DataTrigger Binding="{Binding ElementName=PortConnectionStatusTextBlock, Path=Text}" Value="Попытка подключения">
-                    <Setter Property="Opacity" Value="0.1"/>
+                    <Setter Property="Opacity" Value="0.2"/>
                     <Setter Property="Background" Value="LightYellow"/>
                     <Setter Property="IsEnabled" Value="False"/>
                     <Setter Property="Content" Value="Подключиться к MCU"/>
@@ -87,7 +87,7 @@
                 <DataTrigger Binding="{Binding ElementName=PortConnectionStatusTextBlock, Path=Text}" Value="Ошибка передачи данных">
                     <Setter Property="Background" Value="LightYellow"/>
                     <Setter Property="Content" Value="Отключиться"/>
-                    <Setter Property="Command" Value="{Binding DisconnectCommand}"/>
+                    <Setter Property="Command" Value="{Binding DisconnectPortCommand}"/>
                 </DataTrigger>
                 <Trigger Property="IsMouseOver" Value="True">
                     <Setter Property="Opacity" Value="0.9"/>
@@ -113,13 +113,13 @@
                 </Setter.Value>
             </Setter>
             <Style.Triggers>
-                <DataTrigger Binding="{Binding Text, ElementName=WebConnectionStatusTextBlock}" Value="Связь с веб установлена">
+                <DataTrigger Binding="{Binding Text, ElementName=WebConnectionStatusTextBlock}" Value="Связь установлена">
                     <Setter Property="Background" Value="LightGreen"/>
                     <Setter Property="Content" Value="Отключиться"/>
                     <Setter Property="Command" Value="{Binding DisconnectWebCommand}"/>
                 </DataTrigger>
                 <DataTrigger Binding="{Binding ElementName=WebConnectionStatusTextBlock, Path=Text}" Value="Попытка подключения к веб">
-                    <Setter Property="Opacity" Value="0.1"/>
+                    <Setter Property="Opacity" Value="0.2"/>
                     <Setter Property="Background" Value="LightYellow"/>
                     <Setter Property="IsEnabled" Value="False"/>
                     <Setter Property="Content" Value="Подключиться к веб-приложению"/>
@@ -134,7 +134,13 @@
                 </Trigger>
                 <DataTrigger Binding="{Binding ElementName=OfflineModeCheckBox, Path=IsChecked}" Value="true">
                     <Setter Property="IsEnabled" Value="False"/>
-                    <Setter Property="Opacity" Value="0.1"/>
+                    <Setter Property="Opacity" Value="0.2"/>
+                    <Setter Property="Background" Value="LightYellow"/>
+                    <Setter Property="IsEnabled" Value="False"/>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding ElementName=PortConnectionStatusTextBlock, Path=Text}" Value="Связь установлена">
+                    <Setter Property="IsEnabled" Value="False"/>
+                    <Setter Property="Opacity" Value="0.2"/>
                     <Setter Property="Background" Value="LightYellow"/>
                     <Setter Property="IsEnabled" Value="False"/>
                 </DataTrigger>
@@ -144,27 +150,55 @@
         <Style x:Key="StartButtonStyle" TargetType="Button">
             <Setter Property="Width" Value="150"/>
             <Setter Property="Height" Value="50"/>
-            <Setter Property="Opacity" Value="0.1"/>
+            <Setter Property="Opacity" Value="0.2"/>
             <Setter Property="Background" Value="LightYellow"/>
             <Setter Property="IsEnabled" Value="False"/>
             <Setter Property="FontSize" Value="15"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Command" Value="{Binding StartDischargingCommand}"/>
+            <Setter Property="BorderThickness" Value="0"/>
             <Setter Property="Effect">
                 <Setter.Value>
                     <DropShadowEffect ShadowDepth="3"/>
                 </Setter.Value>
             </Setter>
-            <Setter Property="Command" Value="{Binding StartDischargingCommand}"/>
             <Style.Triggers>
-                <DataTrigger Binding="{Binding ElementName=PortConnectionStatusTextBlock, Path=Text}" Value="Связь установлена">
+                <DataTrigger Binding="{Binding ElementName=DischargingStatusTextBlock, Path=Text}" Value="Батарея разряжается">
+                    <Setter Property="Background" Value="LightGreen"/>
+                    <Setter Property="Content" Value="Остановить"/>
                     <Setter Property="IsEnabled" Value="True"/>
                     <Setter Property="Opacity" Value="1"/>
-                    <Setter Property="Background" Value="LightPink"/>
-                    <Setter Property="Cursor" Value="Hand"/>
-                    <Setter Property="BorderThickness" Value="0"/>
+                    <Setter Property="Command" Value="{Binding StopDischargingCommand}"/>
                 </DataTrigger>
+                <MultiDataTrigger>
+                    <MultiDataTrigger.Conditions>
+                        <Condition Binding="{Binding ElementName=PortConnectionStatusTextBlock, Path=Text}" Value="Связь установлена"/>
+                        <Condition Binding="{Binding ElementName=DischargingStatusTextBlock, Path=Text}" Value="Отключен"/>
+                        <Condition Binding="{Binding ElementName=OfflineModeCheckBox, Path=IsChecked}" Value="true"/>
+                    </MultiDataTrigger.Conditions>
+                    <MultiDataTrigger.Setters>
+                        <Setter Property="IsEnabled" Value="True"/>
+                        <Setter Property="Opacity" Value="1"/>
+                        <Setter Property="Background" Value="LightPink"/>
+                    </MultiDataTrigger.Setters>
+                </MultiDataTrigger>
+                <MultiDataTrigger>
+                    <MultiDataTrigger.Conditions>
+                        <Condition Binding="{Binding ElementName=PortConnectionStatusTextBlock, Path=Text}" Value="Связь установлена"/>
+                        <Condition Binding="{Binding ElementName=WebConnectionStatusTextBlock, Path=Text}" Value="Связь установлена"/>
+                        <Condition Binding="{Binding ElementName=DischargingStatusTextBlock, Path=Text}" Value="Отключен"/>
+                        <Condition Binding="{Binding ElementName=OfflineModeCheckBox, Path=IsChecked}" Value="false"/>
+                    </MultiDataTrigger.Conditions>
+                    <MultiDataTrigger.Setters>
+                        <Setter Property="IsEnabled" Value="True"/>
+                        <Setter Property="Opacity" Value="1"/>
+                        <Setter Property="Background" Value="LightPink"/>
+                    </MultiDataTrigger.Setters>
+                </MultiDataTrigger>
                 <Trigger Property="IsMouseOver" Value="True">
                     <Setter Property="Opacity" Value="0.9"/>
                 </Trigger>
+
             </Style.Triggers>
         </Style>
 
@@ -205,8 +239,8 @@
             <Setter Property="Height" Value="30px"/>
         </Style>
 
-        <Style x:Key="StatusStyle" TargetType="{x:Type TextBlock}">
-            <Setter Property="Width" Value="80"/>
+        <Style x:Key="StatusStyle" TargetType="TextBlock">
+            <Setter Property="Width" Value="100"/>
             <Setter Property="TextAlignment" Value="Center"/>
         </Style>
 
@@ -222,6 +256,14 @@
 
         <Style x:Key="OfflineModeCheckBoxStyle" TargetType="CheckBox">
             <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding ElementName=WebConnectionStatusTextBlock, Path=Text}" Value="Связь установлена">
+                    <Setter Property="IsEnabled" Value="False"/>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding ElementName=WebConnectionStatusTextBlock, Path=Text}" Value="Попытка подключения к веб">
+                    <Setter Property="IsEnabled" Value="False"/>
+                </DataTrigger>
+            </Style.Triggers>
         </Style>
     </Window.Resources>
     <!--#endregion-->
@@ -382,7 +424,11 @@
                            Margin="0 0 30 0"/>
 
                 <TextBlock Style="{StaticResource StatusStyle}" Text="Web статус: "/>
-                <TextBlock x:Name="WebConnectionStatusTextBlock" Text="{Binding WebConnectionStatusMessageVM}"/>
+                <TextBlock x:Name="WebConnectionStatusTextBlock" Text="{Binding WebConnectionStatusMessageVM}"
+                           Margin="0 0 30 0"/>
+
+                <TextBlock Style="{StaticResource StatusStyle}" Text="Статус разряда: "/>
+                <TextBlock x:Name="DischargingStatusTextBlock" Text="{Binding DischargingStatusMessageVM}"/>
             </StackPanel>
         </StatusBar>
     </DockPanel>

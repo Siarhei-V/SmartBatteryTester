@@ -7,6 +7,7 @@
         void StartDischarging(bool isOnlineMode);
         void StopDischarging();
         void DisconnectWeb();
+        void DisconnectDevice();
         void CreateNewTest(string testName);
 
         IDataGetter DataSender { set; }

@@ -51,14 +51,19 @@ namespace SmartBatteryTesterDesktopApp.PORT
 
         public void ConnectToPort(Dictionary<string, string> portConnectionParameters)
         {
-            _portController.Connect(portConnectionParameters);
+            _portController.OpenPort(portConnectionParameters);
             _measurementModel.Current = Convert.ToDecimal(portConnectionParameters["TempDischargingCurrent"]);  // TODO: temp
         }
 
         public void StartDischarging(bool isOnlineMode)
         {
             _isOnlineModeEnabled = isOnlineMode;
-            _portController.Start();
+            _portController.StartDischarging();
+
+            if (isOnlineMode)
+            {
+                SendDataToWeb();
+            }
         }
 
         public async void SendUsartData(string data)
@@ -91,13 +96,24 @@ namespace SmartBatteryTesterDesktopApp.PORT
                 throw;
             }
 
+            _dataGetter.GetWebStatus("Соединение с веб остановлено");
             _dataSaver = null;
-            _discharger.Discharge(0, 0, new DateTime());
+            _isOnlineModeEnabled = false;
+            _discharger.SetDischargingParams(0, 0, 0);
+        }
+
+        public void DisconnectDevice()
+        {
+            _portController.ClosePort();
         }
 
         public void DisconnectWeb()
         {
-            _dataSaver.FinishDataTransfer(new TimeSpan(), 0, "Разряд батареи не был запущен");
+            if (_dataSaver != null)
+            {
+                _dataSaver.FinishDataTransfer(new TimeSpan(), 0, "Разряд батареи не был запущен");
+            }
+
             _dataGetter.GetWebStatus("Соединение с веб остановлено");
         }
 
@@ -109,7 +125,7 @@ namespace SmartBatteryTesterDesktopApp.PORT
             {
                 _dataGetter.GetWebStatus("Попытка подключения к веб");
                 await _dataSaver.StartDataTransfer(testName);
-                _dataGetter.GetWebStatus("Связь с веб установлена");
+                _dataGetter.GetWebStatus("Связь установлена");
             }
             catch (Exception)
             {
@@ -156,6 +172,7 @@ namespace SmartBatteryTesterDesktopApp.PORT
                 {
                     await _dataSaver.FinishDataTransfer(_dischargerModel.DischargeDuration, _dischargerModel.ResultCapacity,
                         "Батарея разряжена");
+                    _dataGetter.GetWebStatus("Соединение с веб остановлено");
                 }
                 catch (Exception)
                 {
@@ -165,7 +182,11 @@ namespace SmartBatteryTesterDesktopApp.PORT
 
             _portController.StopDischarging();
 
-            _dataGetter.GetData("Порт закрыт");
+            _dataGetter.GetPortStatus("Порт закрыт");
+            //_dataGetter.GetWebStatus("Соединение с веб остановлено");
+            _isOnlineModeEnabled = false;
+            _dataSaver = null;
+            _discharger.SetDischargingParams(0, 0, 0);
         }
         #endregion
     }

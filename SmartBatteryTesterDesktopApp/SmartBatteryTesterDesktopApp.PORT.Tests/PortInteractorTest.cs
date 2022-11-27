@@ -80,7 +80,7 @@ namespace SmartBatteryTesterDesktopApp.PORT.Tests
             //_uiInteractorInputPort.StartDischarging(new Dictionary<string, string>());
 
             // Assert
-            _portControllerMock.Verify(m => m.Connect(It.IsAny<Dictionary<string, string>>()), Times.Once());
+            _portControllerMock.Verify(m => m.OpenPort(It.IsAny<Dictionary<string, string>>()), Times.Once());
         }
 
         [Fact]

@@ -142,6 +142,17 @@ namespace SmartBatteryTesterDesktopApp.UI.ViewModels
             }
         }
 
+        private string _dischargingStatusMessageVM = "Отключен";
+        public string DischargingStatusMessageVM
+        {
+            get => _dischargingStatusMessageVM;
+            set
+            {
+                _dischargingStatusMessageVM = value;
+                OnPropertyChanged();
+            }
+        }
+
         #region Commands
         private RelayCommand _connectToComPortCommand;
         public RelayCommand ConnectToComPortCommand
@@ -178,21 +189,39 @@ namespace SmartBatteryTesterDesktopApp.UI.ViewModels
                     (_startDischargingCommand = new RelayCommand(obj =>
                     {
                         _portInteractor.StartDischarging(_isOnlineModeEnabled);
+                        DischargingStatusMessageVM = "Батарея разряжается";
                     }));
             }
         }
 
-        private RelayCommand _disconnectCommand;
-        public RelayCommand DisconnectCommand
+        private RelayCommand _stopDischargingCommand;
+        public RelayCommand StopDischargingCommand
         {
             get
             {
-                return _disconnectCommand ??
-                    (_disconnectCommand = new RelayCommand(obj =>
+                return _stopDischargingCommand ??
+                    (_stopDischargingCommand = new RelayCommand(obj =>
+                    {
+                        _portInteractor.StopDischarging();
+                        DischargingStatusMessageVM = "Отключен";
+                    }));
+            }
+        }
+
+        private RelayCommand _disconnectPortCommand;
+        public RelayCommand DisconnectPortCommand
+        {
+            get
+            {
+                return _disconnectPortCommand ??
+                    (_disconnectPortCommand = new RelayCommand(obj =>
                     {
                         VoltageVM = string.Empty;
                         _portInteractor.StopDischarging();
+                        _portInteractor.DisconnectDevice();
                         PortConnectionStatusMessageVM = "Порт закрыт";
+                        DischargingStatusMessageVM = "Отключен";
+                        WebConnectionStatusMessageVM = "Готов";
                     }));
             }
         }
@@ -228,6 +257,28 @@ namespace SmartBatteryTesterDesktopApp.UI.ViewModels
         void HandleDataChangedEvent(object? sender, EventArgs args)
         {
             WebConnectionStatusMessageVM = _dischargingParameters.WebConnectionStatus;
+
+            if (_dischargingParameters.PortConnectionStatus == "Порт закрыт"
+                || _dischargingParameters.PortConnectionStatus == "Готов")
+            {
+                PortConnectionStatusMessageVM = _dischargingParameters.PortConnectionStatus;
+                DischargingStatusMessageVM = "Отключен";
+                VoltageVM = "";
+                return;
+            }
+
+            try
+            {
+                Convert.ToDecimal(_dischargingParameters.Voltage);
+                VoltageVM = _dischargingParameters.Voltage;
+                PortConnectionStatusMessageVM = "Связь установлена";
+
+            }
+            catch (Exception)
+            {
+
+                PortConnectionStatusMessageVM = "Ошибка передачи данных";
+            }
         }
 
         private void CreateParameterDictionary()
