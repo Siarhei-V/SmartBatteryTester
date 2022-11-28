@@ -7,11 +7,6 @@ namespace SmartBatteryTesterWebApp.DAL.EF
     {
         public DbSet<Measurement>? Measurements { get; set; }
         public DbSet<MeasurementSet>? MeasurementSets { get; set; }
-        public ApplicationContext() { }
-
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            optionsBuilder.UseSqlServer("Server=(localdb)\\mssqllocaldb;Database=measurementsdbtest;Trusted_Connection=True;");
-        }
+        public ApplicationContext(DbContextOptions<ApplicationContext> options) : base(options) { }
     }
 }
