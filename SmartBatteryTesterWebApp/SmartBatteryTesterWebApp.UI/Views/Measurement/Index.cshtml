@@ -35,7 +35,7 @@
 }
 
 <script type="text/javascript">
-    const hubConnection = new signalR.HubConnectionBuilder().withUrl('/measurementsHub').build();
+    const hubConnection = new signalR.HubConnectionBuilder().withUrl('http://192.168.0.101/measurementsHub').build();
     const chartElement = document.getElementById('chartContainer');
     const statusElement = document.getElementById('signalRMessage');
     const context = document.getElementById('measurementLineChart');

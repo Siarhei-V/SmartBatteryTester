@@ -13,7 +13,7 @@ namespace SmartBatteryTesterDesktopApp.PORT.DataSaver
         {
             _model = testModel;
 
-            _hubConnection = new HubConnectionBuilder().WithUrl("https://localhost:44357/measurementsHub").Build();
+            _hubConnection = new HubConnectionBuilder().WithUrl("http://192.168.0.101/measurementsHub").Build();
 
             try
             {
