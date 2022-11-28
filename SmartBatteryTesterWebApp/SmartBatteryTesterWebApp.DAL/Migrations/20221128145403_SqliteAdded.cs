@@ -1,11 +1,12 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
 namespace SmartBatteryTesterWebApp.DAL.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreate : Migration
+    public partial class SqliteAdded : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -14,10 +15,12 @@ namespace SmartBatteryTesterWebApp.DAL.Migrations
                 name: "MeasurementSets",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    MeasurementName = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    MeasurementStatus = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    MeasurementName = table.Column<string>(type: "TEXT", nullable: true),
+                    MeasurementStatus = table.Column<string>(type: "TEXT", nullable: true),
+                    DischargeDuration = table.Column<TimeSpan>(type: "TEXT", nullable: true),
+                    ResultCapacity = table.Column<decimal>(type: "TEXT", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -28,12 +31,12 @@ namespace SmartBatteryTesterWebApp.DAL.Migrations
                 name: "Measurements",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Voltage = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    Current = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    MeasurementDateTime = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    MeasurementSetId = table.Column<int>(type: "int", nullable: false)
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Voltage = table.Column<decimal>(type: "TEXT", nullable: false),
+                    Current = table.Column<decimal>(type: "TEXT", nullable: false),
+                    MeasurementDateTime = table.Column<string>(type: "TEXT", nullable: true),
+                    MeasurementSetId = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {

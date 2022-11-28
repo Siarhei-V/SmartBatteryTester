@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore;
 using SmartBatteryTesterWebApp.BLL.Interfaces;
 using SmartBatteryTesterWebApp.BLL.Services;
 using SmartBatteryTesterWebApp.DAL.EF;
@@ -7,6 +8,9 @@ using SmartBatteryTesterWebApp.DAL.Repositories;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+
+string connection = builder.Configuration.GetConnectionString("DefaultConnection");
+builder.Services.AddDbContext<ApplicationContext>(options => options.UseSqlite(connection));
 
 builder.Services.AddScoped<IMeasurementRepository, EFMeasurementRepository>();
 builder.Services.AddScoped<IMeasurementSetRepository, EFMeasurementSetRepository>();

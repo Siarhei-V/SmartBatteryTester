@@ -9,7 +9,7 @@ using SmartBatteryTesterWebApp.UI.Infrastructure;
 var builder = WebApplication.CreateBuilder(args);
 
 string connection = builder.Configuration.GetConnectionString("DefaultConnection");
-builder.Services.AddDbContext<ApplicationContext>(options => options.UseSqlServer(connection));
+builder.Services.AddDbContext<ApplicationContext>(options => options.UseSqlite(connection));
 
 builder.Services.AddScoped<IMeasurementRepository, EFMeasurementRepository>();
 builder.Services.AddScoped<IMeasurementSetRepository, EFMeasurementSetRepository>();
