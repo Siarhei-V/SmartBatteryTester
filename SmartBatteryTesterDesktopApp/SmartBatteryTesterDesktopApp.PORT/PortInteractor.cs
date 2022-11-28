@@ -170,7 +170,8 @@ namespace SmartBatteryTesterDesktopApp.PORT
             {
                 try
                 {
-                    await _dataSaver.FinishDataTransfer(_dischargerModel.DischargeDuration, _dischargerModel.ResultCapacity,
+                    await _dataSaver.FinishDataTransfer(_dischargerModel.DischargeDuration, 
+                        Decimal.Round(_dischargerModel.ResultCapacity, 2),
                         "Батарея разряжена");
                     _dataGetter.GetWebStatus("Соединение с веб остановлено");
                 }
@@ -183,7 +184,6 @@ namespace SmartBatteryTesterDesktopApp.PORT
             _portController.StopDischarging();
 
             _dataGetter.GetPortStatus("Порт закрыт");
-            //_dataGetter.GetWebStatus("Соединение с веб остановлено");
             _isOnlineModeEnabled = false;
             _dataSaver = null;
             _discharger.SetDischargingParams(0, 0, 0);
