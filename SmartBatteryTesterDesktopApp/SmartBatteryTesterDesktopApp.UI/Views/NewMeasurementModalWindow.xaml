@@ -38,7 +38,11 @@
         </Grid.RowDefinitions>
 
         <TextBlock Grid.Row="0" Style="{StaticResource DescriptionStyle}" Text="Введите название нового теста"></TextBlock>
-        <TextBox Grid.Row="1" Style="{StaticResource NewTestTextboxStyle}" Text="{Binding TestName}"></TextBox>
+        <StackPanel Grid.Row="1" VerticalAlignment="Center" FocusManager.FocusedElement="{Binding ElementName=TestNameTextBox}">
+            <TextBox Grid.Row="1" Name="TestNameTextBox"
+                     Style="{StaticResource NewTestTextboxStyle}" Text="{Binding TestName}"
+                     Focusable="True"></TextBox>
+        </StackPanel>
         <Grid Grid.Row="2">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition/>

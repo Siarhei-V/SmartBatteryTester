@@ -8,12 +8,19 @@ namespace SmartBatteryTesterDesktopApp.DataAccess
     {
         TestDataModel _model;
         HubConnection _hubConnection;
+        string _ipAddress;
+        readonly string _ipFilePath = @"Settings\SignalRIpAddress.txt";
+
+        public DataToSignalRSender()
+        {
+            GetIpAddress();
+        }
 
         async Task IDataSender.StartDataTransfer(TestDataModel testModel)
         {
             _model = testModel;
 
-            _hubConnection = new HubConnectionBuilder().WithUrl("http://192.168.0.101/measurementsHub").Build();
+            _hubConnection = new HubConnectionBuilder().WithUrl(_ipAddress + "measurementsHub").Build();
 
             try
             {
@@ -85,5 +92,12 @@ namespace SmartBatteryTesterDesktopApp.DataAccess
                 throw;
             }
         }
+
+        #region Private Methods
+        private void GetIpAddress()
+        {
+            _ipAddress = File.ReadAllText(_ipFilePath);
+        }
+        #endregion
     }
 }

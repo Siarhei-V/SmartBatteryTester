@@ -8,19 +8,26 @@ namespace SmartBatteryTesterDesktopApp.DataAccess
     {
         int _currentTestId = 0;
         TestDataModel _model;
+        string _ipAddress;
+        readonly string _ipFilePath = @"Settings\WebApiIpAddress.txt";
+
+        public DataToWebApiSender()
+        {
+            GetIpAddress();
+        }
 
         async Task IDataSender.StartDataTransfer(TestDataModel testModel)
         {
             _model = testModel;
             using (HttpClient httpClient = new HttpClient())
             {
-                await httpClient.PostAsJsonAsync("http://192.168.0.101:50000/api/Measurements/AddMeasurementSet", testModel);
+                await httpClient.PostAsJsonAsync(_ipAddress + "api/Measurements/AddMeasurementSet", testModel);
             }
 
             using (HttpClient httpClient = new HttpClient())
             {
                 var receivedTest = await httpClient.GetAsync(
-                    "http://192.168.0.101:50000/api/Measurements/FindMeasurementSet?status=Батарея разряжается");
+                    _ipAddress + "api/Measurements/FindMeasurementSet?status=Батарея разряжается");
                 _currentTestId = (await receivedTest.Content.ReadFromJsonAsync<TestDataModel>()).Id;
             }
         }
@@ -30,7 +37,7 @@ namespace SmartBatteryTesterDesktopApp.DataAccess
             measurementModel.MeasurementSetId = _currentTestId;
             using (HttpClient httpClient = new HttpClient())
             {
-                await httpClient.PostAsJsonAsync("http://192.168.0.101:50000/api/Measurements/AddMeasurement", measurementModel);
+                await httpClient.PostAsJsonAsync(_ipAddress + "api/Measurements/AddMeasurement", measurementModel);
             }
         }
 
@@ -40,9 +47,17 @@ namespace SmartBatteryTesterDesktopApp.DataAccess
 
             using (HttpClient httpClient = new HttpClient())
             {
-                await httpClient.PostAsJsonAsync("http://192.168.0.101:50000/api/Measurements/UpdateMeasurementSet", _model);
+                await httpClient.PostAsJsonAsync(_ipAddress + "api/Measurements/UpdateMeasurementSet", _model);
             }
             _model.Id = 0;
+        }
+
+        #region Private Methods
+
+        #endregion
+        private void GetIpAddress()
+        {
+            _ipAddress = File.ReadAllText(_ipFilePath);
         }
     }
 }

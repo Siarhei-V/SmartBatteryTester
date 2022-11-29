@@ -15,4 +15,17 @@
     <ProjectReference Include="..\SmartBatteryTesterDesktopApp.PORT\SmartBatteryTesterDesktopApp.PORT.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Settings\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Settings\SignalRIpAddress.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Settings\WebApiIpAddress.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>
