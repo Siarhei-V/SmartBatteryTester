@@ -1,6 +1,6 @@
-﻿namespace SmartBatteryTesterDesktopApp.PORT.Models
+﻿namespace SmartBatteryTesterDesktopApp.DataAccess.Models
 {
-    internal class TestModel
+    internal class TestDataModel
     {
         public int Id { get; set; }
         public string? MeasurementName { get; set; }

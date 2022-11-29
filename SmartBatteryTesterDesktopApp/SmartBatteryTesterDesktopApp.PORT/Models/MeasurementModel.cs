@@ -1,7 +1,9 @@
 ﻿namespace SmartBatteryTesterDesktopApp.PORT.Models
 {
-    public class MeasurementModel : MeasurementBaseModel
+    public class MeasurementModel
     {
-        public int MeasurementSetId { get; set; }
+        public decimal Voltage { get; set; }
+        public decimal Current { get; set; }
+        public string? MeasurementDateTime { get; set; }
     }
 }

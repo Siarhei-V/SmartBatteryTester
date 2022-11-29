@@ -1,6 +1,6 @@
-﻿namespace SmartBatteryTesterDesktopApp.PORT.Models
+﻿namespace SmartBatteryTesterDesktopApp.DataAccess.Models
 {
-    public class MeasurementBaseModel
+    internal class MeasurementBaseDataModel
     {
         public decimal Voltage { get; set; }
         public decimal Current { get; set; }

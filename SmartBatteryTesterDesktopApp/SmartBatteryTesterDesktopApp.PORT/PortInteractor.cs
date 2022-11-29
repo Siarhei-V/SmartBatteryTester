@@ -1,13 +1,11 @@
 ﻿using SmartBatteryTesterDesktopApp.BL;
 using SmartBatteryTesterDesktopApp.BL.Interfaces;
-using SmartBatteryTesterDesktopApp.PORT.DataSaver;
 using SmartBatteryTesterDesktopApp.PORT.Interfaces;
-using SmartBatteryTesterDesktopApp.PORT.Interfaces.DataSaver;
 using SmartBatteryTesterDesktopApp.PORT.Models;
 
 namespace SmartBatteryTesterDesktopApp.PORT
 {
-    public class PortInteractor : IUiInteractorInputPort, IUsartInteractorInputPort
+    public class PortInteractor : IUiInteractorInputPort, IUsartInteractorInputPort, IDaInteractorInputPort
     {
         static PortInteractor? _portInteractor;
         IPortController? _portController;
@@ -16,16 +14,15 @@ namespace SmartBatteryTesterDesktopApp.PORT
         IDischarger _discharger;
         DischargerModel _dischargerModel;
         MeasurementModel _measurementModel;
-        IDataSaverFacade? _dataSaver;
-        IDataSaverFactory _dataSaverFactory;
+        IDataSaver? _dataSaver;
         bool _isOnlineModeEnabled;
         bool _isDischargingStarted;
+        bool _isNewTestCreated;
 
         private PortInteractor() 
         {
             _dischargerInitializer = new DischargerInitializer();
             _measurementModel = new MeasurementModel();
-            _dataSaverFactory = new DataSaverFactory();
             _discharger = _dischargerInitializer.InitializeDischarger();
         }
 
@@ -41,6 +38,11 @@ namespace SmartBatteryTesterDesktopApp.PORT
         public IDataGetter DataSender 
         { 
             set => _dataGetter = value; 
+        }
+
+        public IDataSaver DataSaver
+        {
+            set => _dataSaver = value;
         }
 
         public void SetDischargingParams(string lowerDischargeThreshold, string valuesChangeDiscreteness, string dischargingCurrent)
@@ -94,7 +96,8 @@ namespace SmartBatteryTesterDesktopApp.PORT
             }
 
             _dataGetter.GetWebStatus("Соединение с веб остановлено");
-            _dataSaver = null;
+            _isNewTestCreated = false;
+            //_dataSaver = null;
             _isOnlineModeEnabled = false;
             _discharger.SetDischargingParams(0, 0, 0);
             _isDischargingStarted = false;
@@ -107,7 +110,7 @@ namespace SmartBatteryTesterDesktopApp.PORT
 
         public void DisconnectWeb()
         {
-            if (_dataSaver != null)
+            if (_isNewTestCreated)
             {
                 _dataSaver.FinishDataTransfer(new TimeSpan(), 0, "Разряд батареи не был запущен");
             }
@@ -117,7 +120,8 @@ namespace SmartBatteryTesterDesktopApp.PORT
 
         public async void CreateNewTest(string testName)
         {
-            _dataSaver = new DataSaverFacade(_dataSaverFactory);
+            //_dataSaver = new DataSaverFacade(_dataSaverFactory);
+            _isNewTestCreated = true;
 
             try
             {
@@ -185,7 +189,8 @@ namespace SmartBatteryTesterDesktopApp.PORT
 
             _dataGetter.GetPortStatus("Порт закрыт");
             _isOnlineModeEnabled = false;
-            _dataSaver = null;
+            _isNewTestCreated = false;
+            //_dataSaver = null;
             _discharger.SetDischargingParams(0, 0, 0);
             _isDischargingStarted = false;
         }

@@ -17,6 +17,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\SmartBatteryTesterDesktopApp.DataAccess\SmartBatteryTesterDesktopApp.DataAccess.csproj" />
     <ProjectReference Include="..\SmartBatteryTesterDesktopApp.PORT\SmartBatteryTesterDesktopApp.PORT.csproj" />
     <ProjectReference Include="..\SmartBatteryTesterDesktopApp.USART\SmartBatteryTesterDesktopApp.USART.csproj" />
   </ItemGroup>
