@@ -62,7 +62,7 @@ namespace SmartBatteryTesterDesktopApp.PORT
 
             if (isOnlineMode)
             {
-                SendDataToWeb();
+                _ = SendDataToWeb();
             }
         }
 
@@ -151,7 +151,7 @@ namespace SmartBatteryTesterDesktopApp.PORT
         private async Task SendDataToWeb()
         {
             _measurementModel.Voltage = _dischargerModel.Voltage;
-            //_measurementModel.Current = _dischargerModel.Current;
+            _measurementModel.Current = _dischargerModel.Current;
             _measurementModel.MeasurementDateTime = _dischargerModel.CurrentDateTime.ToString();
 
             try

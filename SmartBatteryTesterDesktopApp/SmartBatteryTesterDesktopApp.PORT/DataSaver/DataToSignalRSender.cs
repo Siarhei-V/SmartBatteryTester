@@ -62,7 +62,7 @@ namespace SmartBatteryTesterDesktopApp.PORT.DataSaver
                 case "Батарея разряжена":
                     resultMessage = $"Тест \"{_model.MeasurementName}\" окончен<br>" +
                         $"Длительность теста: {resDuration}<br>" +
-                        $"Измеренная емкость: {Decimal.Round(_model.ResultCapacity, 2)} Ач";
+                        $"Измеренная емкость: {_model.ResultCapacity} Ач";
                     break;
 
                 case "Разряд батареи прерван":
