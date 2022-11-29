@@ -19,6 +19,7 @@ namespace SmartBatteryTesterDesktopApp.PORT
         IDataSaverFacade? _dataSaver;
         IDataSaverFactory _dataSaverFactory;
         bool _isOnlineModeEnabled;
+        bool _isDischargingStarted;
 
         private PortInteractor() 
         {
@@ -58,12 +59,8 @@ namespace SmartBatteryTesterDesktopApp.PORT
         public void StartDischarging(bool isOnlineMode)
         {
             _isOnlineModeEnabled = isOnlineMode;
+            _isDischargingStarted = true;
             _portController.StartDischarging();
-
-            if (isOnlineMode)
-            {
-                _ = SendDataToWeb();
-            }
         }
 
         public async void SendUsartData(string data)
@@ -100,6 +97,7 @@ namespace SmartBatteryTesterDesktopApp.PORT
             _dataSaver = null;
             _isOnlineModeEnabled = false;
             _discharger.SetDischargingParams(0, 0, 0);
+            _isDischargingStarted = false;
         }
 
         public void DisconnectDevice()
@@ -137,6 +135,10 @@ namespace SmartBatteryTesterDesktopApp.PORT
 
         private void HandleDataFromUsart(string data)
         {
+            _dataGetter.GetData(data);
+
+            if (!_isDischargingStarted) return;
+
             try
             {
                 _discharger.Discharge(Convert.ToDecimal(data), 0, DateTime.Now);
@@ -144,8 +146,6 @@ namespace SmartBatteryTesterDesktopApp.PORT
             catch (Exception)
             {
             }
-
-            _dataGetter.GetData(data);
         }
 
         private async Task SendDataToWeb()
@@ -187,6 +187,7 @@ namespace SmartBatteryTesterDesktopApp.PORT
             _isOnlineModeEnabled = false;
             _dataSaver = null;
             _discharger.SetDischargingParams(0, 0, 0);
+            _isDischargingStarted = false;
         }
         #endregion
     }

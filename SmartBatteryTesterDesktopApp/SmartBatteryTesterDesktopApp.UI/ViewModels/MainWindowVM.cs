@@ -1,5 +1,4 @@
-﻿using SmartBatteryTesterDesktopApp.PORT;
-using SmartBatteryTesterDesktopApp.PORT.Interfaces;
+﻿using SmartBatteryTesterDesktopApp.PORT.Interfaces;
 using SmartBatteryTesterDesktopApp.UI.Commands;
 using SmartBatteryTesterDesktopApp.UI.Infrastructure;
 using SmartBatteryTesterDesktopApp.UI.Models;

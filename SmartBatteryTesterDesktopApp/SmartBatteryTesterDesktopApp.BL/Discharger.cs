@@ -34,6 +34,7 @@ namespace SmartBatteryTesterDesktopApp.BL
             _lowerDischargeThreshold = lowerDischargeThreshold;
             _valuesChangeDiscreteness = valuesChangeDiscreteness;
             _dataModel.Current = dischargingCurrent;
+            _isNewDataReceived = false;
         }
 
         public void Discharge(decimal voltage, decimal current, DateTime dateTime)
