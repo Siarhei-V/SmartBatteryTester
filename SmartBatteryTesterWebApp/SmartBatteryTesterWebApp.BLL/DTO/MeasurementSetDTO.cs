@@ -1,6 +1,4 @@
-﻿using SmartBatteryTesterWebApp.DAL.Entities;
-
-namespace SmartBatteryTesterWebApp.BLL.DTO
+﻿namespace SmartBatteryTesterWebApp.BLL.DTO
 {
     public class MeasurementSetDTO
     {

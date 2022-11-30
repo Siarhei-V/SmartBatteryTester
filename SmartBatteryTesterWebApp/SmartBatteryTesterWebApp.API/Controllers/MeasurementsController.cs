@@ -10,12 +10,12 @@ namespace SmartBatteryTesterWebApp.API.Controllers
     [Route("api/[controller]/[action]")]
     public class MeasurementsController : ControllerBase
     {
-        IMeasurementInputService _measurementService;
+        IMeasurementInputService _measurementInputService;
         IMeasurementOutputService _measurementOutputService;
 
         public MeasurementsController(IMeasurementInputService measurementService, IMeasurementOutputService measurementOutputService)
         {
-            _measurementService = measurementService;
+            _measurementInputService = measurementService;
             _measurementOutputService = measurementOutputService;
         }
 
@@ -23,7 +23,7 @@ namespace SmartBatteryTesterWebApp.API.Controllers
         public async Task AddMeasurementSetAsync(MeasurementSetModel measurementSet)
         {
             var measurementSetDTO = MapMeasurementSetModelToMeasurementSetDTO(measurementSet);
-            await _measurementService.MakeMeasurementSetAsync(measurementSetDTO);
+            await _measurementInputService.MakeMeasurementSetAsync(measurementSetDTO);
         }
 
         [HttpPost]
@@ -31,14 +31,14 @@ namespace SmartBatteryTesterWebApp.API.Controllers
         {
             IMapper mapper = new MapperConfiguration(m => m.CreateMap<MeasurementModel, MeasurementDTO>()).CreateMapper();
             var measurementDTO = mapper.Map<MeasurementModel, MeasurementDTO>(measurement);
-            await _measurementService.MakeMeasurementAsync(measurementDTO);
+            await _measurementInputService.MakeMeasurementAsync(measurementDTO);
         }
 
         [HttpPost]
         public async Task UpdateMeasurementSetAsync(MeasurementSetModel measurementSet)
         {
             var measurementSetDTO = MapMeasurementSetModelToMeasurementSetDTO(measurementSet);
-            await _measurementService.UpdateMeasurementSetAsync(measurementSetDTO);
+            await _measurementInputService.UpdateMeasurementSetAsync(measurementSetDTO);
         }
 
         [HttpGet]
