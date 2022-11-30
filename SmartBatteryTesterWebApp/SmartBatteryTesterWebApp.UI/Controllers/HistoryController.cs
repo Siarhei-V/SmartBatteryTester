@@ -19,6 +19,7 @@ namespace SmartBatteryTesterWebApp.UI.Controllers
             _chartCreator = chartCreator;
         }
 
+        [HttpGet]
         public async Task<IActionResult> IndexAsync(int measurementSetNumber)
         {
             IMapper mapper;
@@ -34,15 +35,15 @@ namespace SmartBatteryTesterWebApp.UI.Controllers
             else
             {
                 ViewBag.MeasurementResults = measurementSets.Where(m => m.Id == measurementSetNumber).FirstOrDefault();
+
+                List<MeasurementDTO> measurementDTOs = await _measurementService.GetMeasurementAsync(measurementSetNumber);
+                mapper = new MapperConfiguration(m => m.CreateMap<MeasurementDTO, MeasurementViewModel>()).CreateMapper();
+                var measurements = mapper.Map<List<MeasurementDTO>, List<MeasurementViewModel>>(measurementDTOs);
+
+                ViewBag.ChartData = _chartCreator.GetLineChartData(measurements);
             }
 
-            List<MeasurementDTO> measurementDTOs = await _measurementService.GetMeasurementAsync(measurementSetNumber);
-            mapper = new MapperConfiguration(m => m.CreateMap<MeasurementDTO, MeasurementViewModel>()).CreateMapper();
-            var measurements = mapper.Map<List<MeasurementDTO>, List<MeasurementViewModel>>(measurementDTOs);
-
-            var chartData = _chartCreator.GetLineChartData(measurements);
-
-            return View(chartData);
+            return View();
         }
     }
 }

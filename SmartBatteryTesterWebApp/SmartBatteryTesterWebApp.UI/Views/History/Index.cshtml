@@ -1,6 +1,4 @@
-﻿@using SmartBatteryTesterWebApp.UI.Models.Chart
-@model ChartJsData
-@{
+﻿@{
     ViewData["Title"] = "История измерений";
 }
 
@@ -11,7 +9,7 @@
 <div class="container">
     <div class="row">
         <div class="col-12 col-lg-8 order-1 order-lg-0">
-            <vc:measurements chart-js=Model/>
+            <vc:measurements chart-js=ViewBag.ChartData/>
         </div>
         <div class="col-12 col-lg-4">
             <form class="mb-4 row align-items-center" asp-controller="History" asp-action="Index" method="get">
@@ -29,6 +27,7 @@
                 @{
                     if (ViewBag.MeasurementResults == null) return;
                     
+                    <p>Имя теста: @ViewBag.MeasurementResults.MeasurementName</p>
                     <p>@ViewBag.MeasurementResults.MeasurementStatus</p>
                     
                     if (ViewBag.MeasurementResults.MeasurementStatus == "Батарея разряжена")
