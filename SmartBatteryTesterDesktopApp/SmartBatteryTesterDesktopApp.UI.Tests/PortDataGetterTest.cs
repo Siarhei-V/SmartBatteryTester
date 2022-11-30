@@ -9,7 +9,6 @@ namespace SmartBatteryTesterDesktopApp.UI.Tests
     {
         DischargingParameters _parameters;
         IDataGetter _portDataGetter;
-        bool _isEventTriggered;
 
         public PortDataGetterTest()
         {
@@ -21,29 +20,60 @@ namespace SmartBatteryTesterDesktopApp.UI.Tests
         public void GetData_CheckEvent()
         {
             // Arrange
-            _portDataGetter.DataChanged += (sender, args) => _isEventTriggered = true;
+            bool isEventTriggered = false;
+            _portDataGetter.DataChanged += (sender, args) => isEventTriggered = true;
 
             // Act
             _portDataGetter.GetData("");
 
             // Assert
-            Assert.True(_isEventTriggered);
+            Assert.True(isEventTriggered);
+        }
+
+        [Fact]
+        public void GetPortStatus_CheckEvent()
+        {
+            // Arrange
+            bool isEventTriggered = false;
+            _portDataGetter.DataChanged += (sender, args) => isEventTriggered = true;
+
+            // Act
+            _portDataGetter.GetPortStatus("");
+
+            // Assert
+            Assert.True(isEventTriggered);
+        }
+
+        [Fact]
+        public void GetWebtStatus_CheckEvent()
+        {
+            // Arrange
+            bool isEventTriggered = false;
+            _portDataGetter.DataChanged += (sender, args) => isEventTriggered = true;
+
+            // Act
+            _portDataGetter.GetWebStatus("");
+
+            // Assert
+            Assert.True(isEventTriggered);
         }
 
         [Theory]
-        [InlineData("")]
-        [InlineData("10")]
-        [InlineData("500")]
-        [InlineData("aaa")]
-        public void GetData_CheckSavingParameters(string inputData)
+        [InlineData("", "", "")]
+        [InlineData("10", "Port Status", "Web Status")]
+        public void GetData_CheckSavingParameters(string data, string portStatus, string webStatus)
         {
             // Arrange
 
             // Act
-            _portDataGetter.GetData(inputData);
+            _portDataGetter.GetData(data);
+            _portDataGetter.GetPortStatus(portStatus);
+            _portDataGetter.GetWebStatus(webStatus);
 
             // Assert
-            Assert.Equal(inputData, _parameters.Voltage);
+            Assert.Equal(data, _parameters.Voltage);
+            Assert.Equal(portStatus, _parameters.PortConnectionStatus);
+            Assert.Equal(webStatus, _parameters.WebConnectionStatus);
         }
     }
 }
