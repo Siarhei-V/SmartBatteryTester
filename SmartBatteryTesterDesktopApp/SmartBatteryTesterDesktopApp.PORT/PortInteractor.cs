@@ -21,8 +21,8 @@ namespace SmartBatteryTesterDesktopApp.PORT
 
         private PortInteractor() 
         {
-            _dischargerInitializer = new DischargerInitializer();
             _measurementModel = new MeasurementModel();
+            _dischargerInitializer = new DischargerInitializer();           // TODO: inject somehow
             _discharger = _dischargerInitializer.InitializeDischarger();
         }
 
@@ -92,12 +92,11 @@ namespace SmartBatteryTesterDesktopApp.PORT
             }
             catch (Exception)
             {
-                throw;
+                _dataGetter.GetWebStatus("Ошибка подключения к веб");
             }
 
             _dataGetter.GetWebStatus("Соединение с веб остановлено");
             _isNewTestCreated = false;
-            //_dataSaver = null;
             _isOnlineModeEnabled = false;
             _discharger.SetDischargingParams(0, 0, 0);
             _isDischargingStarted = false;
@@ -120,7 +119,6 @@ namespace SmartBatteryTesterDesktopApp.PORT
 
         public async void CreateNewTest(string testName)
         {
-            //_dataSaver = new DataSaverFacade(_dataSaverFactory);
             _isNewTestCreated = true;
 
             try
@@ -164,7 +162,7 @@ namespace SmartBatteryTesterDesktopApp.PORT
             }
             catch (Exception)
             {
-                throw;
+                _dataGetter.GetWebStatus("Ошибка подключения к веб");
             }
         }
 
@@ -181,7 +179,7 @@ namespace SmartBatteryTesterDesktopApp.PORT
                 }
                 catch (Exception)
                 {
-                    throw;
+                    _dataGetter.GetWebStatus("Ошибка подключения к веб");
                 }
             }
 
@@ -190,7 +188,6 @@ namespace SmartBatteryTesterDesktopApp.PORT
             _dataGetter.GetPortStatus("Порт закрыт");
             _isOnlineModeEnabled = false;
             _isNewTestCreated = false;
-            //_dataSaver = null;
             _discharger.SetDischargingParams(0, 0, 0);
             _isDischargingStarted = false;
         }
