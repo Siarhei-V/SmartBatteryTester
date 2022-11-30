@@ -13,12 +13,12 @@ namespace SmartBatteryTesterDesktopApp.DataAccess
         IDataSender _dataToSignalRSender;
         TestDataModel _testModel;
 
-        internal DataSaverFacade(IDataSenderFactory dataSenderFactory)
+        internal DataSaverFacade(IDataSenderFactory dataSenderFactory, TestDataModel testModel)
         {
             _dataSaverFactory = dataSenderFactory;
             _dataToWebApiSender = _dataSaverFactory.MakeDataToWebApiSender();
             _dataToSignalRSender = _dataSaverFactory.MakeDataToSignalRSender();
-            _testModel = new TestDataModel();
+            _testModel = testModel;
         }
 
         public async Task StartDataTransfer(string testName)
@@ -29,17 +29,17 @@ namespace SmartBatteryTesterDesktopApp.DataAccess
             await _dataToSignalRSender.StartDataTransfer(_testModel);
         }
 
-        public async Task TransmitData(MeasurementModel portDataModel)
+        public async Task TransmitData(MeasurementModel measurementModel)
         {
             IMapper mapper = new MapperConfiguration(m => m.CreateMap<MeasurementModel, MeasurementDataModel>()).CreateMapper();
-            var measurementDataModel = mapper.Map<MeasurementModel, MeasurementDataModel>(portDataModel);
+            var measurementDataModel = mapper.Map<MeasurementModel, MeasurementDataModel>(measurementModel);
 
             await _dataToWebApiSender.TransmitData(measurementDataModel);
             await _dataToSignalRSender.TransmitData(measurementDataModel);
         }
 
         public async Task FinishDataTransfer(TimeSpan dischargingDuration, decimal resultCapacity, string status)
-        {
+        {   
             _testModel.MeasurementStatus = status;
             _testModel.DischargeDuration = dischargingDuration;
             _testModel.ResultCapacity = resultCapacity;
