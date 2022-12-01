@@ -28,7 +28,7 @@ namespace SmartBatteryTesterWebApp.UI.Tests
         }
 
         [Fact]
-        public void IndexAsync_CheckMethodsColling()
+        public void IndexAsync_CheckMethodsCollingWhenMeasurementSetWasFound()
         {
             // Arrange
 
@@ -57,6 +57,7 @@ namespace SmartBatteryTesterWebApp.UI.Tests
             Assert.NotNull(model);
             Assert.Equal(2, model.Labels.Count);
             Assert.Equal(3, model.Datasets.Count);
+            Assert.Equal("first", model.Labels[0]);
         }
 
         [Fact]
@@ -71,6 +72,9 @@ namespace SmartBatteryTesterWebApp.UI.Tests
             // Assert
             var viewResult = Assert.IsType<ViewResult>(result);
             Assert.Null(viewResult.Model);
+            _measurementServiceMock.Verify(m => m.FindMeasurementSetAsync("Батарея разряжается"), Times.Once);
+            _chartCreatorMock.Verify(m => m.GetLineChartData(It.IsAny<List<MeasurementViewModel>>()), Times.Once);
+            _measurementServiceMock.Verify(m => m.GetMeasurementAsync(It.IsAny<int>()), Times.Never);
         }
 
         #region Private Methods
