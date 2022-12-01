@@ -32,27 +32,27 @@ namespace SmartBatteryTesterWebApp.BLL.Tests
             };
         }
 
-        #region GetMeasurementSetAsync Tests
+        #region GetMeasurementSet Tests
         [Fact]
-        public void GetMeasurementSetAsync_CheckGetMeasurementSetsAsyncMethodColling()
+        public void GetMeasurementSet_CheckGetMeasurementSetsMethodColling()
         {
             // Arrange
 
             // Act
-            _measurementOutputService.GetMeasurementSetAsync();
+            _measurementOutputService.GetMeasurementSet();
 
             // Assert
-            _measurementSetRepositoryMock.Verify(m => m.GetMeasurementSetsAsync(), Times.Once());
+            _measurementSetRepositoryMock.Verify(m => m.GetMeasurementSets(), Times.Once());
         }
 
         [Fact]
-        public async Task GetMeasurementSetAsync_CheckReturnedValuesAsync()
+        public void GetMeasurementSet_CheckReturnedValues()
         {
             // Arrange
-            _measurementSetRepositoryMock.Setup(m => m.GetMeasurementSetsAsync()).ReturnsAsync(_testMeasurementSets);
+            _measurementSetRepositoryMock.Setup(m => m.GetMeasurementSets()).Returns(_testMeasurementSets);
 
             // Act
-            var methodResult = await _measurementOutputService.GetMeasurementSetAsync();
+            var methodResult = _measurementOutputService.GetMeasurementSet();
 
             // Assert
             var typeResult = Assert.IsType<List<MeasurementSetDTO>>(methodResult);
@@ -68,24 +68,24 @@ namespace SmartBatteryTesterWebApp.BLL.Tests
         }
         #endregion
 
-        #region GetMeasurementAsync Tests
+        #region GetMeasurement Tests
         [Fact]
-        public void GetMeasurementAsync_CheckGetMeasurementSetsAsyncMethodColling()
+        public void GetMeasurement_CheckGetMeasurementSetsMethodColling()
         {
             // Arrange
 
             // Act
-            _measurementOutputService.GetMeasurementAsync(It.IsAny<int>());
+            _measurementOutputService.GetMeasurement(It.IsAny<int>());
 
             // Assert
-            _measurementRepositoryMock.Verify(m => m.GetMeasurementsAsync(It.IsAny<int>()), Times.Once());
+            _measurementRepositoryMock.Verify(m => m.GetMeasurements(It.IsAny<int>()), Times.Once());
         }
 
         [Theory]
         [InlineData(0, 2)]
         [InlineData(1, 3)]
         [InlineData(2, 0)]
-        public async Task GetMeasurementAsync_CheckReturnedValuesAsync(int testCase, int testResultCount)
+        public void GetMeasurement_CheckReturnedValues(int testCase, int testResultCount)
         {
             // Arrange
             List<Measurement> testMeasurements = new List<Measurement>();
@@ -127,10 +127,10 @@ namespace SmartBatteryTesterWebApp.BLL.Tests
                     break;
             }
 
-            _measurementRepositoryMock.Setup(m => m.GetMeasurementsAsync(testCase)).ReturnsAsync(testMeasurements);
+            _measurementRepositoryMock.Setup(m => m.GetMeasurements(testCase)).Returns(testMeasurements);
 
             // Act
-            var methodResult = await _measurementOutputService.GetMeasurementAsync(testCase);
+            var methodResult = _measurementOutputService.GetMeasurement(testCase);
 
             // Assert
             var typeResult = Assert.IsType<List<MeasurementDTO>>(methodResult);
@@ -148,29 +148,29 @@ namespace SmartBatteryTesterWebApp.BLL.Tests
         }
         #endregion
 
-        #region FindMeasurementSetAsync Tests
+        #region FindMeasurementSet Tests
         [Fact]
-        public void FindMeasurementSetAsync_CheckFindAsyncMethodColling()
+        public void FindMeasurementSet_CheckFindMethodColling()
         {
             // Arrange
 
             // Act
-            _measurementOutputService.FindMeasurementSetAsync(It.IsAny<string>());
+            _measurementOutputService.FindMeasurementSet(It.IsAny<string>());
 
             // Assert
-            _measurementSetRepositoryMock.Verify(m => m.FindAsync(It.IsAny<string>()), Times.Once());
+            _measurementSetRepositoryMock.Verify(m => m.Find(It.IsAny<string>()), Times.Once());
         }
 
         [Theory]
         [InlineData("Test status 1", 0)]
         [InlineData("Test status 2", 1)]
-        public async Task FindMeasurementSetAsync_CheckReturnedValuesAsync(string status, int index)
+        public void FindMeasurementSet_CheckReturnedValues(string status, int index)
         {
             // Arrange
-            _measurementSetRepositoryMock.Setup(m => m.FindAsync(status)).ReturnsAsync(_testMeasurementSets[index]);
+            _measurementSetRepositoryMock.Setup(m => m.Find(status)).Returns(_testMeasurementSets[index]);
 
             // Act
-            var methodResult = await _measurementOutputService.FindMeasurementSetAsync(status);
+            var methodResult = _measurementOutputService.FindMeasurementSet(status);
 
             // Assert
             var typeResult = Assert.IsType<MeasurementSetDTO>(methodResult);

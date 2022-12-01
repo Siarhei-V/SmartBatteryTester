@@ -23,39 +23,39 @@ namespace SmartBatteryTesterWebApp.BLL.Tests
         }
 
         [Fact]
-        public void MakeMeasurementAsync_CheckCreateAsyncMethodColling()
+        public void MakeMeasurement_CheckCreateMethodColling()
         {
             // Arrange
 
             // Act
-            _measurementInputService.MakeMeasurementAsync(It.IsAny<MeasurementDTO>());
+            _measurementInputService.MakeMeasurement(It.IsAny<MeasurementDTO>());
 
             // Assert
-            _measurementRepositoryMock.Verify(m => m.CreateAsync(It.IsAny<Measurement>()), Times.Once);
+            _measurementRepositoryMock.Verify(m => m.Create(It.IsAny<Measurement>()), Times.Once);
         }
 
         [Fact]
-        public void MakeMeasurementSetAsync_CheckCreateAsyncMethodColling()
+        public void MakeMeasurementSet_CheckCreateMethodColling()
         {
             // Arrange
 
             // Act
-            _measurementInputService.MakeMeasurementSetAsync(It.IsAny<MeasurementSetDTO>());
+            _measurementInputService.MakeMeasurementSet(It.IsAny<MeasurementSetDTO>());
 
             // Assert
-            _measurementSetRepositoryMock.Verify(m => m.CreateAsync(It.IsAny<MeasurementSet>()), Times.Once);
+            _measurementSetRepositoryMock.Verify(m => m.Create(It.IsAny<MeasurementSet>()), Times.Once);
         }
 
         [Fact]
-        public void UpdateMeasurementSetAsync_CheckUpdateAsyncMethodColling()
+        public void UpdateMeasurementSet_CheckUpdateMethodColling()
         {
             // Arrange
 
             // Act
-            _measurementInputService.UpdateMeasurementSetAsync(It.IsAny<MeasurementSetDTO>());
+            _measurementInputService.UpdateMeasurementSet(It.IsAny<MeasurementSetDTO>());
 
             // Assert
-            _measurementSetRepositoryMock.Verify(m => m.UpdateAsync(It.IsAny<MeasurementSet>()), Times.Once);
+            _measurementSetRepositoryMock.Verify(m => m.Update(It.IsAny<MeasurementSet>()), Times.Once);
         }
     }
 }

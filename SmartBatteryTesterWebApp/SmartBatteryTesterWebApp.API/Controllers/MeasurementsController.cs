@@ -20,31 +20,31 @@ namespace SmartBatteryTesterWebApp.API.Controllers
         }
 
         [HttpPost]
-        public async Task AddMeasurementSetAsync(MeasurementSetModel measurementSet)
+        public void AddMeasurementSet(MeasurementSetModel measurementSet)
         {
             var measurementSetDTO = MapMeasurementSetModelToMeasurementSetDTO(measurementSet);
-            await _measurementInputService.MakeMeasurementSetAsync(measurementSetDTO);
+            _measurementInputService.MakeMeasurementSet(measurementSetDTO);
         }
 
         [HttpPost]
-        public async Task AddMeasurementAsync(MeasurementModel measurement)
+        public void AddMeasurement(MeasurementModel measurement)
         {
             IMapper mapper = new MapperConfiguration(m => m.CreateMap<MeasurementModel, MeasurementDTO>()).CreateMapper();
             var measurementDTO = mapper.Map<MeasurementModel, MeasurementDTO>(measurement);
-            await _measurementInputService.MakeMeasurementAsync(measurementDTO);
+            _measurementInputService.MakeMeasurement(measurementDTO);
         }
 
         [HttpPost]
-        public async Task UpdateMeasurementSetAsync(MeasurementSetModel measurementSet)
+        public void UpdateMeasurementSet(MeasurementSetModel measurementSet)
         {
             var measurementSetDTO = MapMeasurementSetModelToMeasurementSetDTO(measurementSet);
-            await _measurementInputService.UpdateMeasurementSetAsync(measurementSetDTO);
+            _measurementInputService.UpdateMeasurementSet(measurementSetDTO);
         }
 
         [HttpGet]
-        public async Task<MeasurementSetModel> FindMeasurementSetAsync(string status)
+        public MeasurementSetModel FindMeasurementSet(string status)
         {
-            var measurementSet = await _measurementOutputService.FindMeasurementSetAsync(status);
+            var measurementSet = _measurementOutputService.FindMeasurementSet(status);
             var mapper = new MapperConfiguration(m => m.CreateMap<MeasurementSetDTO, MeasurementSetModel>()).CreateMapper();
             var result = mapper.Map<MeasurementSetDTO, MeasurementSetModel>(measurementSet);
             return result;

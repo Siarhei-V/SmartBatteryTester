@@ -31,47 +31,47 @@ namespace SmartBatteryTesterWebApp.UI.Tests
                 new MeasurementSetDTO() { Id = 1, MeasurementName = "The first test" },
                 new MeasurementSetDTO() { Id = 2, MeasurementName = "The second test" }
             };
-            _measurementServiceMock.Setup(m => m.GetMeasurementSetAsync()).ReturnsAsync(_measurementSetDTOList);
+            _measurementServiceMock.Setup(m => m.GetMeasurementSet()).Returns(_measurementSetDTOList);
         }
 
         [Fact]
-        public async void IndexAsync_CheckMethodsCollingWhenParameterIsZero()
+        public void Index_CheckMethodsCollingWhenParameterIsZero()
         {
             // Arrange
 
             // Act
-            await _historyController.IndexAsync(0);
+            _historyController.Index(0);
 
             // Assert
-            _measurementServiceMock.Verify(m => m.GetMeasurementSetAsync(), Times.Once);
-            _measurementServiceMock.Verify(m => m.GetMeasurementAsync(It.IsAny<int>()), Times.Never);
+            _measurementServiceMock.Verify(m => m.GetMeasurementSet(), Times.Once);
+            _measurementServiceMock.Verify(m => m.GetMeasurement(It.IsAny<int>()), Times.Never);
             _chartCreatorMock.Verify(m => m.GetLineChartData(It.IsAny<List<MeasurementViewModel>>()), Times.Never);
         }
 
         [Fact]
-        public async void IndexAsync_CheckMethodsCollingWhenParameterIsNotZero()
+        public void Index_CheckMethodsCollingWhenParameterIsNotZero()
         {
             // Arrange
             int measurementSetNumber = 1;
 
             // Act
-            await _historyController.IndexAsync(1);
+            _historyController.Index(1);
 
             // Assert
-            _measurementServiceMock.Verify(m => m.GetMeasurementSetAsync(), Times.Once);
-            _measurementServiceMock.Verify(m => m.GetMeasurementAsync(measurementSetNumber), Times.Once);
+            _measurementServiceMock.Verify(m => m.GetMeasurementSet(), Times.Once);
+            _measurementServiceMock.Verify(m => m.GetMeasurement(measurementSetNumber), Times.Once);
             _chartCreatorMock.Verify(m => m.GetLineChartData(It.IsAny<List<MeasurementViewModel>>()), Times.Once);
         }
 
         [Theory]
         [InlineData(0, 2)]
         [InlineData(1, 3)]
-        public async void IndexAsync_CheckViewBagItemsCount(int methodParameter, int viewBagItemsCount)
+        public void Index_CheckViewBagItemsCount(int methodParameter, int viewBagItemsCount)
         {
             // Arrange
 
             // Act
-            var result = await _historyController.IndexAsync(methodParameter) as ViewResult;
+            var result = _historyController.Index(methodParameter) as ViewResult;
 
             // Assert
             Assert.Equal(viewBagItemsCount, result.ViewData.Count);
@@ -80,12 +80,12 @@ namespace SmartBatteryTesterWebApp.UI.Tests
         [Theory]
         [InlineData(0)]
         [InlineData(1)]
-        public async void IndexAsync_CheckReturnedValueWhenParameterIsZero(int index)
+        public void Index_CheckReturnedValueWhenParameterIsZero(int index)
         {
             // Arrange
 
             // Act
-            var result = await _historyController.IndexAsync(0);
+            var result = _historyController.Index(0);
             var measurementSetViewModelList = GetResultsFromMeasurementSetListViewBag(result);
             var measurementSetViewModel = GetResultsFromMeasurementResultsViewBag(result);
 
@@ -99,12 +99,12 @@ namespace SmartBatteryTesterWebApp.UI.Tests
         [Theory]
         [InlineData(0, 1)]
         [InlineData(1, 2)]
-        public async void IndexAsync_CheckMeasurementResultsViewBag(int index, int measurementSetNumber)
+        public void Index_CheckMeasurementResultsViewBag(int index, int measurementSetNumber)
         {
             // Arrange
 
             // Act
-            var result = await _historyController.IndexAsync(measurementSetNumber);
+            var result = _historyController.Index(measurementSetNumber);
             var measurementSetViewModel = GetResultsFromMeasurementResultsViewBag(result);
 
             // Assert
@@ -113,7 +113,7 @@ namespace SmartBatteryTesterWebApp.UI.Tests
         }
 
         [Fact]
-        public async void IndexAsync_CheckChartDataViewBag()
+        public void Index_CheckChartDataViewBag()
         {
             // Arrange
             var chartData = new ChartJsData()
@@ -131,7 +131,7 @@ namespace SmartBatteryTesterWebApp.UI.Tests
                     .Returns(chartData);
 
             // Act
-            var result = await _historyController.IndexAsync(1);
+            var result = _historyController.Index(1);
             var resultChartData = GetResultsFromChartDataViewBag(result);
 
             // Assert

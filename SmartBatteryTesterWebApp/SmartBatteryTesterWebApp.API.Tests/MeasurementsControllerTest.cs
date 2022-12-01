@@ -23,43 +23,43 @@ namespace SmartBatteryTesterWebApp.API.Tests
         }
 
         [Fact]
-        public void AddMeasurementSetAsync_CheckMakeMeasurementSetAsyncColling()
+        public void AddMeasurementSet_CheckMakeMeasurementSetColling()
         {
             // Arrange
 
             // Act
-            _ = _measurementsController.AddMeasurementSetAsync(new MeasurementSetModel());
+            _measurementsController.AddMeasurementSet(new MeasurementSetModel());
 
             // Assert
-            _measurementInputServiceMock.Verify(m => m.MakeMeasurementSetAsync(It.IsAny<MeasurementSetDTO>()), Times.Once);
+            _measurementInputServiceMock.Verify(m => m.MakeMeasurementSet(It.IsAny<MeasurementSetDTO>()), Times.Once);
         }
 
         [Fact]
-        public void AddMeasurementAsync_CheckMakeMeasurementAsyncColling()
+        public void AddMeasurement_CheckMakeMeasurementColling()
         {
             // Arrange
 
             // Act
-            _ = _measurementsController.AddMeasurementAsync(new MeasurementModel());
+            _measurementsController.AddMeasurement(new MeasurementModel());
 
             // Assert
-            _measurementInputServiceMock.Verify(m => m.MakeMeasurementAsync(It.IsAny<MeasurementDTO>()), Times.Once);
+            _measurementInputServiceMock.Verify(m => m.MakeMeasurement(It.IsAny<MeasurementDTO>()), Times.Once);
         }
 
         [Fact]
-        public void UpdateMeasurementSetAsync_UpdateMeasurementSetAsyncColling()
+        public void UpdateMeasurementSet_UpdateMeasurementSetColling()
         {
             // Arrange
 
             // Act
-            _ = _measurementsController.UpdateMeasurementSetAsync(new MeasurementSetModel());
+            _measurementsController.UpdateMeasurementSet(new MeasurementSetModel());
 
             // Assert
-            _measurementInputServiceMock.Verify(m => m.UpdateMeasurementSetAsync(It.IsAny<MeasurementSetDTO>()), Times.Once);
+            _measurementInputServiceMock.Verify(m => m.UpdateMeasurementSet(It.IsAny<MeasurementSetDTO>()), Times.Once);
         }
 
         [Fact]
-        public async void FindMeasurementSetAsync_CheckReturnedValue()
+        public void FindMeasurementSet_CheckReturnedValue()
         {
             // Arrange
             string measurementName = "test 1";
@@ -76,10 +76,10 @@ namespace SmartBatteryTesterWebApp.API.Tests
                 ResultCapacity = capacity
             };
 
-            _measurementOutputServiceMock.Setup(m => m.FindMeasurementSetAsync(status)).ReturnsAsync(measurementSetDTO);
+            _measurementOutputServiceMock.Setup(m => m.FindMeasurementSet(status)).Returns(measurementSetDTO);
 
             // Act
-            var result = await _measurementsController.FindMeasurementSetAsync(status);
+            var result = _measurementsController.FindMeasurementSet(status);
 
             // Assert
             Assert.IsType<MeasurementSetModel>(result);

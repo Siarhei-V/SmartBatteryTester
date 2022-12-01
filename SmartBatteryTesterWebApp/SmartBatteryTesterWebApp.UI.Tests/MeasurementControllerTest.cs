@@ -22,34 +22,34 @@ namespace SmartBatteryTesterWebApp.UI.Tests
             _measurementServiceMock = new Mock<IMeasurementOutputService>();
             _chartCreatorMock = new Mock<IMeasurementChartDataCreator>();
             
-            _measurementServiceMock.Setup(m => m.FindMeasurementSetAsync("Батарея разряжается")).ReturnsAsync(new MeasurementSetDTO());
+            _measurementServiceMock.Setup(m => m.FindMeasurementSet("Батарея разряжается")).Returns(new MeasurementSetDTO());
 
             _measurementController = new MeasurementController(_measurementServiceMock.Object, _chartCreatorMock.Object);
         }
 
         [Fact]
-        public void IndexAsync_CheckMethodsCollingWhenMeasurementSetWasFound()
+        public void Index_CheckMethodsCollingWhenMeasurementSetWasFound()
         {
             // Arrange
 
             // Act
-            _ = _measurementController.IndexAsync();
+            _measurementController.Index();
 
             // Assert
-            _measurementServiceMock.Verify(m => m.FindMeasurementSetAsync(It.IsAny<string>()), Times.Once);
-            _measurementServiceMock.Verify(m => m.GetMeasurementAsync(It.IsAny<int>()), Times.Once);
+            _measurementServiceMock.Verify(m => m.FindMeasurementSet(It.IsAny<string>()), Times.Once);
+            _measurementServiceMock.Verify(m => m.GetMeasurement(It.IsAny<int>()), Times.Once);
             _chartCreatorMock.Verify(m => m.GetLineChartData(It.IsAny<List<MeasurementViewModel>>()), Times.Once);
         }
 
         [Fact]
-        public async void IndexAsync_CheckReturnedValue()
+        public void Index_CheckReturnedValue()
         {
             // Arrange
             _chartCreatorMock.Setup(m => m.GetLineChartData(It.IsAny<List<MeasurementViewModel>>()))
                 .Returns(CreateChartData());
 
             // Act
-            var result = await _measurementController.IndexAsync();
+            var result = _measurementController.Index();
 
             // Assert
             var viewResult = Assert.IsType<ViewResult>(result);
@@ -61,20 +61,20 @@ namespace SmartBatteryTesterWebApp.UI.Tests
         }
 
         [Fact]
-        public async void IndexAsync_CheckNullResult()
+        public void Index_CheckNullResult()
         {
             // Arrange
-            _measurementServiceMock.Setup(m => m.FindMeasurementSetAsync("Батарея разряжается"));
+            _measurementServiceMock.Setup(m => m.FindMeasurementSet("Батарея разряжается"));
 
             // Act
-            var result = await _measurementController.IndexAsync();
+            var result = _measurementController.Index();
 
             // Assert
             var viewResult = Assert.IsType<ViewResult>(result);
             Assert.Null(viewResult.Model);
-            _measurementServiceMock.Verify(m => m.FindMeasurementSetAsync("Батарея разряжается"), Times.Once);
+            _measurementServiceMock.Verify(m => m.FindMeasurementSet("Батарея разряжается"), Times.Once);
             _chartCreatorMock.Verify(m => m.GetLineChartData(It.IsAny<List<MeasurementViewModel>>()), Times.Once);
-            _measurementServiceMock.Verify(m => m.GetMeasurementAsync(It.IsAny<int>()), Times.Never);
+            _measurementServiceMock.Verify(m => m.GetMeasurement(It.IsAny<int>()), Times.Never);
         }
 
         #region Private Methods

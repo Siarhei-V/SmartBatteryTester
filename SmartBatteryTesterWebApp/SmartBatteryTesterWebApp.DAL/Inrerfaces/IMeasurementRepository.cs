@@ -4,7 +4,7 @@ namespace SmartBatteryTesterWebApp.DAL.Inrerfaces
 {
     public interface IMeasurementRepository
     {
-        public Task<List<Measurement>> GetMeasurementsAsync(int measurementSetId);
-        Task CreateAsync(Measurement measurement);
+        public List<Measurement> GetMeasurements(int measurementSetId);
+        void Create(Measurement measurement);
     }
 }

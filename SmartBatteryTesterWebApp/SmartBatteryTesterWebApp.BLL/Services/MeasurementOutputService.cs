@@ -17,25 +17,25 @@ namespace SmartBatteryTesterWebApp.BLL.Services
             _measurementSetRepository = measurementSetRepository;
         }
 
-        public async Task<List<MeasurementSetDTO>> GetMeasurementSetAsync()
+        public List<MeasurementSetDTO> GetMeasurementSet()
         {
-            var measurementSets = await _measurementSetRepository.GetMeasurementSetsAsync();
+            var measurementSets = _measurementSetRepository.GetMeasurementSets();
             var mapper = new MapperConfiguration(m => m.CreateMap<MeasurementSet, MeasurementSetDTO>()).CreateMapper();
             var measurementSetDtos = mapper.Map<List<MeasurementSet>, List<MeasurementSetDTO>>(measurementSets);
             return measurementSetDtos;
         }
 
-        public async Task<List<MeasurementDTO>> GetMeasurementAsync(int measurementSetId)
+        public List<MeasurementDTO> GetMeasurement(int measurementSetId)
         {
-            var measurements = await _measurementRepository.GetMeasurementsAsync(measurementSetId);
+            var measurements = _measurementRepository.GetMeasurements(measurementSetId);
             var mapper = new MapperConfiguration(m => m.CreateMap<Measurement, MeasurementDTO>()).CreateMapper();
             var measurementDtos = mapper.Map<List<Measurement>, List<MeasurementDTO>>(measurements);
             return measurementDtos;
         }
 
-        public async Task<MeasurementSetDTO> FindMeasurementSetAsync(string measurementSetStatus)
+        public MeasurementSetDTO FindMeasurementSet(string measurementSetStatus)
         {
-            var measurementSet = await _measurementSetRepository.FindAsync(measurementSetStatus);
+            var measurementSet = _measurementSetRepository.Find(measurementSetStatus);
             var mapper = new MapperConfiguration(m => m.CreateMap<MeasurementSet, MeasurementSetDTO>()).CreateMapper();
             var measurementSetDtos = mapper.Map<MeasurementSet, MeasurementSetDTO>(measurementSet);
             return measurementSetDtos;

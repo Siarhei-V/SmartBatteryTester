@@ -14,15 +14,15 @@ namespace SmartBatteryTesterWebApp.DAL.Repositories
             _applicationContext = applicationContext;
         }
 
-        public async Task<List<Measurement>> GetMeasurementsAsync(int measurementSetId)
+        public List<Measurement> GetMeasurements(int measurementSetId)
         {
-            return await _applicationContext.Measurements.Where(m => m.MeasurementSetId == measurementSetId).ToListAsync();
+            return _applicationContext.Measurements.Where(m => m.MeasurementSetId == measurementSetId).ToList();
         }
 
-        public async Task CreateAsync(Measurement measurement)
+        public void Create(Measurement measurement)
         {
             _applicationContext.Add(measurement);
-            await _applicationContext.SaveChangesAsync();
+            _applicationContext.SaveChanges();
         }
 
     }

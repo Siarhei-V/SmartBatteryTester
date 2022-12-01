@@ -18,23 +18,23 @@ namespace SmartBatteryTesterWebApp.BLL.Services
             _measurementSetRepository = measurementSetRepository;
         }
 
-        public async Task MakeMeasurementAsync(MeasurementDTO measurementDto)
+        public void MakeMeasurement(MeasurementDTO measurementDto)
         {
             var mapper = new MapperConfiguration(m => m.CreateMap<MeasurementDTO, Measurement>()).CreateMapper();
             Measurement measurement = mapper.Map<MeasurementDTO, Measurement>(measurementDto);
-            await _measurementRepository.CreateAsync(measurement);
+            _measurementRepository.Create(measurement);
         }
 
-        public async Task MakeMeasurementSetAsync(MeasurementSetDTO measurementSetDto)
+        public void MakeMeasurementSet(MeasurementSetDTO measurementSetDto)
         {
             var measurementSet = MapMeasurementSetDtoToMeasurementSet(measurementSetDto);
-            await _measurementSetRepository.CreateAsync(measurementSet);
+            _measurementSetRepository.Create(measurementSet);
         }
 
-        public async Task UpdateMeasurementSetAsync(MeasurementSetDTO measurementSetDto)
+        public void UpdateMeasurementSet(MeasurementSetDTO measurementSetDto)
         {
             var measurementSet = MapMeasurementSetDtoToMeasurementSet(measurementSetDto);
-            await _measurementSetRepository.UpdateAsync(measurementSet);
+            _measurementSetRepository.Update(measurementSet);
         }
 
         #region Private Methods

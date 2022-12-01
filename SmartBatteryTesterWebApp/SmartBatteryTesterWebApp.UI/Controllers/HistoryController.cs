@@ -20,10 +20,10 @@ namespace SmartBatteryTesterWebApp.UI.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> IndexAsync(int measurementSetNumber)
+        public IActionResult Index(int measurementSetNumber)
         {
             IMapper mapper;
-            List<MeasurementSetDTO> measurementSetDTOs = await _measurementService.GetMeasurementSetAsync();
+            List<MeasurementSetDTO> measurementSetDTOs = _measurementService.GetMeasurementSet();
             mapper = new MapperConfiguration(m => m.CreateMap<MeasurementSetDTO, MeasurementSetViewModel>()).CreateMapper();
             var measurementSets = mapper.Map<List<MeasurementSetDTO>, List<MeasurementSetViewModel>>(measurementSetDTOs);
             ViewBag.MeasurementSetList = new SelectList(measurementSets, "Id", "MeasurementName");
@@ -36,7 +36,7 @@ namespace SmartBatteryTesterWebApp.UI.Controllers
             {
                 ViewBag.MeasurementResults = measurementSets.Where(m => m.Id == measurementSetNumber).FirstOrDefault();
 
-                List<MeasurementDTO> measurementDTOs = await _measurementService.GetMeasurementAsync(measurementSetNumber);
+                List<MeasurementDTO> measurementDTOs = _measurementService.GetMeasurement(measurementSetNumber);
                 mapper = new MapperConfiguration(m => m.CreateMap<MeasurementDTO, MeasurementViewModel>()).CreateMapper();
                 var measurements = mapper.Map<List<MeasurementDTO>, List<MeasurementViewModel>>(measurementDTOs);
 

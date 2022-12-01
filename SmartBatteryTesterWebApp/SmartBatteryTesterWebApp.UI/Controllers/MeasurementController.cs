@@ -19,12 +19,12 @@ namespace SmartBatteryTesterWebApp.UI.Controllers
             _chartCreator = chartCreator;
         }
 
-        public async Task<IActionResult> IndexAsync()
+        public IActionResult Index()
         {
             IMapper mapper;
             ChartJsData chartData;
 
-            var measurementSetDTO = await _measurementService.FindMeasurementSetAsync("Батарея разряжается");
+            var measurementSetDTO = _measurementService.FindMeasurementSet("Батарея разряжается");
             mapper = new MapperConfiguration(m => m.CreateMap<MeasurementSetDTO, MeasurementSetViewModel>()).CreateMapper();
             var measurementSet = mapper.Map<MeasurementSetDTO, MeasurementSetViewModel>(measurementSetDTO);
 
@@ -34,7 +34,7 @@ namespace SmartBatteryTesterWebApp.UI.Controllers
             }
             else
             {
-                List<MeasurementDTO> measurementDTOs = await _measurementService.GetMeasurementAsync(measurementSet.Id);
+                List<MeasurementDTO> measurementDTOs = _measurementService.GetMeasurement(measurementSet.Id);
                 mapper = new MapperConfiguration(m => m.CreateMap<MeasurementDTO, MeasurementViewModel>()).CreateMapper();
                 var measurements = mapper.Map<List<MeasurementDTO>, List<MeasurementViewModel>>(measurementDTOs);
                 chartData = _chartCreator.GetLineChartData(measurements);
