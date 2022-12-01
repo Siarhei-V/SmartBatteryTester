@@ -21,12 +21,14 @@ namespace SmartBatteryTesterWebApp.UI.Tests
         public void Send_CheckGetLineChartDataMethodColling()
         {
             // Arrange
+            var measurement = new MeasurementViewModel() { Current = 1, Voltage = 2 };
+            var measurementsList = new List<MeasurementViewModel>() { measurement };
 
             // Act
-            _ = _measurementsHub.Send(It.IsAny<string>(), It.IsAny<MeasurementViewModel>());
+            _ = _measurementsHub.Send(It.IsAny<string>(), measurement);
 
             // Assert
-            _chartCreatorMock.Verify(m => m.GetLineChartData(It.IsAny<List<MeasurementViewModel>>()), Times.Once);
+            _chartCreatorMock.Verify(m => m.GetLineChartData(measurementsList), Times.Once);
         }
     }
 }

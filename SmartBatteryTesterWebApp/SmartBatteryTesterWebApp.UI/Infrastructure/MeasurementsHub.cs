@@ -14,7 +14,7 @@ namespace SmartBatteryTesterWebApp.UI.Infrastructure
 
         public async Task Send(string message, MeasurementViewModel measurement)
         {
-            var chartData = _measurementChartDataCreator.GetLineChartData(new List<MeasurementViewModel> () { measurement});
+            var chartData = _measurementChartDataCreator.GetLineChartData(new List<MeasurementViewModel> () { measurement });
             await Clients.All.SendAsync("Receive", message, chartData);
         }
     }
