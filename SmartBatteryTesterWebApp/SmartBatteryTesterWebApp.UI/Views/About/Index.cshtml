@@ -7,9 +7,11 @@
 </div>
 
 <div>
-    <div class="border-start border-5">
-        <div class="mt-4" role="button">
-            <h4 class="ms-3">Описание</h4>
+    <div class="border-start border-5 mt-4"">
+        <div class="about_title">
+            <div class="about_title_description">
+                Описание
+            </div>
         </div>
         <div class="text-start ms-3">
             <p>Данный ресурс предназначен для удаленного контроля процесса разряда аккумуляторных батарей.</p>
@@ -34,9 +36,11 @@
             <p>На странице <a href="~/History">История измерений</a> доступны для просмотра результаты ранее произведенных тестов.</p>
         </div>
     </div>
-    <div class="border-start border-5">
-        <div class="mt-4" role="button">
-            <h4 class="ms-3">Преимущества</h4>
+    <div class="border-start border-5 mt-4"">
+        <div class="about_title">
+            <div class="about_title_description">
+                Преимущества
+            </div>
         </div>
         <div class="text-start ms-3">
             <p class="mb-0">Преимущества данной системы:</p>
@@ -56,9 +60,11 @@
             </ul>
         </div>
     </div>
-    <div class="border-start border-5">
-        <div class="mt-4" role="button">
-            <h4 class="ms-3">Особенности</h4>
+    <div class="border-start border-5 mt-4"">
+        <div class="about_title">
+            <div class="about_title_description">
+                Особенности
+            </div>
         </div>
         <div class="text-start ms-3">
             <p>
@@ -67,9 +73,11 @@
             </p>
         </div>
     </div>
-    <div class="border-start border-5">
-        <div class="mt-4" role="button">
-            <h4 class="ms-3">В следующих релизах</h4>
+    <div class="border-start border-5 mt-4"">
+        <div class="about_title">
+            <div class="about_title_description">
+                В следующих релизах
+            </div>
         </div>
         <div class="text-start ms-3">
             <p class="mb-0">В следующих релизах будет реализовано:</p>
@@ -84,9 +92,11 @@
             </ul>
         </div>
     </div>
-    <div class="border-start border-5">
-        <div class="mt-4" role="button">
-            <h4 class="ms-3">Фото процесса</h4>
+    <div class="border-start border-5 mt-4">
+        <div class="about_title">
+            <div class="about_title_description">
+                Фото
+            </div>
         </div>
         <div class="text-start ms-3">
 
@@ -95,9 +105,11 @@
 </div>
 
 <script>
-    $('.mt-4').click(function(){
-        $('.mt-4').not(this).parent().find('.text-start').slideUp('fast');
+    $('.about_title').click(function(){
+        $('.about_title.open').not(this).trigger('click');
+        $('.about_title').not(this).parent().find('.text-start').slideUp('fast');
         $(this).parent().find('.text-start').slideToggle('fast');
+        $(this).toggleClass('open');
     });
 
     $(function(){
