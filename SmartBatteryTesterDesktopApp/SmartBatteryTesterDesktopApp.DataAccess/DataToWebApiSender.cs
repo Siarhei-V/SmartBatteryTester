@@ -19,36 +19,30 @@ namespace SmartBatteryTesterDesktopApp.DataAccess
         async Task IDataSender.StartDataTransfer(TestDataModel testModel)
         {
             _model = testModel;
-            using (HttpClient httpClient = new HttpClient())
-            {
-                await httpClient.PostAsJsonAsync(_ipAddress + "api/Measurements/AddMeasurementSet", testModel);
-            }
+            using HttpClient httpClient = new HttpClient();
+         
+            await httpClient.PostAsJsonAsync(_ipAddress + "api/Measurements/AddMeasurementSet", testModel);
 
-            using (HttpClient httpClient = new HttpClient())
-            {
-                var receivedTest = await httpClient.GetAsync(
-                    _ipAddress + "api/Measurements/FindMeasurementSet?status=Батарея разряжается");
-                _currentTestId = (await receivedTest.Content.ReadFromJsonAsync<TestDataModel>()).Id;
-            }
+            var receivedTest = await httpClient.GetAsync(
+                _ipAddress + "api/Measurements/FindMeasurementSet?status=Батарея разряжается");
+            _currentTestId = (await receivedTest.Content.ReadFromJsonAsync<TestDataModel>()).Id;
         }
 
         async Task IDataSender.TransmitData(MeasurementDataModel measurementModel)
         {
             measurementModel.MeasurementSetId = _currentTestId;
-            using (HttpClient httpClient = new HttpClient())
-            {
-                await httpClient.PostAsJsonAsync(_ipAddress + "api/Measurements/AddMeasurement", measurementModel);
-            }
+            using HttpClient httpClient = new HttpClient();
+            
+            await httpClient.PostAsJsonAsync(_ipAddress + "api/Measurements/AddMeasurement", measurementModel);
         }
 
         async Task IDataSender.FinishDataTransfer()
         {
             _model.Id = _currentTestId;
 
-            using (HttpClient httpClient = new HttpClient())
-            {
-                await httpClient.PostAsJsonAsync(_ipAddress + "api/Measurements/UpdateMeasurementSet", _model);
-            }
+            using HttpClient httpClient = new HttpClient();
+            
+            await httpClient.PostAsJsonAsync(_ipAddress + "api/Measurements/UpdateMeasurementSet", _model);
             _model.Id = 0;
         }
 

@@ -50,21 +50,21 @@ namespace SmartBatteryTesterDesktopApp.PORT.Tests
         {
             // Arrange
             Type interactorType = typeof(PortInteractor);
-            bool hasPublicConstructors = false;
+            bool hasNotPrivateConstructors = false;
 
             // Act
             ConstructorInfo[] constructorInfo = interactorType.GetConstructors();
             foreach (var item in constructorInfo)
             {
-                if (item.IsPublic)
+                if (!item.IsPrivate)
                 {
-                    hasPublicConstructors = true;
+                    hasNotPrivateConstructors = true;
                     break;
                 }
             }
 
             // Assert
-            Assert.False(hasPublicConstructors);
+            Assert.False(hasNotPrivateConstructors);
 
         }
 
