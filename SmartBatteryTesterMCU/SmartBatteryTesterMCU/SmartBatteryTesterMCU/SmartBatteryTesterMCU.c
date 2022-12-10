@@ -25,7 +25,7 @@ void InitAdc()
 {
 	ADCSRA |= (1 << ADEN) | (1 << ADPS2) | (1 << ADPS1) | (1 << ADPS0);
 	ADMUX &= ~(1 << REFS1);
-	ADMUX |= (1 << REFS0);
+	ADMUX &= ~(1 << REFS0);
 }
 
 //-----------------------------
@@ -199,16 +199,14 @@ ISR (TIMER1_COMPA_vect)
 	float resultCurrent = 0;
 	char buffer [10];
 	char resultToUsart [10];
-	
-	ADMUX |= (1 << MUX0);
 
-	resultVoltage = (float)GetAdcData() / 204.8; // 1024 / 5 = 204,8; 5 - опорное напр.
+	resultVoltage = (float)GetAdcData() / 204,8; // 1024 / 5 = 204,8; 5 - опорное напр.
 	SetPos(0, 0);
 	sprintf(buffer,"Ubat = %.2f V", resultVoltage);
 	SendString(buffer);
 	
-	ADMUX &= ~(1 << MUX0);
-	resultCurrent = ((float)GetAdcData() / 204.8) * 1000 * 0.133; // 1024 / 5 = 204,8; 5 - опорное напр.
+	//ADMUX &= ~(1 << MUX0);
+	//resultCurrent = ((float)GetAdcData() / 204.8) * 1000 * 0.133; // 1024 / 5 = 204,8; 5 - опорное напр.
 	SetPos(0, 1);
 	sprintf(buffer,"Ibat = %.2f A", resultCurrent);
 	SendString(buffer);

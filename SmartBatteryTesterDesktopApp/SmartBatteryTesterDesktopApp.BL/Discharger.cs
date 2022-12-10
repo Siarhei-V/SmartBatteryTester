@@ -45,7 +45,7 @@ namespace SmartBatteryTesterDesktopApp.BL
                 return;
             }
 
-            if (Math.Abs(_prevVoltage - voltage) >= _valuesChangeDiscreteness ||
+            if (_prevVoltage - voltage >= _valuesChangeDiscreteness ||
                 Math.Abs(_prevCurrent - current) >= _valuesChangeDiscreteness)
             {
                 HandleNewData(voltage, current, dateTime);
@@ -74,6 +74,7 @@ namespace SmartBatteryTesterDesktopApp.BL
             _dataModel.CurrentDateTime = dateTime;
 
             _prevVoltage = voltage;
+            _prevCurrent = current;
 
             _isNewDataReceived = true;
         }

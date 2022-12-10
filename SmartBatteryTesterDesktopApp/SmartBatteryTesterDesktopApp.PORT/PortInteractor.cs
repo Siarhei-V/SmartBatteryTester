@@ -143,7 +143,7 @@ namespace SmartBatteryTesterDesktopApp.PORT
 
             try
             {
-                _discharger.Discharge(Convert.ToDecimal(data), 0, DateTime.Now);
+                _discharger.Discharge(Convert.ToDecimal(data), _measurementModel.Current, DateTime.Now);
             }
             catch (Exception)
             {
