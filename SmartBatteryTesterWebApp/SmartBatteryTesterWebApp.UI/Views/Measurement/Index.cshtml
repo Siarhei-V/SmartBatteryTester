@@ -1,0 +1,92 @@
+﻿@using SmartBatteryTesterWebApp.UI.Models.Chart
+@model ChartJsData
+@{
+    ViewData["Title"] = "Измерения";
+}
+
+<div class="text-center">
+    <h3>Текущие измерения</h3>
+</div>
+
+<div class="row">
+    <div class="col-12 col-lg-8 order-1 order-lg-0">
+        <p id="firstMessage">Начтине тест на ПК</p>
+        <div id="chartContainer">
+            <h5>График разряда</h5>
+            <canvas id="measurementLineChart"></canvas>
+        </div>
+    </div>
+    <div class="col-12 col-lg-4 d-flex justify-content-center mt-5">
+        <span class="fw-bold" id="signalRMessage"></span>
+    </div>
+</div>
+
+<script src="/js/aspnet-signalr/signalr.min.js"></script>
+<script src="~/js/Chart.js/chart.umd.js"></script>
+
+@if (Model.Labels.Count == 0)
+{
+    <script>
+        document.getElementById('chartContainer').hidden = true;
+    </script>
+}
+
+<script type="text/javascript">
+    const hubConnection = new signalR.HubConnectionBuilder().withUrl('/measurementsHub').build();
+    const chartElement = document.getElementById('chartContainer');
+    const statusElement = document.getElementById('signalRMessage');
+    const context = document.getElementById('measurementLineChart');
+
+    let lineChart = new Chart(context, {
+        type: 'line',
+        data: @Json.Serialize(Model),
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+        
+    function addData(chart, label, newVoltageData, newCurrentData) {
+        if (`${label}` === '') {
+            return;
+        }
+
+        chartElement.hidden = false;
+
+        chart.data.labels.push(label);
+        chart.data.datasets[0].data.push(newVoltageData);
+        chart.data.datasets[1].data.push(newCurrentData);
+        chart.update();
+    }
+
+    function changeTextColor(element) {
+        element.style.color = 'red';
+
+        setTimeout(() => {
+            element.style.color = 'black';
+        }, 1000);
+    }
+
+    hubConnection.on('Receive', function(message, chartData) {
+        let newVoltageData = chartData.datasets[0].data[0];
+        let newCurrentData = chartData.datasets[1].data[0];
+        
+        if (statusElement.childElementCount === 0) {
+            statusElement.innerHTML = message;
+
+        }
+        else {
+            statusElement.childNodes[0].nodeValue = message;
+        }
+
+        changeTextColor(statusElement);
+        document.getElementById('firstMessage').hidden = true;
+
+        addData(lineChart, chartData.labels, newVoltageData, newCurrentData);
+    });
+
+    hubConnection.start();
+</script>

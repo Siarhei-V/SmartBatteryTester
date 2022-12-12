@@ -1,0 +1,29 @@
+﻿@using SmartBatteryTesterWebApp.UI.Models.Chart
+@model ChartJsData
+
+<div>
+    <h5>График разряда</h5>
+    <canvas id="measurementLineChart"></canvas>
+</div>
+
+<script src="~/js/Chart.js/chart.umd.min.js"></script>
+
+<script type="text/javascript">
+
+    let showChart = () => {
+        let context = document.getElementById("measurementLineChart");
+        let lineChart = new Chart(context, {
+            type: 'line',
+            data: @Json.Serialize(Model),
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    }
+
+    showChart();
+</script>

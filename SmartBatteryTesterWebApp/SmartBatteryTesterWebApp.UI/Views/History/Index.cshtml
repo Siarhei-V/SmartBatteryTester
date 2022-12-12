@@ -1,0 +1,42 @@
+﻿@{
+    ViewData["Title"] = "История измерений";
+}
+
+<div class="text-center">
+    <h3>История измерений</h3>
+</div>
+
+<div class="container">
+    <div class="row">
+        <div class="col-12 col-lg-8 order-1 order-lg-0">
+            <vc:measurements chart-js=ViewBag.ChartData/>
+        </div>
+        <div class="col-12 col-lg-4">
+            <form class="mb-4 row align-items-center" asp-controller="History" asp-action="Index" method="get">
+                <div class="col-12 col-xl-8">
+                    <select class="form-select" name="measurementSetNumber" asp-items="ViewBag.MeasurementSetList">
+                        <option selected="selected" value="0">Выберите имя теста</option>
+                    </select>
+                </div>
+                <div class="col-12 col-xl-4 gx-xl-2 gy-2 gy-xl-0">
+                    <input class="btn-sm btn-primary" type="submit" value="Получить данные" />
+                </div>
+            </form>
+
+            <div>
+                @{
+                    if (ViewBag.MeasurementResults == null) return;
+                    
+                    <p>Имя теста: @ViewBag.MeasurementResults.MeasurementName</p>
+                    <p>@ViewBag.MeasurementResults.MeasurementStatus</p>
+                    
+                    if (ViewBag.MeasurementResults.MeasurementStatus == "Батарея разряжена")
+                    {
+                        <p>Длительность разряда: @ViewBag.MeasurementResults.DischargeDuration.ToString(@"hh\:mm\:ss")</p>
+                        <p>Измеренная емкость: @ViewBag.MeasurementResults.ResultCapacity Ач</p>
+                    }
+                }
+            </div>
+        </div>
+    </div>
+</div>
