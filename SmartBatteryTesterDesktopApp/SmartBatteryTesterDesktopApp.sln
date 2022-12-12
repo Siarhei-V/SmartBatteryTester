@@ -1,0 +1,79 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.1.32210.238
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SmartBatteryTesterDesktopApp.UI", "SmartBatteryTesterDesktopApp.UI\SmartBatteryTesterDesktopApp.UI.csproj", "{6CB9C645-C40E-4DDA-8BA3-51F47A9110A7}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SmartBatteryTesterDesktopApp.BL", "SmartBatteryTesterDesktopApp.BL\SmartBatteryTesterDesktopApp.BL.csproj", "{8CD1FDB4-D6AD-4893-9B29-CAAEABC6B2B6}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SmartBatteryTesterDesktopApp.BL.Tests", "SmartBatteryTesterDesktopApp.BL.Tests\SmartBatteryTesterDesktopApp.BL.Tests.csproj", "{5C20D87D-CECC-47D6-A674-4105D7BAFE51}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SmartBatteryTesterDesktopApp.PORT", "SmartBatteryTesterDesktopApp.PORT\SmartBatteryTesterDesktopApp.PORT.csproj", "{14F64F6D-C433-4EC3-BC48-3B95FDC7A6A7}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SmartBatteryTesterDesktopApp.PORT.Tests", "SmartBatteryTesterDesktopApp.PORT.Tests\SmartBatteryTesterDesktopApp.PORT.Tests.csproj", "{246F1F41-0F82-4863-85D6-FA68692E5C32}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SmartBatteryTesterDesktopApp.USART", "SmartBatteryTesterDesktopApp.USART\SmartBatteryTesterDesktopApp.USART.csproj", "{2426FF6D-7472-4728-86D3-90940C4DCE85}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SmartBatteryTesterDesktopApp.USART.Tests", "SmartBatteryTesterDesktopApp.USART.Tests\SmartBatteryTesterDesktopApp.USART.Tests.csproj", "{96499029-3E8E-4140-8481-170D5829BE9C}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SmartBatteryTesterDesktopApp.UI.Tests", "SmartBatteryTesterDesktopApp.UI.Tests\SmartBatteryTesterDesktopApp.UI.Tests.csproj", "{E2318CA0-3477-4D2F-BFD4-DFF4AF91F0AF}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SmartBatteryTesterDesktopApp.DataAccess", "SmartBatteryTesterDesktopApp.DataAccess\SmartBatteryTesterDesktopApp.DataAccess.csproj", "{3D480814-7727-49C7-8EC8-C6F72A602346}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmartBatteryTesterDesktopApp.DataAccess.Tests", "SmartBatteryTesterDesktopApp.DataAccess.Tests\SmartBatteryTesterDesktopApp.DataAccess.Tests.csproj", "{60DD16ED-0001-4003-97CD-9D323870429E}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{6CB9C645-C40E-4DDA-8BA3-51F47A9110A7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6CB9C645-C40E-4DDA-8BA3-51F47A9110A7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6CB9C645-C40E-4DDA-8BA3-51F47A9110A7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6CB9C645-C40E-4DDA-8BA3-51F47A9110A7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8CD1FDB4-D6AD-4893-9B29-CAAEABC6B2B6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8CD1FDB4-D6AD-4893-9B29-CAAEABC6B2B6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8CD1FDB4-D6AD-4893-9B29-CAAEABC6B2B6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8CD1FDB4-D6AD-4893-9B29-CAAEABC6B2B6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5C20D87D-CECC-47D6-A674-4105D7BAFE51}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5C20D87D-CECC-47D6-A674-4105D7BAFE51}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5C20D87D-CECC-47D6-A674-4105D7BAFE51}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5C20D87D-CECC-47D6-A674-4105D7BAFE51}.Release|Any CPU.Build.0 = Release|Any CPU
+		{14F64F6D-C433-4EC3-BC48-3B95FDC7A6A7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{14F64F6D-C433-4EC3-BC48-3B95FDC7A6A7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{14F64F6D-C433-4EC3-BC48-3B95FDC7A6A7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{14F64F6D-C433-4EC3-BC48-3B95FDC7A6A7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{246F1F41-0F82-4863-85D6-FA68692E5C32}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{246F1F41-0F82-4863-85D6-FA68692E5C32}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{246F1F41-0F82-4863-85D6-FA68692E5C32}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{246F1F41-0F82-4863-85D6-FA68692E5C32}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2426FF6D-7472-4728-86D3-90940C4DCE85}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2426FF6D-7472-4728-86D3-90940C4DCE85}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2426FF6D-7472-4728-86D3-90940C4DCE85}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2426FF6D-7472-4728-86D3-90940C4DCE85}.Release|Any CPU.Build.0 = Release|Any CPU
+		{96499029-3E8E-4140-8481-170D5829BE9C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{96499029-3E8E-4140-8481-170D5829BE9C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{96499029-3E8E-4140-8481-170D5829BE9C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{96499029-3E8E-4140-8481-170D5829BE9C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E2318CA0-3477-4D2F-BFD4-DFF4AF91F0AF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E2318CA0-3477-4D2F-BFD4-DFF4AF91F0AF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E2318CA0-3477-4D2F-BFD4-DFF4AF91F0AF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E2318CA0-3477-4D2F-BFD4-DFF4AF91F0AF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3D480814-7727-49C7-8EC8-C6F72A602346}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3D480814-7727-49C7-8EC8-C6F72A602346}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3D480814-7727-49C7-8EC8-C6F72A602346}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3D480814-7727-49C7-8EC8-C6F72A602346}.Release|Any CPU.Build.0 = Release|Any CPU
+		{60DD16ED-0001-4003-97CD-9D323870429E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{60DD16ED-0001-4003-97CD-9D323870429E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{60DD16ED-0001-4003-97CD-9D323870429E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{60DD16ED-0001-4003-97CD-9D323870429E}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {C8FB8628-348E-4AC5-AACD-E48EFC18E98D}
+	EndGlobalSection
+EndGlobal

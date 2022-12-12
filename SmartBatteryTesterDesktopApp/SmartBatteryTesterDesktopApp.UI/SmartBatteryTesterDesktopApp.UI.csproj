@@ -1,0 +1,25 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net6.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <UseWPF>true</UseWPF>
+    <ApplicationIcon>batt.ico</ApplicationIcon>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Content Include="batt.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Ninject" Version="3.3.6" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\SmartBatteryTesterDesktopApp.DataAccess\SmartBatteryTesterDesktopApp.DataAccess.csproj" />
+    <ProjectReference Include="..\SmartBatteryTesterDesktopApp.PORT\SmartBatteryTesterDesktopApp.PORT.csproj" />
+    <ProjectReference Include="..\SmartBatteryTesterDesktopApp.USART\SmartBatteryTesterDesktopApp.USART.csproj" />
+  </ItemGroup>
+
+</Project>
