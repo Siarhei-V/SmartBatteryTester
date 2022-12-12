@@ -83,7 +83,7 @@ namespace SmartBatteryTesterDesktopApp.BL.Tests
             _discharger.Discharge(voltage, current, DateTime.Now);
 
             // Arrange
-            if (Math.Abs(prevVoltage - voltage) >= valuesChangeDiscreteness ||
+            if (prevVoltage - voltage >= valuesChangeDiscreteness ||
                     Math.Abs(prevCurrent - current) >= valuesChangeDiscreteness)
             {
                 Assert.True(_discharger.IsNewDataReceived);
@@ -105,13 +105,13 @@ namespace SmartBatteryTesterDesktopApp.BL.Tests
             _discharger.Discharge(1, 1.1m, date);
          
             // Assert
-            _resultsCalculatorMock.Verify(m => m.CalculateResults(), Times.Once());
+            _resultsCalculatorMock.Verify(m => m.CalculateResults(), Times.Once);
             Assert.True(_dischargerModel.IsDischargingCompleted);
             Assert.True(_discharger.IsNewDataReceived);
             Assert.Equal(1, _dischargerModel.Voltage);
             Assert.Equal(date, _dischargerModel.CurrentDateTime);
 
-            _discharger.Discharge(500, 0, date);
+            _discharger.Discharge(500, 10, date);
             Assert.False(_dischargerModel.IsDischargingCompleted);
         }
 

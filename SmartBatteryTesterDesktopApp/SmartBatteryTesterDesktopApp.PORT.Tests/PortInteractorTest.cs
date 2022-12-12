@@ -102,20 +102,22 @@ namespace SmartBatteryTesterDesktopApp.PORT.Tests
             // Act
             // Assert
             _uiInteractorPort.StartDischarging(false);
-            _usartInteractorPort.SendUsartData("2");
+            _uiInteractorPort.ConnectToPort(new Dictionary<string, string> { ["TempDischargingCurrent"] = "1" });
+            _usartInteractorPort.SendUsartData("3");
             _dataSaverMock.Verify(m => m.TransmitData(It.IsAny<MeasurementModel>()), Times.Never);
             _dataGetterMock.Verify(m => m.GetData(It.IsAny<string>()), Times.Once);
             
             _uiInteractorPort.StartDischarging(true);
-            _usartInteractorPort.SendUsartData("1");
+            _usartInteractorPort.SendUsartData("2");
             _dataSaverMock.Verify(m => m.TransmitData(It.IsAny<MeasurementModel>()), Times.Once);
             _dataGetterMock.Verify(m => m.GetData(It.IsAny<string>()), Times.Exactly(2));
 
-            _usartInteractorPort.SendUsartData("1");
+            _uiInteractorPort.ConnectToPort(new Dictionary<string, string> { ["TempDischargingCurrent"] = "1" });
+            _usartInteractorPort.SendUsartData("2");
             _dataSaverMock.Verify(m => m.TransmitData(It.IsAny<MeasurementModel>()), Times.Once);
             _dataGetterMock.Verify(m => m.GetData(It.IsAny<string>()), Times.Exactly(3));
 
-            _usartInteractorPort.SendUsartData("2");
+            _usartInteractorPort.SendUsartData("1");
             _dataSaverMock.Verify(m => m.TransmitData(It.IsAny<MeasurementModel>()), Times.Exactly(2));
             _dataGetterMock.Verify(m => m.GetData(It.IsAny<string>()), Times.Exactly(4));
         }
